@@ -1,9 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, Dimensions, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Button, Dimensions, Image, TouchableOpacity, PixelRatio } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSolid, faUser, faPlus, faUpLong, faMagnifyingGlass, faComment, faPen, faW, faF, faFlagCheckered, faGear, faTrophy, faHouse } from '@fortawesome/free-solid-svg-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/native';
+
+const {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+} = Dimensions.get('window');
+
+const scaleWidth = SCREEN_WIDTH / 360;
+const scaleHeight = SCREEN_HEIGHT / 800;
+
+const WidthRatio = (size) => {
+    const newSize = size * scaleWidth;
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+}
+
+const HeightRatio = (size) => {
+    const newSize = size * scaleHeight;
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+}
 
 
 export const Navbar = (props) => {
@@ -90,8 +108,9 @@ export const Navbar = (props) => {
                     <FontAwesomeIcon
                         icon={faSolid, faHouse}
                         style={{ color: '#7678ed', alignSelf: 'center' }}
+                        size={25}
                     />
-                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center' }}>Home</Text>
+                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}>Home</Text>
                 </View>
             </TouchableOpacity>
            
@@ -111,8 +130,9 @@ export const Navbar = (props) => {
                     <FontAwesomeIcon
                         icon={faSolid, faFlagCheckered}
                         style={{ color: '#aaf683', alignSelf: 'center' }}
+                        size={25}
                     />
-                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center' }}>Game</Text>
+                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}>Game</Text>
                 </View>
             </TouchableOpacity>
             {/* [[[LEADER BOARD]]] */}
@@ -132,8 +152,9 @@ export const Navbar = (props) => {
                     <FontAwesomeIcon
                         icon={faSolid, faTrophy}
                         style={{ color: '#efea5a', alignSelf: 'center' }}
+                        size={25}
                     />
-                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center' }}>Leader</Text>
+                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}>Leader</Text>
                 </View>
             </TouchableOpacity>
             
@@ -154,8 +175,9 @@ export const Navbar = (props) => {
                     <FontAwesomeIcon
                         icon={faSolid, faUser}
                         style={{ color: '#00b2ca', alignSelf: 'center' }}
+                        size={25}
                     />
-                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center' }}>Profile</Text>
+                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}>Profile</Text>
                 </View>
             </TouchableOpacity>
             :
@@ -174,8 +196,9 @@ export const Navbar = (props) => {
                     <FontAwesomeIcon
                         icon={faSolid, faUser}
                         style={{ color: '#00b2ca', alignSelf: 'center' }}
+                        size={25}
                     />
-                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center' }}>Profile</Text>
+                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}>Profile</Text>
                 </View>
             </TouchableOpacity>
 

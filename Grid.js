@@ -10,6 +10,7 @@ import { CommonActions } from '@react-navigation/native';
 // import { SettingsModal from './Settings';
 import { Picker } from '@react-native-picker/picker'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { qmark } from './assets/qmark.png'
 import {
     StyleSheet,
     Text,
@@ -23,7 +24,8 @@ import {
     SafeAreaView,
     ScrollView,
     Button,
-    Image
+    Image,
+    PixelRatio
 } from 'react-native';
 import {
     faSolid,
@@ -43,6 +45,29 @@ import {
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
+const {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+} = Dimensions.get('window');
+
+const scaleWidth = SCREEN_WIDTH / 360;
+const scaleHeight = SCREEN_HEIGHT / 800;
+
+const WidthRatio = (size) => {
+    const newSize = size * scaleWidth;
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+    //   if (Platform.OS === 'ios') {
+    //     return Math.round(PixelRatio.roundToNearestPixel(newSize))
+    //   } else {
+    //     return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+    //   }
+}
+
+const HeightRatio = (size) => {
+    const newSize = size * scaleHeight;
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+}
 
 export const Grid = (props) => {
 
@@ -162,8 +187,8 @@ export const Grid = (props) => {
                         style={{
                             borderRadius: 6,
                             borderWidth: 1,
-                            height: windowHeight / 16,
-                            width: windowHeight / 20,
+                            height: HeightRatio(50),
+                            width: WidthRatio(35),
                         }}
                         key={i}
                     >
@@ -172,7 +197,7 @@ export const Grid = (props) => {
                             key={`${layer_0}` + i}
                         >
                             <Text
-                                style={{ color: '#001219', fontSize: windowHeight / 28, fontWeight: 'bold', marginLeft: 4 }}
+                                style={{ color: '#001219', fontSize: HeightRatio(30), fontWeight: 'bold', marginLeft: WidthRatio(6) }}
                             >
                                 {keyContainer[i]}
                             </Text>
@@ -194,7 +219,7 @@ export const Grid = (props) => {
         }
 
         return (
-            <View style={{ flexDirection: 'column', alignSelf: 'center', marginTop: windowHeight/50, marginBottom: windowHeight/10 }}>
+            <View style={{ flexDirection: 'column', alignSelf: 'center', marginTop: windowHeight / 50, marginBottom: windowHeight / 10 }}>
                 <MergeKeyboardLayers />
             </View>
         )
@@ -360,6 +385,11 @@ export const Grid = (props) => {
             }
 
         }
+        console.log("u0: " + u0);
+        console.log("u1: " + u1)
+        console.log(windowWidth * 0.8)
+        console.log((windowWidth * 0.14) * u1)
+        console.log((windowWidth * 0.14) * (u0 / 5))
 
         for (let i = 0; i < 25; i++) {
             buttonArray[i] =
@@ -370,12 +400,7 @@ export const Grid = (props) => {
                                 <LinearGradient
                                     // Button Linear Gradient
                                     colors={['#f8f9fa', '#ced4da']}
-                                    style={{
-                                        height: windowHeight / 12,
-                                        width: windowHeight / 12,
-                                        margin: 2,
-                                        // backgroundColor: '#f9c74f'
-                                    }}
+                                    style={styles.gridBlock}
                                 >
                                     <TouchableOpacity
                                         onPress={() => console.log(i)}
@@ -389,12 +414,7 @@ export const Grid = (props) => {
                                         <LinearGradient
                                             // Button Linear Gradient
                                             colors={['#aacc00', '#80b918']}
-                                            style={{
-                                                height: windowHeight / 12,
-                                                width: windowHeight / 12,
-                                                margin: 2,
-                                                // backgroundColor: '#f9c74f'
-                                            }}
+                                            style={styles.gridBlock}
                                         >
                                             <TouchableOpacity
                                                 onPress={() => console.log(i)}
@@ -408,15 +428,11 @@ export const Grid = (props) => {
                                             <LinearGradient
                                                 // Button Linear Gradient
                                                 colors={['#ffba08', '#faa307']}
-                                                style={{
-                                                    height: windowHeight / 12,
-                                                    width: windowHeight / 12,
-                                                    margin: 2,
-                                                    // backgroundColor: '#f9c74f'
-                                                }}
+                                                style={styles.gridBlock}
                                             >
                                                 <TouchableOpacity
                                                     onPress={() => console.log(i)}
+
                                                 >
                                                     {i == (u0 + u1) ?
                                                         <Text style={styles.letters}>{tempGridArray_0[i]}</Text>
@@ -434,12 +450,7 @@ export const Grid = (props) => {
                         <LinearGradient
                             // Button Linear Gradient
                             colors={['#f8f9fa', '#ced4da']}
-                            style={{
-                                height: windowHeight / 12,
-                                width: windowHeight / 12,
-                                margin: 2,
-                                // backgroundColor: '#f9c74f'
-                            }}
+                            style={styles.gridBlock}
                         >
                             <TouchableOpacity
                                 onPress={() => console.log(i)}
@@ -477,22 +488,14 @@ export const Grid = (props) => {
                                 <View
                                     style={{
                                         backgroundColor: '#8ac926',
-                                        height: windowHeight / 24,
-                                        width: windowHeight / 24,
-                                        marginTop: 2,
-                                        marginBottom: 2,
-                                        marginLeft: 5,
-                                        alignSelf: 'center',
-                                        borderRadius: 2
+                                        ...styles.guessBlocks
                                     }}
                                 >
                                     <Text
                                         style={{
                                             color: 'black',
                                             fontWeight: 'bold',
-                                            alignSelf: 'center',
-                                            fontSize: windowHeight/32,
-                                            // marginTop: 6
+                                            fontSize: HeightRatio(20),
                                         }}
                                     >
                                         {storedGuesses[i]}
@@ -502,14 +505,7 @@ export const Grid = (props) => {
                                 <View
                                     style={{
                                         backgroundColor: 'rgba(0, 0, 0, 0.25)',
-                                        height: windowHeight / 24,
-                                        width: windowHeight / 24,
-                                        marginTop: 2,
-                                        marginBottom: 2,
-                                        marginLeft: 5,
-                                        alignSelf: 'center',
-                                        borderRadius: 2
-                                        
+                                        ...styles.guessBlocks
                                     }}
                                 >
                                 </View>
@@ -520,23 +516,14 @@ export const Grid = (props) => {
                         <View
                             style={{
                                 backgroundColor: '#ff595e',
-                                height: windowHeight / 24,
-                                width: windowHeight / 24,
-                                marginTop: 2,
-                                marginBottom: 2,
-                                marginLeft: 5,
-                                alignSelf: 'center',
-                                borderRadius: 2
+                                ...styles.guessBlocks
                             }}
                         >
                             <Text
                                 style={{
                                     color: 'black',
                                     fontWeight: 'bold',
-                                    alignSelf: 'center',
-                                    fontSize: windowHeight/32,
-                                    // marginTop: 6
-                                    
+                                    fontSize: HeightRatio(20),
                                 }}
                             >
                                 {storedGuesses[i]}
@@ -549,13 +536,9 @@ export const Grid = (props) => {
         return (
             <View
                 style={{
-                    width: windowWidth/2.4,
+                    // width: WidthRatio(230),
                     flexDirection: 'row',
                     flexWrap: 'wrap',
-                    alignSelf: 'center',
-                    marginLeft: 10,
-                    // marginTop: 2,
-                    // backgroundColor: 'red'
                 }}
             >
                 {guessBoxes}
@@ -838,65 +821,131 @@ export const Grid = (props) => {
                         <View
                             style={{
                                 alignItems: 'center',
+                                alignSelf: 'center',
                                 justifyContent: 'center',
                                 flexDirection: 'row',
                                 flexWrap: 'wrap',
-                                marginTop: windowHeight*0.02,
-                                width: windowHeight*6/12
+                                marginTop: HeightRatio(8),
+                                width: windowWidth * 0.8
                             }}
                         >
                             {buttonArray}
                         </View>
+                        <TouchableOpacity
+                            onPress={() => console.log("Q? T -> B")}
+                            style={{
+                                position: 'absolute',
+                                borderRadius: 100,
+                                height: HeightRatio(40),
+                                width: HeightRatio(40),
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                padding: 5,
+                                top: HeightRatio(8) - HeightRatio(35),
+                                left: ((windowWidth * 0.14) * (u1+1))+ (u1*2) + ((windowWidth * 0.07) - HeightRatio(20))
+                            }}
+                        >
+                            <View
+                                
+                            >
+                                {/* <Text style={{ color: 'white', fontWeight: 'bold', fontSize: HeightRatio(20) }}>?</Text> */}
+                                <Image  
+                                    style={{height: HeightRatio(50), width: HeightRatio(50)}}
+                                    source={require('./assets/qmark.png')}
+                                />
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={() => console.log("Q? L -> R")}
+                            style={{
+                                position: 'absolute',
+                                borderRadius: 100,
+                                height: HeightRatio(40),
+                                width: HeightRatio(40),
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                padding: 5,
+                                top: HeightRatio(8) + ((windowWidth * 0.14) * ((u0) / 5)) + ((u0/5)*2) + HeightRatio(20),
+                                left:  WidthRatio(13)
+                            }}
+                        >
+                            <View
+                                
+                            >
+                                {/* <Text style={{ color: 'white', fontWeight: 'bold', fontSize: HeightRatio(20) }}>?</Text> */}
+                                <Image  
+                                    style={{height: HeightRatio(50), width: HeightRatio(50)}}
+                                    source={require('./assets/qmark.png')}
+                                />
+                            </View>
+                        </TouchableOpacity>
                         {/* - - - - - - - - - - - - - -  */}
                         {/* Guess Area */}
                         {/* - - - - - - - - - - - - - -  */}
-                        <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                        <View
+                            style={{
+                                // flexDirection: 'row',
+                                // alignSelf: 'center',
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                marginTop: HeightRatio(8),
+                                width: windowWidth,
+                                alignSelf: 'center',
+                                // backgroundColor: 'red'
+                            }}
+                        >
                             {/* - - - - - - - - - - - - - -  */}
                             {/* Guess Box */}
                             {/* - - - - - - - - - - - - - -  */}
-                            <TouchableOpacity
-                                disabled={promptGuessInput == '' ? true : false}
-                                onPress={() => { CheckArray(promptGuessInput); setPromptGuessInput([]) }}
-                            >
-                                <View
-                                    style={{
-                                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                                        height: 100,
-                                        marginTop: windowHeight/40,
-                                        marginLeft: 20,
-                                        width: 100,
-                                        alignSelf: 'center',
-                                        borderRadius: 10
-                                    }}
+                            <View style={{ flexDirection: 'column' }}>
+                                <TouchableOpacity
+                                    disabled={promptGuessInput == '' ? true : false}
+                                    onPress={() => { CheckArray(promptGuessInput); setPromptGuessInput([]) }}
                                 >
-                                    <Text
-                                        style={{ color: 'white', alignSelf: 'center', fontSize: windowHeight/17, fontWeight: 'bold' }}
+                                    <View
+                                        style={{
+                                            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                                            ...styles.guessBlock
+                                        }}
                                     >
-                                        {promptGuessInput}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
+                                        <Text
+                                            style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(35), fontWeight: 'bold' }}
+                                        >
+                                            {promptGuessInput}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                                {/* <View style={{alignSelf: 'center'}}>
+                                    <Text style={{color: 'white', fontSize: HeightRatio(18), fontWeight: 'bold'}}>Enter</Text>
+                                </View> */}
+                            </View>
                             {/* - - - - - - - - - - - - - -  */}
                             {/* Previous Guesses */}
                             {/* - - - - - - - - - - - - - -  */}
                             <View
-                                style={{ flexDirection: 'column' }}
+                                style={{
+                                    width: WidthRatio(200),
+                                    marginLeft: WidthRatio(4),
+                                    marginRight: WidthRatio(4),
+                                }}
                             >
-                                <Text style={{ color: 'white', fontSize:windowHeight / 40, fontWeight: 'bold', marginLeft: 10, marginBottom: -4 }}>
+                                {/* <Text style={{ color: 'white', fontSize: windowHeight / 40, fontWeight: 'bold', marginLeft: 10, marginBottom: -4 }}>
                                     Guesses
-                                </Text>
+                                </Text> */}
                                 <PreviousGuess />
                             </View>
                         </View>
 
                         <View
                             style={{
-                                position: 'absolute',
-                                bottom: -windowHeight / 4 - 70,
+                                // position: 'absolute',
+                                // bottom: HeightRatio(-250),
                                 alignSelf: 'center',
-                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                // backgroundColor: 'rgba(0, 0, 0, 0.5)',
                                 paddingLeft: 10,
-                                paddingRight: 10
+                                paddingRight: 10,
                             }}
                         >
                             <Keyboard />
@@ -919,35 +968,35 @@ export const Grid = (props) => {
                         {/* - - - - - - - - - - - - - -  */}
                         <TouchableOpacity
                             onPress={() => { Generate(); start(); }}
-                            style={{ marginTop: windowHeight / 3 }}
+                            style={{ borderWidth: 2, borderColor: 'white', width: WidthRatio(320), height: HeightRatio(600), borderRadius: WidthRatio(20), }}
                         >
-                            <LinearGradient
+                            {/* <LinearGradient
                                 // Button Linear Gradient
                                 colors={['#aacc00', '#80b918']}
-                                style={{ ...styles.modalWordButton, height: windowWidth / 3 }}
+                                style={{ ...styles.modalWordButton, height: HeightRatio(400) }}
+                            > */}
+                            <FontAwesomeIcon
+                                icon={faSolid, faGamepad}
+                                style={{
+                                    ...styles.modalFontAwesomeIcons,
+                                    color: 'white',
+                                    marginTop: WidthRatio(90)
+                                }}
+                                size={300}
+                            />
+                            <Text
+                                style={{
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                    fontSize: WidthRatio(50),
+                                    alignSelf: 'center',
+                                    // justifyContent: 'center',
+                                    // margin: 4
+                                }}
                             >
-                                <FontAwesomeIcon
-                                    icon={faSolid, faGamepad}
-                                    style={{
-                                        ...styles.modalFontAwesomeIcons,
-                                        color: 'rgba(0, 0, 0, 0.6)',
-                                        alignSelf: 'center', marginTop: 5
-                                    }}
-                                    size={50}
-                                />
-                                <Text
-                                    style={{
-                                        color: '#001219',
-                                        fontWeight: 'bold',
-                                        fontSize: windowWidth*0.06, 
-                                        alignSelf: 'center',
-                                        justifyContent: 'center',
-                                        // margin: 4
-                                    }}
-                                >
-                                    New Game
-                                </Text>
-                            </LinearGradient>
+                                New Game
+                            </Text>
+                            {/* </LinearGradient> */}
                         </TouchableOpacity>
                     </View>
                 }
@@ -1338,12 +1387,42 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: 0
     },
+    guessBlock: {
+        height: WidthRatio(50),
+        width: WidthRatio(50),
+        // margin: 2,
+        marginLeft: WidthRatio(4),
+        marginRight: WidthRatio(4),
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: '#ffb600',
+        borderWidth: WidthRatio(4),
+        borderRadius: WidthRatio(5)
+    },
+    guessBlocks: {
+        height: WidthRatio(30),
+        width: WidthRatio(30),
+        margin: 2,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    gridBlock: {
+        height: windowWidth * 0.14,
+        width: windowWidth * 0.14,
+        margin: 2,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: WidthRatio(3)
+    },
     letters: {
         alignSelf: 'center',
-        // margin: 10,
-        fontSize: windowHeight/18,
+        // fontSize: windowHeight / 30,
+        fontSize: HeightRatio(44),
         fontWeight: 'bold',
-        color: '#001219'
+        color: 'rgba(0, 0, 0, 0.85)',
     },
     modalView: {
         margin: 20,

@@ -6,7 +6,7 @@ import { LOGIN_USER, ADD_USER } from './utils/mutations';
 import { GET_USER_BY_ID, LEADERBOARD } from './utils/queries';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Alert, StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, StatusBar, SafeAreaView, Dimensions, Button, Linking, ImageBackground, FlatList } from 'react-native';
+import { Alert, StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, StatusBar, SafeAreaView, Dimensions, Button, Linking, ImageBackground, FlatList, PixelRatio } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSolid, faUser, faPlus, faUpLong, faMagnifyingGlass, faCheck, faLocationPin, faEnvelope, faLock, faGear } from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from './Navbar';
@@ -21,6 +21,29 @@ import { dalle_1 } from './assets/dalle_1.png';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
+const {
+  width: SCREEN_WIDTH,
+  height: SCREEN_HEIGHT,
+} = Dimensions.get('window');
+
+const scaleWidth = SCREEN_WIDTH / 360;
+const scaleHeight = SCREEN_HEIGHT / 800;
+
+const WidthRatio = (size) => {
+  const newSize = size * scaleWidth;
+  return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+  //   if (Platform.OS === 'ios') {
+  //     return Math.round(PixelRatio.roundToNearestPixel(newSize))
+  //   } else {
+  //     return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+  //   }
+}
+
+const HeightRatio = (size) => {
+  const newSize = size * scaleHeight;
+  return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+}
 
 function HomeScreen({ navigation }) {
   const [userID, setUserID] = useState('');
@@ -122,41 +145,31 @@ function HomeScreen({ navigation }) {
   const DemoGrid = () => {
     for (let i = 0; i < 25; i++) {
       buttonArray[i] =
-        <View key = {i}>
-        {i == 11 ?
-          <LinearGradient
-            // Button Linear Gradient
-            colors={['#ffba08', '#faa307']}
-            style={{
-              height: windowWidth / 6.5,
-              width: windowWidth / 6.5,
-              margin: 2
-              // backgroundColor: '#f9c74f'
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => console.log(i)}
+        <View key={i}>
+          {i == 11 ?
+            <LinearGradient
+              // Button Linear Gradient
+              colors={['#ffba08', '#faa307']}
+              style={styles.gridBlock}
             >
-              <Text style={styles.letters}>{demoText[i]}</Text>
-            </TouchableOpacity>
-          </LinearGradient>
-          :
-          <LinearGradient
-            // Button Linear Gradient
-            colors={['#f8f9fa', '#ced4da']}
-            style={{
-              height: windowWidth / 6.5,
-              width: windowWidth / 6.5,
-              margin: 2
-              // backgroundColor: '#f9c74f'
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => console.log(i)}
+              <TouchableOpacity
+                onPress={() => console.log(i)}
+              >
+                <Text style={styles.letters}>{demoText[i]}</Text>
+              </TouchableOpacity>
+            </LinearGradient>
+            :
+            <LinearGradient
+              // Button Linear Gradient
+              colors={['#f8f9fa', '#ced4da']}
+              style={styles.gridBlock}
             >
-              <Text style={styles.letters}>{demoText[i]}</Text>
-            </TouchableOpacity>
-          </LinearGradient>
+              <TouchableOpacity
+                onPress={() => console.log(i)}
+              >
+                <Text style={styles.letters}>{demoText[i]}</Text>
+              </TouchableOpacity>
+            </LinearGradient>
           }
         </View>
     }
@@ -169,13 +182,13 @@ function HomeScreen({ navigation }) {
 
   return (
     <>
-    {/* <View style={{backgroundColor: 'red', height: 100, width: windowWidth, position: 'absolute', zIndex: 10}}></View> */}
+      {/* <View style={{backgroundColor: 'red', height: 100, width: windowWidth, position: 'absolute', zIndex: 10}}></View> */}
       <View style={styles.container}>
-       
+
         {selectedColor && selectedColor.gradient && selectedColor.image ?
           <>
-          <DisplayGradient gradient={selectedColor.gradient} image={selectedColor.image} />
-          
+            <DisplayGradient gradient={selectedColor.gradient} image={selectedColor.image} />
+
           </>
           :
           <>
@@ -186,224 +199,232 @@ function HomeScreen({ navigation }) {
             />
           </>
         }
-        
-        <Navbar nav={navigation} auth={authState} position={'relative'} from={'settings'} />
-        <SafeAreaView style={styles.scrollContainer}>
-        <ScrollView style={styles.scrollView}>
-        
-          <View
-            style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              marginTop: windowHeight/24,
-              padding: 20,
-              marginLeft: 10,
-              marginRight: 10,
-              borderTopLeftRadius: 10,
-              borderBottomLeftRadius: 50,
-              
-            }}
-          >
-            <Text style={{ color: 'white', fontSize: windowWidth*0.06, fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}>Choose a background color:</Text>
 
-            <View style={styles.circlecontainer}>
-              {colors.map((color) => (
-                <TouchableOpacity
-                  key={color.id}
-                  style={[styles.circle, { backgroundColor: color.value }]}
-                  onPress={() => selectColor(color)}
-                />
-              ))}
-            </View>
-          </View>
-          <View
-            style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              marginTop: 20,
-              padding: 20,
-              marginLeft: 5,
-              marginRight: 5,
-              borderTopLeftRadius: 10,
-              borderBottomLeftRadius: 50,
-            }}
-          >
-            <Text style={{ color: 'white', fontSize: windowWidth*0.06, fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}>
-              How to play:
-            </Text>
+        <Navbar nav={navigation} auth={authState} position={'relative'} from={'home'} />
+        <SafeAreaView style={styles.scrollContainer}>
+          <ScrollView style={styles.scrollView}>
+
             <View
               style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                marginTop: 20
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                marginTop: windowHeight / 24,
+                padding: 20,
+                marginLeft: 10,
+                marginRight: 10,
+                borderTopLeftRadius: 10,
+                borderBottomLeftRadius: 50,
+
               }}
             >
-              <DemoGrid />
+              <Text style={{ color: 'white', fontSize: HeightRatio(24), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}>Choose a background color:</Text>
+
+              <View style={styles.circlecontainer}>
+                {colors.map((color) => (
+                  <TouchableOpacity
+                    key={color.id}
+                    style={[styles.circle, { backgroundColor: color.value }]}
+                    onPress={() => selectColor(color)}
+                  />
+                ))}
+              </View>
             </View>
-            {/* #1 */}
-            <View style={{flexDirection: 'row', marginTop:5, marginBottom: 5}}>
-              <View 
+            <View
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                marginTop: 20,
+                padding: 20,
+                marginLeft: 5,
+                marginRight: 5,
+                borderTopLeftRadius: 10,
+                borderBottomLeftRadius: 50,
+              }}
+            >
+              <Text style={{ color: 'white', fontSize: HeightRatio(24), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}>
+                How to play:
+              </Text>
+              <View
                 style={{
-                  // flexDirection: 'column', 
-                  // margin: 5, 
-                  // backgroundColor: 'rgba(255, 255, 255, 0.2)', 
-                  // width: 50, 
-                  // height: 50, 
-                  // borderRadius: 50
-                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                  borderRadius: 20,
-                  width: windowWidth*0.12,
-                  height: windowWidth*0.09,
-                  marginRight: 10,
-                  marginTop: 10,
-                  // borderLeftWidth: 1, 
-                  // borderBottomWidth: 1, 
-                  borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                  borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                  borderTopLeftRadius: 10,
-                  borderBottomLeftRadius: 30,
+                  // alignItems: 'center',
+                  // justifyContent: 'center',
+                  // flexDirection: 'row',
+                  // flexWrap: 'wrap',
+                  // marginTop: 20,
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  marginTop: HeightRatio(8),
+                  width: windowWidth * 0.8
+
                 }}
               >
-                <Text style={{ color: 'white', fontSize: windowWidth*0.06, fontWeight: 'bold', alignSelf: 'center' }}>
-                  1
-                </Text>
+                <DemoGrid />
               </View>
-              <View style={{flexDirection: 'column'}}>
-                <Text style={{ color: '#ffba08', fontSize: windowWidth*0.06, fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth/1.4  }}>
-                  Two words will appear.
-                </Text>
+              {/* #1 */}
+              <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                <View
+                  style={{
+                    // flexDirection: 'column', 
+                    // margin: 5, 
+                    // backgroundColor: 'rgba(255, 255, 255, 0.2)', 
+                    // width: 50, 
+                    // height: 50, 
+                    // borderRadius: 50
+                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    borderRadius: 20,
+                    width: windowWidth * 0.12,
+                    height: windowWidth * 0.09,
+                    marginRight: 10,
+                    marginTop: 10,
+                    // borderLeftWidth: 1, 
+                    // borderBottomWidth: 1, 
+                    borderLeftColor: 'rgba(255, 255, 255, 0.5)',
+                    borderBottomColor: 'rgba(255, 255, 255, 0.5)',
+                    borderTopLeftRadius: 10,
+                    borderBottomLeftRadius: 30,
+                  }}
+                >
+                  <Text style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}>
+                    1
+                  </Text>
+                </View>
+                <View style={{ flexDirection: 'column' }}>
+                  <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                    Two words will appear.
+                  </Text>
+                </View>
+              </View>
+              {/* #2 */}
+              <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                <View
+                  style={{
+                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    borderRadius: 20,
+                    width: windowWidth * 0.12,
+                    height: windowWidth * 0.09,
+                    marginRight: 10,
+                    marginTop: 10,
+                    // borderLeftWidth: 1, 
+                    // borderBottomWidth: 1, 
+                    borderLeftColor: 'rgba(255, 255, 255, 0.5)',
+                    borderBottomColor: 'rgba(255, 255, 255, 0.5)',
+                    borderTopLeftRadius: 10,
+                    borderBottomLeftRadius: 30,
+                  }}
+                >
+                  <Text style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}>
+                    2
+                  </Text>
+                </View>
+                <View style={{ flexDirection: 'column' }}>
+                  <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                    One letter will be revealed.
+                  </Text>
+                  <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                    That letter will always be the overlapping letter.
+                  </Text>
+                </View>
+              </View>
+              {/* #3 */}
+              <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                <View
+                  style={{
+                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    borderRadius: 20,
+                    width: windowWidth * 0.12,
+                    height: windowWidth * 0.09,
+                    marginRight: 10,
+                    marginTop: 10,
+                    // borderLeftWidth: 1, 
+                    // borderBottomWidth: 1, 
+                    borderLeftColor: 'rgba(255, 255, 255, 0.5)',
+                    borderBottomColor: 'rgba(255, 255, 255, 0.5)',
+                    borderTopLeftRadius: 10,
+                    borderBottomLeftRadius: 30,
+                  }}
+                >
+                  <Text style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}>
+                    3
+                  </Text>
+                </View>
+                <View style={{ flexDirection: 'column' }}>
+                  <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                    Guess that letter.
+                  </Text>
+                  <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                    If you are lucky, the overlapping letter may appear in other places!
+                  </Text>
+                </View>
+              </View>
+              {/* #4 */}
+              <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                <View
+                  style={{
+                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    borderRadius: 20,
+                    width: windowWidth * 0.12,
+                    height: windowWidth * 0.09,
+                    marginRight: 10,
+                    marginTop: 10,
+                    // borderLeftWidth: 1, 
+                    // borderBottomWidth: 1, 
+                    borderLeftColor: 'rgba(255, 255, 255, 0.5)',
+                    borderBottomColor: 'rgba(255, 255, 255, 0.5)',
+                    borderTopLeftRadius: 10,
+                    borderBottomLeftRadius: 30,
+                  }}
+                >
+                  <Text style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}>
+                    4
+                  </Text>
+                </View>
+                <View style={{ flexDirection: 'column' }}>
+                  <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                    You have 12 guesses.
+                  </Text>
+                </View>
+              </View>
+              {/* #5 */}
+              <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                <View
+                  style={{
+                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    borderRadius: 20,
+                    width: windowWidth * 0.12,
+                    height: windowWidth * 0.09,
+                    marginRight: 10,
+                    marginTop: 10,
+                    // borderLeftWidth: 1, 
+                    // borderBottomWidth: 1, 
+                    borderLeftColor: 'rgba(255, 255, 255, 0.5)',
+                    borderBottomColor: 'rgba(255, 255, 255, 0.5)',
+                    borderTopLeftRadius: 10,
+                    borderBottomLeftRadius: 30,
+                  }}
+                >
+                  <Text style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}>
+                    5
+                  </Text>
+                </View>
+                <View style={{ flexDirection: 'column' }}>
+                  <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                    Score points are based on time and guesses.
+                  </Text>
+                  <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                    +20 points if you guess both words within 12 guesses and under 30 seconds.
+                  </Text>
+                  <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                    +10 points if you guess both words within 12 guesses and under 60 seconds.
+                  </Text>
+                  <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                    +5 points if you guess both words within 12 guesses and under 90 seconds.
+                  </Text>
+                </View>
               </View>
             </View>
-            {/* #2 */}
-            <View style={{flexDirection: 'row', marginTop:5, marginBottom: 5}}>
-            <View 
-                style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                  borderRadius: 20,
-                  width: windowWidth*0.12,
-                  height: windowWidth*0.09,
-                  marginRight: 10,
-                  marginTop: 10,
-                  // borderLeftWidth: 1, 
-                  // borderBottomWidth: 1, 
-                  borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                  borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                  borderTopLeftRadius: 10,
-                  borderBottomLeftRadius: 30,
-                }}
-              >
-                <Text style={{ color: 'white', fontSize: windowWidth*0.06, fontWeight: 'bold', alignSelf: 'center' }}>
-                  2
-                </Text>
-              </View>
-              <View style={{flexDirection: 'column'}}>
-                <Text style={{ color: '#ffba08', fontSize: windowWidth*0.06, fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth/1.4 }}>
-                  One letter will be revealed.
-                </Text>
-                <Text style={{ color: 'white', fontSize: windowWidth*0.04, fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth/1.5  }}>
-                  That letter will always be the overlapping letter. 
-                </Text>
-              </View>
-            </View>
-            {/* #3 */}
-            <View style={{flexDirection: 'row', marginTop:5, marginBottom: 5}}>
-              <View 
-                style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                  borderRadius: 20,
-                  width: windowWidth*0.12,
-                  height: windowWidth*0.09,
-                  marginRight: 10,
-                  marginTop: 10,
-                  // borderLeftWidth: 1, 
-                  // borderBottomWidth: 1, 
-                  borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                  borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                  borderTopLeftRadius: 10,
-                  borderBottomLeftRadius: 30,
-                }}
-              >
-                <Text style={{ color: 'white', fontSize: windowWidth*0.06, fontWeight: 'bold', alignSelf: 'center' }}>
-                  3
-                </Text>
-              </View>
-              <View style={{flexDirection: 'column'}}>
-                <Text style={{ color: '#ffba08', fontSize: windowWidth*0.06, fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth/1.4 }}>
-                Guess that letter.
-                </Text>
-                <Text style={{ color: 'white', fontSize: windowWidth*0.04, fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth/1.5 }}>
-                If you are lucky, the overlapping letter may appear in other places!
-                </Text>
-              </View>
-            </View>
-            {/* #4 */}
-            <View style={{flexDirection: 'row', marginTop:5, marginBottom: 5}}>
-              <View 
-                style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                  borderRadius: 20,
-                  width: windowWidth*0.12,
-                  height: windowWidth*0.09,
-                  marginRight: 10,
-                  marginTop: 10,
-                  // borderLeftWidth: 1, 
-                  // borderBottomWidth: 1, 
-                  borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                  borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                  borderTopLeftRadius: 10,
-                  borderBottomLeftRadius: 30,
-                }}
-              >
-                <Text style={{ color: 'white', fontSize: windowWidth*0.06, fontWeight: 'bold', alignSelf: 'center' }}>
-                  4
-                </Text>
-              </View>
-              <View style={{flexDirection: 'column'}}>
-                <Text style={{ color: '#ffba08', fontSize: windowWidth*0.06, fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth/1.4 }}>
-                  You have 12 guesses.
-                </Text>
-              </View>
-            </View>
-            {/* #5 */}
-            <View style={{flexDirection: 'row', marginTop:5, marginBottom: 5}}>
-              <View 
-                style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                  borderRadius: 20,
-                  width: windowWidth*0.12,
-                  height: windowWidth*0.09,
-                  marginRight: 10,
-                  marginTop: 10,
-                  // borderLeftWidth: 1, 
-                  // borderBottomWidth: 1, 
-                  borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                  borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                  borderTopLeftRadius: 10,
-                  borderBottomLeftRadius: 30,
-                }}
-              >
-                <Text style={{ color: 'white', fontSize: windowWidth*0.06, fontWeight: 'bold', alignSelf: 'center' }}>
-                  5
-                </Text>
-              </View>
-              <View style={{flexDirection: 'column'}}>
-                <Text style={{ color: '#ffba08', fontSize: windowWidth*0.06, fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth/1.4 }}>
-                  Score points are based on time and guesses.
-                </Text>
-                <Text style={{ color: 'white', fontSize: windowWidth*0.04, fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth/1.5 }}>
-                  +20 points if you guess both words within 12 guesses and under 30 seconds.
-                </Text>
-                <Text style={{ color: 'white', fontSize: windowWidth*0.04, fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth/1.5 }}>
-                  +10 points if you guess both words within 12 guesses and under 60 seconds.
-                </Text>
-                <Text style={{ color: 'white', fontSize: windowWidth*0.04, fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth/1.5 }}>
-                  +5 points if you guess both words within 12 guesses and under 90 seconds.
-                </Text>
-              </View>
-            </View>
-          </View> 
-          <View style={{marginBottom: 400}}></View>
-        </ScrollView>
+            <View style={{ marginBottom: 400 }}></View>
+          </ScrollView>
         </SafeAreaView>
         {/* <View
           style={{
@@ -446,7 +467,7 @@ function HomeScreen({ navigation }) {
           </View>
         </View> */}
       </View>
-      
+
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -539,10 +560,15 @@ const GameScreen = ({ navigation }) => {
         <View
           style={{
             // marginTop: 40,
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-            flexDirection: 'row',
-            flexWrap: 'wrap',
+            // alignItems: 'flex-start',
+            // justifyContent: 'space-evenly',
+            // flexDirection: 'row',
+            // flexWrap: 'wrap',
+            // backgroundColor: 'red',
+            // marginTop: 30,
+            alignSelf: 'center',
+            marginTop: WidthRatio(30)
+
           }}
         >
           <Grid nav={navigation} currentuser={userID} auth={authState} />
@@ -612,88 +638,155 @@ function LeaderScreen({ navigation }) {
 
 
   const Item = ({ username, score, pos }) => (
-    <View
-      style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-        padding: 10,
-        borderRadius: 10,
-        borderTopLeftRadius: 10,
-        borderBottomLeftRadius: 40,
-        flexDirection: 'row',
-        marginTop: 5,
-        marginBottom: 5,
-        width: windowWidth - 20,
-        alignSelf: 'center',
-        borderLeftWidth: 1,
-        borderBottomWidth: 1,
-        borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-        borderLeftColor: 'rgba(255, 255, 255, 0.5)'
-      }}
-    >
-      <View
+    <View>
+      <View 
         style={{
-          flexDirection: 'column',
-          backgroundColor: 'rgba(0, 0, 0, 0.2)',
-          borderRadius: 20,
-          width: windowWidth*0.12,
-          height: windowWidth*0.09,
-          marginRight: 10,
-          marginTop: 10,
-          // borderLeftWidth: 1, 
-          // borderBottomWidth: 1, 
-          borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-          borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-          borderTopLeftRadius: 10,
-          borderBottomLeftRadius: 30,
+            backgroundColor: '#001219', 
+            height: HeightRatio(100), 
+            width: WidthRatio(340), 
+            alignSelf: 'center', 
+            borderRadius: 50,
+            flexDirection: 'row'
         }}
       >
-        <Text
-          style={{ color: 'white', alignSelf: 'center', marginleft: windowWidth*0.01, marginTop: windowWidth*0.01, fontSize: windowWidth*0.04, fontWeight: 'bold' }}
-        >{pos}</Text>
-      </View>
-      <View style={{ flexDirection: 'column' }}>
-        <View style={{ flexDirection: 'column', width: windowWidth / 1.4 }}>
-          <View style={{ flexDirection: 'row', alignSelf: 'flex-start', margin: windowWidth*0.01 }}>
-            <Text
-              style={{
-                fontSize: windowWidth*0.06,
-                fontWeight: 'bold',
-                color: '#efea5a'
-              }}
-              numberOfLines={1}
-              ellipsizeMode='tail'
-            >
-              {username}
-            </Text>
-          </View>
+        <View style={{flexDirection: 'column'}}>
+          <Text
+            style={{ 
+              color: 'white', 
+              fontSize: HeightRatio(30), 
+              fontWeight: 'bold', 
+              marginTop: HeightRatio(30), 
+              marginLeft: WidthRatio(20) 
+            }}
+          >
+            {pos}
+          </Text>
         </View>
-        <View
-          style={{
-            flexDirection: 'column',
-            width: windowWidth / 1.6
-          }}
+        <View style={{flexDirection: 'column', alignSelf: 'center', marginLeft: WidthRatio(20)}}>
+          <View style={{ flexDirection: 'column', width: WidthRatio(240) }}>
+            <View style={{ flexDirection: 'row', alignSelf: 'flex-start', margin: windowWidth * 0.01 }}>
+              <Text
+                style={{
+                  fontSize: windowWidth * 0.06,
+                  fontWeight: 'bold',
+                  color: '#efea5a'
+                }}
+                numberOfLines={1}
+                ellipsizeMode='tail'
+              >
+                {username}
+              </Text>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: 'column',
+              width: WidthRatio(240),
+            }}
 
-        >
-          <View style={{ flexDirection: 'row', margin: windowWidth*0.01 }}>
-            {/* <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white', alignSelf: 'flex-end' }}>{score}</Text> */}
-            <Text
-              style={{
-                fontSize: windowWidth*0.05,
-                fontWeight: 'bold',
-                color: 'white',
-                alignSelf: 'flex-end',
-                marginLeft: 10,
-              }}
-              numberOfLines={1}
-              ellipsizeMode='tail'
-            >
-              {score}
-            </Text>
-            <Text style={{ fontSize: windowWidth*0.04, fontWeight: 'bold', color: '#83e377', alignSelf: 'flex-end', marginLeft: 4 }}>points</Text>
+          >
+            <View style={{ flexDirection: 'row', margin: windowWidth * 0.01 }}>
+              <Text
+                style={{
+                  fontSize: windowWidth * 0.05,
+                  fontWeight: 'bold',
+                  color: 'white',
+                  alignSelf: 'flex-end',
+                  marginLeft: 10,
+                }}
+                numberOfLines={1}
+                ellipsizeMode='tail'
+              >
+                {score}
+              </Text>
+              <Text style={{ fontSize: windowWidth * 0.04, fontWeight: 'bold', color: '#83e377', alignSelf: 'flex-end', marginLeft: 4 }}>points</Text>
+            </View>
           </View>
         </View>
-      </View>
+        </View>
+      <View style={styles.modalDivisionLine}></View>
     </View>
+    // <View
+    //   style={{
+    //     backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    //     padding: 10,
+    //     borderRadius: 10,
+    //     borderTopLeftRadius: 10,
+    //     borderBottomLeftRadius: 40,
+    //     flexDirection: 'row',
+    //     marginTop: 5,
+    //     marginBottom: 5,
+    //     width: windowWidth - 20,
+    //     alignSelf: 'center',
+    //     borderLeftWidth: 1,
+    //     borderBottomWidth: 1,
+    //     borderBottomColor: 'rgba(255, 255, 255, 0.5)',
+    //     borderLeftColor: 'rgba(255, 255, 255, 0.5)'
+    //   }}
+    // >
+    //   <View
+    //     style={{
+    //       flexDirection: 'column',
+    //       backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    //       borderRadius: 20,
+    //       width: windowWidth * 0.12,
+    //       height: windowWidth * 0.09,
+    //       marginRight: 10,
+    //       marginTop: 10,
+    //       // borderLeftWidth: 1, 
+    //       // borderBottomWidth: 1, 
+    //       borderLeftColor: 'rgba(255, 255, 255, 0.5)',
+    //       borderBottomColor: 'rgba(255, 255, 255, 0.5)',
+    //       borderTopLeftRadius: 10,
+    //       borderBottomLeftRadius: 30,
+    //     }}
+    //   >
+    //     <Text
+    //       style={{ color: 'white', alignSelf: 'center', marginleft: windowWidth * 0.01, marginTop: windowWidth * 0.01, fontSize: windowWidth * 0.04, fontWeight: 'bold' }}
+    //     >{pos}</Text>
+    //   </View>
+    //   <View style={{ flexDirection: 'column' }}>
+    //     <View style={{ flexDirection: 'column', width: windowWidth / 1.4 }}>
+    //       <View style={{ flexDirection: 'row', alignSelf: 'flex-start', margin: windowWidth * 0.01 }}>
+    //         <Text
+    //           style={{
+    //             fontSize: windowWidth * 0.06,
+    //             fontWeight: 'bold',
+    //             color: '#efea5a'
+    //           }}
+    //           numberOfLines={1}
+    //           ellipsizeMode='tail'
+    //         >
+    //           {username}
+    //         </Text>
+    //       </View>
+    //     </View>
+    //     <View
+    //       style={{
+    //         flexDirection: 'column',
+    //         width: windowWidth / 1.6
+    //       }}
+
+    //     >
+    //       <View style={{ flexDirection: 'row', margin: windowWidth * 0.01 }}>
+    //         <Text
+    //           style={{
+    //             fontSize: windowWidth * 0.05,
+    //             fontWeight: 'bold',
+    //             color: 'white',
+    //             alignSelf: 'flex-end',
+    //             marginLeft: 10,
+    //           }}
+    //           numberOfLines={1}
+    //           ellipsizeMode='tail'
+    //         >
+    //           {score}
+    //         </Text>
+    //         <Text style={{ fontSize: windowWidth * 0.04, fontWeight: 'bold', color: '#83e377', alignSelf: 'flex-end', marginLeft: 4 }}>points</Text>
+    //       </View>
+    //     </View>
+    //   </View>
+    // </View>
   );
 
   const renderItem = ({ item }) => (
@@ -1379,7 +1472,7 @@ const Auth = ({ navigation }) => {
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const GRAPHQL_API_URL = 'http://192.168.1.198:3001/graphql';
+  const GRAPHQL_API_URL = 'https://wordlit-backend.herokuapp.com/graphql';
   const asyncAuthLink = setContext(async () => {
     return {
       headers: {
@@ -1570,8 +1663,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   circle: {
-    width: windowWidth*0.06,
-    height: windowWidth*0.06,
+    width: HeightRatio(40),
+    height: HeightRatio(40),
     borderRadius: 20,
     margin: 10,
   },
@@ -1619,14 +1712,37 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center'
   },
+  gridBlock: {
+    height: windowWidth * 0.14,
+    width: windowWidth * 0.14,
+    margin: 2,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   letters: {
     alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    // margin: 10,
-    fontSize: windowWidth*0.11,
+    // fontSize: windowHeight / 30,
+    fontSize: HeightRatio(44),
     fontWeight: 'bold',
-    color: '#001219'
+    color: 'rgba(0, 0, 0, 0.85)',
+  },
+  // letters: {
+  //   alignSelf: 'center',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   // margin: 10,
+  //   fontSize: windowWidth*0.11,
+  //   fontWeight: 'bold',
+  //   color: '#001219'
+  // },
+  modalDivisionLine: {
+    borderColor: '#4cc9f0',
+    borderBottomWidth: 1,
+    width: WidthRatio(320),
+    alignSelf: 'center',
+    marginTop: 10,
+    marginBottom: 10
   },
 });
 
