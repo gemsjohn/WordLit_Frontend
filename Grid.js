@@ -40,7 +40,8 @@ import {
     faSliders,
     faStar,
     faTrophy,
-    faGamepad
+    faGamepad,
+    faSquareMinus
 } from '@fortawesome/free-solid-svg-icons'
 
 const windowWidth = Dimensions.get('window').width;
@@ -109,6 +110,7 @@ export const Grid = (props) => {
     const [timeTaken, setTimeTaken] = useState(0)
     const [score, setScore] = useState(0)
     const [extraPoints, setExtraPoints] = useState(0);
+    const [awardExtraPoints, setAwardExtraPoints] = useState(false);
 
     // Definitions: Word 1 & Word 2
     const [displayDetails, setDisplayDetails] = useState(false);
@@ -120,6 +122,14 @@ export const Grid = (props) => {
     const [definition3, setDefinition3] = useState('');
     const [definition4, setDefinition4] = useState('');
     const [definition5, setDefinition5] = useState('');
+
+    // HINTS
+    const [hintTopBottomModal, setHintTopBottomModal] = useState(false);
+    const [hintLeftRightModal, setHintLeftRightModal] = useState(false);
+    const [displayTopBottomHint, setDisplayTopBottomHint] = useState(false);
+    const [displayLeftRightHint, setDisplayLeftRightHint] = useState(false);
+    const [leftRightHintReduction, setLeftRightHintReduction] = useState(0);
+    const [topBottomHintReduction, setTopBottomHintReduction] = useState(0);
 
     // Timer: Start and Stop
     const start = () => { setStartTime(Date.now()) };
@@ -385,11 +395,6 @@ export const Grid = (props) => {
             }
 
         }
-        console.log("u0: " + u0);
-        console.log("u1: " + u1)
-        console.log(windowWidth * 0.8)
-        console.log((windowWidth * 0.14) * u1)
-        console.log((windowWidth * 0.14) * (u0 / 5))
 
         for (let i = 0; i < 25; i++) {
             buttonArray[i] =
@@ -622,6 +627,7 @@ export const Grid = (props) => {
         const result_0 = arraysAreEquivalent(uniqueArr, arr2Filtered);
         if (result_0) {
             // console.log("Congrats, perfect score!")
+            setAwardExtraPoints(true)
             end();
         }
 
@@ -630,11 +636,13 @@ export const Grid = (props) => {
         const result_1 = arraysAreEquivalent(uniqueArr, modify_1)
         if (result_1 && !result_0) {
             // console.log(`Nice, you only got ${modify_0.length} wrong.`)
+            setAwardExtraPoints(true)
             end();
         }
 
         if (guesses.length == 12) {
             // console.log("You have run out of guesses.")
+            setAwardExtraPoints(false)
             end();
         }
 
@@ -659,31 +667,48 @@ export const Grid = (props) => {
         }
         setStoreCorrectAnswers(correctAnswers)
         setStoreIncorrectAnswers(incorrectAnswers)
-        setTimeTaken(Math.trunc((endTime - startTime) / 1000));
-        localTimeTaken = Math.trunc((endTime - startTime) / 1000);
 
+        localTimeTaken = Math.trunc((endTime - startTime) / 1000);
+        setTimeTaken(localTimeTaken);
         // Calculate the score as a percentage of correct answers
-        setScore(Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100));
+        // setScore(Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100));
 
         // If the time taken is less than 60 seconds, add a bonus to the score
-        if (localTimeTaken < 30 && guesses.length <= unique.length) {
-            setScore(score => score += 20);
-            localScore = score + 20;
+        if (localTimeTaken < 30 && awardExtraPoints) {
+            // setScore(score => score += 20);
+            // localScore = score + 20;
             localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 20;
             setExtraPoints(20);
-        } else if (localTimeTaken >= 30 && localTimeTaken < 60 && guesses.length <= unique.length) {
-            setScore(score => score += 10);
-            localScore = score + 10;
+            console.log("EXTRA 20")
+        } else if (localTimeTaken >= 30 && localTimeTaken < 60 && awardExtraPoints) {
+            // setScore(score => score += 10);
+            // localScore = score + 10;
             localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 10;
             setExtraPoints(10);
-        } else if (localTimeTaken >= 60 && localTimeTaken < 90 && guesses.length <= unique.length) {
-            setScore(score => score += 5);
-            localScore = score + 5;
+            console.log("EXTRA 10")
+        } else if (localTimeTaken >= 60 && localTimeTaken < 90 && awardExtraPoints) {
+            // setScore(score => score += 5);
+            // localScore = score + 5;
             localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 5;
             setExtraPoints(5);
+            console.log("EXTRA 5")
         } else {
             localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100);
+            console.log("NO EXTRA")
         }
+
+        if (displayLeftRightHint) {
+            localScore = localScore - 10;
+            setLeftRightHintReduction(-10)
+        }
+        if (displayTopBottomHint) {
+            localScore = localScore - 10;
+            setTopBottomHintReduction(-10)
+        }
+
+        console.log("TIME TAKEN: " + localTimeTaken)
+
+        setScore(localScore);
 
         handleAddGame(word1, word2, localTimeTaken, localScore);
 
@@ -832,7 +857,7 @@ export const Grid = (props) => {
                             {buttonArray}
                         </View>
                         <TouchableOpacity
-                            onPress={() => console.log("Q? T -> B")}
+                            onPress={() => { console.log("Q? T -> B"); setHintTopBottomModal(true) }}
                             style={{
                                 position: 'absolute',
                                 borderRadius: 100,
@@ -842,22 +867,22 @@ export const Grid = (props) => {
                                 alignItems: 'center',
                                 padding: 5,
                                 top: HeightRatio(8) - HeightRatio(35),
-                                left: ((windowWidth * 0.14) * (u1+1))+ (u1*2) + ((windowWidth * 0.07) - HeightRatio(20))
+                                left: ((windowWidth * 0.14) * (u1 + 1)) + (u1 * 2) + ((windowWidth * 0.07) - HeightRatio(20))
                             }}
                         >
                             <View
-                                
+
                             >
                                 {/* <Text style={{ color: 'white', fontWeight: 'bold', fontSize: HeightRatio(20) }}>?</Text> */}
-                                <Image  
-                                    style={{height: HeightRatio(50), width: HeightRatio(50)}}
+                                <Image
+                                    style={{ height: HeightRatio(50), width: HeightRatio(50) }}
                                     source={require('./assets/qmark.png')}
                                 />
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity
-                            onPress={() => console.log("Q? L -> R")}
+                            onPress={() => { console.log("Q? L -> R"); setHintLeftRightModal(true) }}
                             style={{
                                 position: 'absolute',
                                 borderRadius: 100,
@@ -866,16 +891,16 @@ export const Grid = (props) => {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 padding: 5,
-                                top: HeightRatio(8) + ((windowWidth * 0.14) * ((u0) / 5)) + ((u0/5)*2) + HeightRatio(20),
-                                left:  WidthRatio(13)
+                                top: HeightRatio(8) + ((windowWidth * 0.14) * ((u0) / 5)) + ((u0 / 5) * 2) + HeightRatio(20),
+                                left: WidthRatio(13)
                             }}
                         >
                             <View
-                                
+
                             >
                                 {/* <Text style={{ color: 'white', fontWeight: 'bold', fontSize: HeightRatio(20) }}>?</Text> */}
-                                <Image  
-                                    style={{height: HeightRatio(50), width: HeightRatio(50)}}
+                                <Image
+                                    style={{ height: HeightRatio(50), width: HeightRatio(50) }}
                                     source={require('./assets/qmark.png')}
                                 />
                             </View>
@@ -1005,9 +1030,269 @@ export const Grid = (props) => {
 
             </View>
 
+            {hintTopBottomModal &&
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={hintTopBottomModal}
+                    onRequestClose={() => {
+                        setHintTopBottomModal(!hintTopBottomModal);
+                    }}
+                >
+                    {/* [[[TOP ROW]]] */}
+                    <LinearGradient
+                        // Button Linear Gradient
+                        colors={['#002855', '#001219']}
+                        // style={styles.modalWordButton}
+                        style={{ ...styles.modalView, alignSelf: 'center' }}
+                    >
+                        <View
+                            style={{
+                                backgroundColor: 'rgba(255, 0, 0, 1)',
+                                alignSelf: 'center',
+                                borderRadius: 8,
+                                position: 'absolute',
+                                zIndex: 10,
+                                top: -1,
+                                right: -1
+                            }}
+                        >
+                            <TouchableOpacity
+                                onPress={() => { setHintTopBottomModal(!hintTopBottomModal) }}
+                                style={{
+                                    borderRadius: 10,
+                                    height: 50,
+                                    width: 50
+                                }}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faSolid, faX}
+                                    style={{
+                                        color: 'black',
+                                        justifyContent: 'center',
+                                        alignSelf: 'center',
+                                        marginTop: 17
+                                    }}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        {/* [[[MIDDLE ROW]]] */}
+                        <SafeAreaView style={styles.container}>
+                            <ScrollView style={styles.scrollView}>
+                                <View
+                                    style={{ flexDirection: 'column', marginTop: 10, marginBottom: 10 }}
+                                >
+                                    <Text style={{ color: 'white', alignSelf: 'center', marginTop: HeightRatio(20), marginBottom: HeightRatio(20), fontSize: HeightRatio(30), width: WidthRatio(280) }}>
+                                        Selecting hint reduces your score by 20 points!
+                                    </Text>
+                                    <TouchableOpacity
+                                        onPress={() => { searchWord2(word2); setDisplayTopBottomHint(true); }}
+                                        // style={styles.modalWordButton}
+                                        disabled={!displayTopBottomHint ? false : true}
+                                    >
+                                        <LinearGradient
+                                            // Button Linear Gradient
+                                            colors={['#aacc00', '#80b918']}
+                                            style={styles.modalWordButton}
+                                        >
+                                            <Text style={styles.modalWordButtonText}>
+                                                Hint: Top to Bottom
+                                            </Text>
+                                            {/* <Text style={styles.modalWordButtonText}>
+                                                {word2}
+                                            </Text> */}
+                                            <FontAwesomeIcon
+                                                icon={faSolid, faCaretDown}
+                                                style={{ ...styles.modalFontAwesomeIcons, color: '#001219', marginLeft: 10 }}
+                                                size={20}
+                                            />
+                                        </LinearGradient>
+                                    </TouchableOpacity>
+                                    <View style={{ width: WidthRatio(280), alignSelf: 'center' }}>
+                                        {definition3 != '' || definition4 != '' || definition5 != '' ?
+                                            <View>
+                                                <Text style={styles.modalContentHeader}>
+                                                    Definitions
+                                                </Text>
+                                            </View>
+                                            :
+                                            null
+                                        }
+                                        {definition3 != '' ?
+                                            <View
+                                                style={{ flexDirection: 'row', marginBottom: 10 }}
+                                            >
+
+                                                <Text style={styles.modalContent}>
+                                                    {definition3}
+                                                </Text>
+                                            </View>
+                                            :
+                                            null
+                                        }
+                                        {definition4 != '' ?
+                                            <View
+                                                style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
+                                            >
+                                                <Text style={styles.modalContent}>
+                                                    {definition4}
+                                                </Text>
+                                            </View>
+                                            :
+                                            null
+                                        }
+                                        {definition5 != '' ?
+                                            <View
+                                                style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
+                                            >
+                                                <Text style={styles.modalContent}>
+                                                    {definition5}
+                                                </Text>
+                                            </View>
+                                            :
+                                            null
+                                        }
+                                    </View>
+
+                                </View>
+                            </ScrollView>
+                        </SafeAreaView>
+                    </LinearGradient>
+                </Modal>
+            }
+
+            {hintLeftRightModal &&
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={hintLeftRightModal}
+                    onRequestClose={() => {
+                        setHintLeftRightModal(!hintLeftRightModal);
+                    }}
+                >
+                    {/* [[[TOP ROW]]] */}
+                    <LinearGradient
+                        // Button Linear Gradient
+                        colors={['#002855', '#001219']}
+                        // style={styles.modalWordButton}
+                        style={{ ...styles.modalView, alignSelf: 'center' }}
+                    >
+                        <View
+                            style={{
+                                backgroundColor: 'rgba(255, 0, 0, 1)',
+                                alignSelf: 'center',
+                                borderRadius: 8,
+                                position: 'absolute',
+                                zIndex: 10,
+                                top: -1,
+                                right: -1
+                            }}
+                        >
+                            <TouchableOpacity
+                                onPress={() => { setHintLeftRightModal(!hintLeftRightModal) }}
+                                style={{
+                                    borderRadius: 10,
+                                    height: 50,
+                                    width: 50
+                                }}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faSolid, faX}
+                                    style={{
+                                        color: 'black',
+                                        justifyContent: 'center',
+                                        alignSelf: 'center',
+                                        marginTop: 17
+                                    }}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        {/* [[[MIDDLE ROW]]] */}
+                        <SafeAreaView style={styles.container}>
+                            <ScrollView style={styles.scrollView}>
+                                <View
+                                    style={{ flexDirection: 'column', marginTop: 10, marginBottom: 10 }}
+                                >
+                                    <Text style={{ color: 'white', alignSelf: 'center', marginTop: HeightRatio(20), marginBottom: HeightRatio(20), fontSize: HeightRatio(30), width: WidthRatio(280) }}>
+                                        Selecting hint reduces your score by 20 points!
+                                    </Text>
+                                    <TouchableOpacity
+                                        onPress={() => { searchWord1(word1); setDisplayLeftRightHint(true); }}
+                                        // style={styles.modalWordButton}
+                                        disabled={!displayLeftRightHint ? false : true}
+                                    >
+                                        <LinearGradient
+                                            // Button Linear Gradient
+                                            colors={['#aacc00', '#80b918']}
+                                            style={styles.modalWordButton}
+                                        >
+                                            <Text style={styles.modalWordButtonText}>
+                                                Hint: Left to Right
+                                            </Text>
+                                            {/* <Text style={styles.modalWordButtonText}>
+                                                {word1}
+                                            </Text> */}
+                                            <FontAwesomeIcon
+                                                icon={faSolid, faCaretDown}
+                                                style={{ ...styles.modalFontAwesomeIcons, color: '#001219', marginLeft: 10 }}
+                                                size={20}
+                                            />
+                                        </LinearGradient>
+                                    </TouchableOpacity>
+                                    {definition0 != '' || definition1 != '' || definition2 != '' ?
+                                        <View>
+                                            <Text style={styles.modalContentHeader}>
+                                                Definitions
+                                            </Text>
+                                        </View>
+                                        :
+                                        null
+                                    }
+                                    {definition0 != '' ?
+                                        <View
+                                            style={{ flexDirection: 'row', marginBottom: 10 }}
+                                        >
+
+                                            <Text style={styles.modalContent}>
+                                                {definition0}
+                                            </Text>
+                                        </View>
+                                        :
+                                        null
+                                    }
+                                    {definition1 != '' ?
+                                        <View
+                                            style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
+                                        >
+                                            <Text style={styles.modalContent}>
+                                                {definition1}
+                                            </Text>
+                                        </View>
+                                        :
+                                        null
+                                    }
+                                    {definition2 != '' ?
+                                        <View
+                                            style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
+                                        >
+                                            <Text style={styles.modalContent}>
+                                                {definition2}
+                                            </Text>
+                                        </View>
+                                        :
+                                        null
+                                    }
+
+
+                                </View>
+                            </ScrollView>
+                        </SafeAreaView>
+                    </LinearGradient>
+                </Modal>
+            }
 
             {/* - - - - - - - - - - - - - -  */}
-            {/* [[[  MODAL  ]]] */}
+            {/* [[[  RESULT MODAL  ]]] */}
             {/* - - - - - - - - - - - - - -  */}
             {modalVisible &&
                 <Modal
@@ -1289,6 +1574,82 @@ export const Grid = (props) => {
                                                     + {extraPoints} points
                                                 </Text>
                                             </View>
+                                            <Text
+                                                style={{
+                                                    color: '#f9c74f',
+                                                    fontSize: 15,
+                                                    fontWeight: 'bold',
+                                                    alignSelf: 'center',
+                                                }}
+                                            >
+                                                Correct and fast!
+                                            </Text>
+                                            <View
+                                                style={{
+                                                    flexDirection: 'row',
+                                                    alignSelf: 'center',
+                                                    marginTop: 10,
+                                                    marginBottom: 10
+                                                }}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faSolid, faSquareMinus}
+                                                    style={{ ...styles.modalFontAwesomeIcons, color: '#f9c74f' }}
+                                                    size={30}
+                                                />
+                                                <Text
+                                                    style={{
+                                                        color: '#f9c74f',
+                                                        fontSize: 30,
+                                                        fontWeight: 'bold',
+                                                    }}
+                                                >
+                                                    {leftRightHintReduction} points
+                                                </Text>
+                                            </View>
+                                            <Text
+                                                style={{
+                                                    color: '#f9c74f',
+                                                    fontSize: 15,
+                                                    fontWeight: 'bold',
+                                                    alignSelf: 'center',
+                                                }}
+                                            >
+                                                Left to Right hint reduction.
+                                            </Text>
+                                            <View
+                                                style={{
+                                                    flexDirection: 'row',
+                                                    alignSelf: 'center',
+                                                    marginTop: 10,
+                                                    marginBottom: 10
+                                                }}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faSolid, faSquareMinus}
+                                                    style={{ ...styles.modalFontAwesomeIcons, color: '#f9c74f' }}
+                                                    size={30}
+                                                />
+                                                <Text
+                                                    style={{
+                                                        color: '#f9c74f',
+                                                        fontSize: 30,
+                                                        fontWeight: 'bold',
+                                                    }}
+                                                >
+                                                    {topBottomHintReduction} points
+                                                </Text>
+                                            </View>
+                                            <Text
+                                                style={{
+                                                    color: '#f9c74f',
+                                                    fontSize: 15,
+                                                    fontWeight: 'bold',
+                                                    alignSelf: 'center',
+                                                }}
+                                            >
+                                                Top to Bottom hint reduction.
+                                            </Text>
 
                                             <View style={styles.modalDivisionLine}></View>
                                             {/* CORRECT */}
