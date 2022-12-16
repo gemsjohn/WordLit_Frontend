@@ -827,8 +827,9 @@ export const Grid = (props) => {
     }, [endTime])
 
 
+ 
 
-
+    
     return (
         <>
 
@@ -925,6 +926,10 @@ export const Grid = (props) => {
                             {/* Guess Box */}
                             {/* - - - - - - - - - - - - - -  */}
                             <View style={{ flexDirection: 'column' }}>
+                                <Image
+                                    style={{height: HeightRatio(25), width: WidthRatio(60), position: 'absolute', zIndex: 10, top: -12, left: -8}}
+                                    source={require('./assets/click.png')}
+                                />
                                 <TouchableOpacity
                                     disabled={promptGuessInput == '' ? true : false}
                                     onPress={() => { CheckArray(promptGuessInput); setPromptGuessInput([]) }}
@@ -956,9 +961,11 @@ export const Grid = (props) => {
                                     marginRight: WidthRatio(4),
                                 }}
                             >
-                                {/* <Text style={{ color: 'white', fontSize: windowHeight / 40, fontWeight: 'bold', marginLeft: 10, marginBottom: -4 }}>
-                                    Guesses
-                                </Text> */}
+                                {guesses.length == 0 &&
+                                    <Text style={{position: 'absolute', color: 'white', fontSize: HeightRatio(40), fontWeight: 'bold', }}>
+                                        GUESSES
+                                    </Text>
+                                }
                                 <PreviousGuess />
                             </View>
                         </View>
@@ -1082,9 +1089,15 @@ export const Grid = (props) => {
                                 <View
                                     style={{ flexDirection: 'column', marginTop: 10, marginBottom: 10 }}
                                 >
-                                    <Text style={{ color: 'white', alignSelf: 'center', marginTop: HeightRatio(20), marginBottom: HeightRatio(20), fontSize: HeightRatio(30), width: WidthRatio(280) }}>
-                                        Selecting hint reduces your score by 20 points!
-                                    </Text>
+                                    <View style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: HeightRatio(20), marginBottom: HeightRatio(20), marginLeft: WidthRatio(20) }}>
+                                        <Text style={{ color: 'white',  fontSize: HeightRatio(30), fontWeight: 'bold', width: WidthRatio(280) }}>
+                                            Warning:
+                                        </Text>
+                                        <Text style={{ color: 'white', fontSize: HeightRatio(30), width: WidthRatio(280), alignSelf: 'center' }}>
+                                            Selecting hint reduces your score by 10 points!
+                                        </Text>
+                                    </View>
+                                    
                                     <TouchableOpacity
                                         onPress={() => { searchWord2(word2); setDisplayTopBottomHint(true); }}
                                         // style={styles.modalWordButton}
@@ -1213,9 +1226,14 @@ export const Grid = (props) => {
                                 <View
                                     style={{ flexDirection: 'column', marginTop: 10, marginBottom: 10 }}
                                 >
-                                    <Text style={{ color: 'white', alignSelf: 'center', marginTop: HeightRatio(20), marginBottom: HeightRatio(20), fontSize: HeightRatio(30), width: WidthRatio(280) }}>
-                                        Selecting hint reduces your score by 20 points!
-                                    </Text>
+                                    <View style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: HeightRatio(20), marginBottom: HeightRatio(20), marginLeft: WidthRatio(20) }}>
+                                        <Text style={{ color: 'white',  fontSize: HeightRatio(30), fontWeight: 'bold', width: WidthRatio(280) }}>
+                                            Warning:
+                                        </Text>
+                                        <Text style={{ color: 'white', fontSize: HeightRatio(30), width: WidthRatio(280), alignSelf: 'center' }}>
+                                            Selecting hint reduces your score by 10 points!
+                                        </Text>
+                                    </View>
                                     <TouchableOpacity
                                         onPress={() => { searchWord1(word1); setDisplayLeftRightHint(true); }}
                                         // style={styles.modalWordButton}
@@ -1239,50 +1257,51 @@ export const Grid = (props) => {
                                             />
                                         </LinearGradient>
                                     </TouchableOpacity>
-                                    {definition0 != '' || definition1 != '' || definition2 != '' ?
-                                        <View>
-                                            <Text style={styles.modalContentHeader}>
-                                                Definitions
-                                            </Text>
-                                        </View>
-                                        :
-                                        null
-                                    }
-                                    {definition0 != '' ?
-                                        <View
-                                            style={{ flexDirection: 'row', marginBottom: 10 }}
-                                        >
+                                    <View style={{ width: WidthRatio(280), alignSelf: 'center' }}>
+                                        {definition0 != '' || definition1 != '' || definition2 != '' ?
+                                            <View>
+                                                <Text style={styles.modalContentHeader}>
+                                                    Definitions
+                                                </Text>
+                                            </View>
+                                            :
+                                            null
+                                        }
+                                        {definition0 != '' ?
+                                            <View
+                                                style={{ flexDirection: 'row', marginBottom: 10 }}
+                                            >
 
-                                            <Text style={styles.modalContent}>
-                                                {definition0}
-                                            </Text>
-                                        </View>
-                                        :
-                                        null
-                                    }
-                                    {definition1 != '' ?
-                                        <View
-                                            style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
-                                        >
-                                            <Text style={styles.modalContent}>
-                                                {definition1}
-                                            </Text>
-                                        </View>
-                                        :
-                                        null
-                                    }
-                                    {definition2 != '' ?
-                                        <View
-                                            style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
-                                        >
-                                            <Text style={styles.modalContent}>
-                                                {definition2}
-                                            </Text>
-                                        </View>
-                                        :
-                                        null
-                                    }
-
+                                                <Text style={styles.modalContent}>
+                                                    {definition0}
+                                                </Text>
+                                            </View>
+                                            :
+                                            null
+                                        }
+                                        {definition1 != '' ?
+                                            <View
+                                                style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
+                                            >
+                                                <Text style={styles.modalContent}>
+                                                    {definition1}
+                                                </Text>
+                                            </View>
+                                            :
+                                            null
+                                        }
+                                        {definition2 != '' ?
+                                            <View
+                                                style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
+                                            >
+                                                <Text style={styles.modalContent}>
+                                                    {definition2}
+                                                </Text>
+                                            </View>
+                                            :
+                                            null
+                                        }
+                                    </View>
 
                                 </View>
                             </ScrollView>
@@ -1749,8 +1768,8 @@ const styles = StyleSheet.create({
         marginTop: 0
     },
     guessBlock: {
-        height: WidthRatio(50),
-        width: WidthRatio(50),
+        height: WidthRatio(60),
+        width: WidthRatio(60),
         // margin: 2,
         marginLeft: WidthRatio(4),
         marginRight: WidthRatio(4),
