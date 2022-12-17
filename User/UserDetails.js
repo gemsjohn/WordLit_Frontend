@@ -193,9 +193,9 @@ export const UserDetails = (props) => {
                                 >
                                     <FontAwesomeIcon
                                         icon={faSolid, faPenToSquare}
-                                        style={{ color: 'white', justifyContent: 'flex-end', marginRight: 10 }}
+                                        style={{ color: '#00b2ca', justifyContent: 'flex-end', marginRight: 5 }}
                                     />
-                                    <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                                    <Text style={{ color: 'white', fontWeight: 'bold' }} allowFontScaling={false}>
                                         EDIT
                                     </Text>
                                 </View>
@@ -207,123 +207,34 @@ export const UserDetails = (props) => {
                                     <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10 }}>
                                         <View style={{ flexDirection: 'column' }}>
                                             {i != 2 &&
-                                            <>
-                                            {i == 3 && 
-                                                <TouchableOpacity onPress={() => copyToClipboard()} style={{marginLeft: 10}}>
-                                                    <View style={{flexDirection: 'row', backgroundColor: 'rgba(0, 0, 0, 0.3)', width: windowWidth-170, borderRadius: 10, padding: 5}}>
-                                                        <Text style={{color: 'white', fontSize: windowHeight*0.02, fontWeight: 'bold', marginLeft: windowWidth*0.02}}>{props.currentuser._id}</Text>
-                                                        <FontAwesomeIcon
-                                                            icon={faSolid, faCopy}
-                                                            style={{ color: 'white', justifyContent: 'center', alignSelf: 'center', marginLeft: windowWidth*0.01 }}
-                                                        />
-                                                    </View>
-                                                </TouchableOpacity>
-                                            }
-                                            <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10 }}>
-                                                
-                                                <TextInput
-                                                    type="text"
-                                                    name={EditableFields[i].title}
-                                                    placeholder={'Update ' + EditableFields[i].title}
-                                                    placeholderTextColor='white'
-                                                    value={EditableFields[i].prompt}
-                                                    onChangeText={EditableFields[i].setprompt}
-                                                    multiline
-                                                    numberOfLines={1}
-                                                    style={{
-                                                        outline: 'none',
-                                                        backgroundColor: 'transparent',
-                                                        color: 'white',
-                                                        display: 'flex',
-                                                        justifyContent: 'flex-start',
-                                                        padding: 20,
-                                                        border: 'solid',
-                                                        borderColor: 'white',
-                                                        borderTopWidth: 1,
-                                                        borderLeftWidth: 1,
-                                                        borderBottomWidth: 1,
-                                                        borderTopLeftRadius: 30,
-                                                        borderBottomLeftRadius: 30,
-                                                        alignSelf: 'center',
-                                                        marginTop: 10,
-                                                        marginBottom: 4,
-                                                        width: windowWidth - 150
-                                                    }}
-                                                />
-                                                {/* [[[SUMBIT BUTTON]]] */}
-                                                <TouchableOpacity
-                                                    onPress={() => {
-                                                        handleFormSubmit();
-                                                        setShowEditableFieldUsername(false);
-                                                        setShowEditableFieldEmail(false);
-                                                        setShowEditableFieldPassword(false);
-                                                        setShowEditableFieldVerification(false);
-                                                        setShowEditableFieldDelete(false);
-                                                    }}
-                                                    style={{
-                                                        // backgroundColor: 'green',
-                                                        // width: windowWidth - 30,
-                                                        padding: 10,
-                                                        // borderRadius: 10,
-                                                        border: 'solid',
-                                                        borderColor: 'white',
-                                                        borderTopWidth: 1,
-                                                        borderRightWidth: 1,
-                                                        borderBottomWidth: 1,
-                                                        borderTopRightRadius: 30,
-                                                        borderBottomRightRadius: 30,
-                                                        marginTop: 10,
-                                                        marginBottom: 4,
-                                                    }}
-                                                >
-                                                    <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }}>SUMBIT</Text>
-                                                </TouchableOpacity>
-                                            </View>
-                                            </>
-                                            }
-
-
-                                            {i == 2 &&
                                                 <>
+                                                    {i == 3 &&
+                                                        <>
+                                                            <TouchableOpacity onPress={() => copyToClipboard()} style={{ marginLeft: 10 }}>
+                                                                <View style={{ flexDirection: 'row', backgroundColor: 'rgba(0, 0, 0, 0.3)', width: windowWidth - 60, borderRadius: 10, padding: 10 }}>
+                                                                    <Text
+                                                                        style={{ color: '#efea5a', fontSize: windowHeight * 0.02, fontWeight: 'bold', marginLeft: windowWidth * 0.02 }}
+                                                                        allowFontScaling={false}
+                                                                    >Copy ID {props.currentuser._id}</Text>
+                                                                </View>
+                                                            </TouchableOpacity>
+                                                        </>
+                                                    }
                                                     <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10 }}>
+
                                                         <TextInput
-                                                            type="password"
+                                                            type="text"
                                                             name={EditableFields[i].title}
-                                                            placeholder={'Update ' + EditableFields[i].title}
+                                                            placeholder={i == 3? 'Paste ID' : EditableFields[i].title}
                                                             placeholderTextColor='white'
-                                                            value={promptPasswordInput1}
-                                                            onChangeText={setPromptPasswordInput1}
-                                                            secureTextEntry={true}
+                                                            value={EditableFields[i].prompt}
+                                                            onChangeText={EditableFields[i].setprompt}
+                                                            multiline
+                                                            numberOfLines={1}
+                                                            allowFontScaling={false}
                                                             style={{
                                                                 outline: 'none',
-                                                                backgroundColor: 'transparent',
-                                                                color: 'white',
-                                                                display: 'flex',
-                                                                justifyContent: 'flex-start',
-                                                                padding: 20,
-                                                                border: 'solid',
-                                                                borderColor: 'white',
-                                                                borderWidth: 1,
-                                                                borderRadius: 30,
-                                                                alignSelf: 'center',
-                                                                marginTop: 10,
-                                                                marginBottom: 4,
-                                                                width: windowWidth - 70
-                                                            }}
-                                                        />
-                                                    </View>
-                                                    <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10 }}>
-                                                        <TextInput
-                                                            type="password"
-                                                            name={EditableFields[i].title}
-                                                            placeholder='Check Password'
-                                                            placeholderTextColor='white'
-                                                            value={promptPasswordInput2}
-                                                            onChangeText={setPromptPasswordInput2}
-                                                            secureTextEntry={true}
-                                                            style={{
-                                                                outline: 'none',
-                                                                backgroundColor: 'transparent',
+                                                                backgroundColor: 'rgba(0, 0, 0, 0.25)',
                                                                 color: 'white',
                                                                 display: 'flex',
                                                                 justifyContent: 'flex-start',
@@ -338,7 +249,7 @@ export const UserDetails = (props) => {
                                                                 alignSelf: 'center',
                                                                 marginTop: 10,
                                                                 marginBottom: 4,
-                                                                width: windowWidth - 150
+                                                                width: windowWidth - 160
                                                             }}
                                                         />
                                                         {/* [[[SUMBIT BUTTON]]] */}
@@ -352,7 +263,7 @@ export const UserDetails = (props) => {
                                                                 setShowEditableFieldDelete(false);
                                                             }}
                                                             style={{
-                                                                // backgroundColor: 'green',
+                                                                backgroundColor: 'rgba(0, 0, 0, 0.25)',
                                                                 // width: windowWidth - 30,
                                                                 padding: 10,
                                                                 // borderRadius: 10,
@@ -367,14 +278,107 @@ export const UserDetails = (props) => {
                                                                 marginBottom: 4,
                                                             }}
                                                         >
-                                                            <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }}>SUMBIT</Text>
+                                                            <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }} allowFontScaling={false}>SUMBIT</Text>
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                </>
+                                            }
+
+
+                                            {i == 2 &&
+                                                <>
+                                                    <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10 }}>
+                                                        <TextInput
+                                                            type="password"
+                                                            name={EditableFields[i].title}
+                                                            placeholder={'New ' + EditableFields[i].title}
+                                                            placeholderTextColor='white'
+                                                            value={promptPasswordInput1}
+                                                            onChangeText={setPromptPasswordInput1}
+                                                            secureTextEntry={true}
+                                                            allowFontScaling={false}
+                                                            style={{
+                                                                outline: 'none',
+                                                                backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                                                                color: 'white',
+                                                                display: 'flex',
+                                                                justifyContent: 'flex-start',
+                                                                padding: 20,
+                                                                border: 'solid',
+                                                                borderColor: 'white',
+                                                                borderWidth: 1,
+                                                                borderRadius: 30,
+                                                                alignSelf: 'center',
+                                                                marginTop: 10,
+                                                                marginBottom: 4,
+                                                                width: windowWidth - 80
+                                                            }}
+                                                        />
+                                                    </View>
+                                                    <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10 }}>
+                                                        <TextInput
+                                                            type="password"
+                                                            name={EditableFields[i].title}
+                                                            placeholder='Confirm Password'
+                                                            placeholderTextColor='white'
+                                                            value={promptPasswordInput2}
+                                                            onChangeText={setPromptPasswordInput2}
+                                                            secureTextEntry={true}
+                                                            allowFontScaling={false}
+                                                            style={{
+                                                                outline: 'none',
+                                                                backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                                                                color: 'white',
+                                                                display: 'flex',
+                                                                justifyContent: 'flex-start',
+                                                                padding: 20,
+                                                                border: 'solid',
+                                                                borderColor: 'white',
+                                                                borderTopWidth: 1,
+                                                                borderLeftWidth: 1,
+                                                                borderBottomWidth: 1,
+                                                                borderTopLeftRadius: 30,
+                                                                borderBottomLeftRadius: 30,
+                                                                alignSelf: 'center',
+                                                                marginTop: 10,
+                                                                marginBottom: 4,
+                                                                width: windowWidth - 160
+                                                            }}
+                                                        />
+                                                        {/* [[[SUMBIT BUTTON]]] */}
+                                                        <TouchableOpacity
+                                                            onPress={() => {
+                                                                handleFormSubmit();
+                                                                setShowEditableFieldUsername(false);
+                                                                setShowEditableFieldEmail(false);
+                                                                setShowEditableFieldPassword(false);
+                                                                setShowEditableFieldVerification(false);
+                                                                setShowEditableFieldDelete(false);
+                                                            }}
+                                                            style={{
+                                                                backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                                                                // width: windowWidth - 30,
+                                                                padding: 10,
+                                                                // borderRadius: 10,
+                                                                border: 'solid',
+                                                                borderColor: 'white',
+                                                                borderTopWidth: 1,
+                                                                borderRightWidth: 1,
+                                                                borderBottomWidth: 1,
+                                                                borderTopRightRadius: 30,
+                                                                borderBottomRightRadius: 30,
+                                                                marginTop: 10,
+                                                                marginBottom: 4,
+                                                            }}
+                                                        >
+                                                            <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }} allowFontScaling={false}>SUMBIT</Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                 </>
                                             }
                                             {promptPasswordInput1 != '' && promptPasswordInput2 != '' && promptPasswordInput1 == promptPasswordInput2 &&
                                                 <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-                                                    <Text style={{ color: 'white', fontSize: windowHeight*0.03 }}>
+                                                    <Text style={{ color: 'white', fontSize: windowHeight * 0.03 }}>
                                                         Passwords Match!
                                                     </Text>
                                                 </View>
