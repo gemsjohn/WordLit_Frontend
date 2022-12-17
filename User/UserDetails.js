@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, View, TouchableOpacity, Text, TextInput } from "react-native";
+import { Button, View, TouchableOpacity, Text, TextInput, StyleSheet, Modal, PixelRatio } from "react-native";
 import { Dimensions } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faSolid, faAddressCard, faEnvelope, faSackDollar, faStar, faX, faPenToSquare, faCopy } from '@fortawesome/free-solid-svg-icons'
@@ -12,6 +12,24 @@ import { DemoAppInvoiceAndQuote } from './VerificationInvoiceAndQuote';
 import * as Clipboard from 'expo-clipboard';
 import { CommonActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+} = Dimensions.get('window');
+
+const scaleWidth = SCREEN_WIDTH / 360;
+const scaleHeight = SCREEN_HEIGHT / 800;
+
+const WidthRatio = (size) => {
+    const newSize = size * scaleWidth;
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+}
+
+const HeightRatio = (size) => {
+    const newSize = size * scaleHeight;
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+}
 
 export const UserDetails = (props) => {
     // console.log(props)
@@ -35,7 +53,7 @@ export const UserDetails = (props) => {
     const [promptVerificationInput, setPromptVerificationInput] = useState("")
     const [promptDeleteInput, setPromptDeleteInput] = useState("")
 
-    const [copiedText, setCopiedText] = React.useState('');
+    const [deleteUserModal, setDeleteUserModal] = useState(false);
 
     let userDetailsArray = [];
 
@@ -154,18 +172,22 @@ export const UserDetails = (props) => {
                 refetch();
             }
             catch (e) { console.error(e); }
-        } else if (showEditableFieldDelete) {
-            try {
-                await deleteUser({
-                    variables: { deleteUserId: promptDeleteInput }
-                  });
-                storeAuthState('false')
-                storeBearerToken('')
-                storeUserID('')
-                props.nav.dispatch(resetActionAuth)
-            }
-            catch (e) { console.error(e); }
+        } else if (showEditableFieldDelete && promptDeleteInput != '') {
+            setDeleteUserModal(true);
         }
+    }
+
+    const handleDeleteAccount = async () => {
+        try {
+            await deleteUser({
+                variables: { deleteUserId: promptDeleteInput }
+            });
+            storeAuthState('false')
+            storeBearerToken('')
+            storeUserID('')
+            props.nav.dispatch(resetActionAuth)
+        }
+        catch (e) { console.error(e); }
     }
 
     // [[[PRODUCT USER DETAIL SECTIONS]]]
@@ -185,6 +207,7 @@ export const UserDetails = (props) => {
                         setPromptPasswordInput1("");
                         setPromptPasswordInput2("");
                         setPromptVerificationInput("");
+                        setPromptDeleteInput("");
                     }}
                 >
                     <View
@@ -410,16 +433,26 @@ export const UserDetails = (props) => {
                                                                 marginTop: 10,
                                                                 marginBottom: 4,
                                                             }}
+
                                                         >
                                                             <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }} allowFontScaling={false}>SUMBIT</Text>
                                                         </TouchableOpacity>
+
                                                     </View>
+
                                                 </>
                                             }
                                             {promptPasswordInput1 != '' && promptPasswordInput2 != '' && promptPasswordInput1 == promptPasswordInput2 &&
                                                 <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                                                     <Text style={{ color: 'white', fontSize: windowHeight * 0.03 }}>
-                                                        Passwords Match!
+                                                        Passwords match!
+                                                    </Text>
+                                                </View>
+                                            }
+                                            {promptPasswordInput1 != '' && promptPasswordInput2 != '' && promptPasswordInput1 != promptPasswordInput2 &&
+                                                <View style={{ flexDirection: 'row', alignSelf: 'center', backgroundColor: 'rgba(255, 255, 255, 0.5)', padding: 10, borderRadius: 10 }}>
+                                                    <Text style={{ color: 'red', fontSize: windowHeight * 0.03 }}>
+                                                        Passwords do not match!
                                                     </Text>
                                                 </View>
                                             }
@@ -441,9 +474,121 @@ export const UserDetails = (props) => {
                         }
                     </View>
                 </TouchableOpacity>
-
             </View>
+
+
+
     }
-    return (userDetailsArray);
+    return (
+        <View>
+            {userDetailsArray}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={deleteUserModal}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    setDeleteUserModal(!deleteUserModal);
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        {/* TOP ROW */}
+                        <View
+                            style={{
+                                backgroundColor: 'rgba(255, 0, 0, 1)',
+                                alignSelf: 'center',
+                                borderRadius: 8,
+                                position: 'absolute',
+                                zIndex: 10,
+                                top: 0,
+                                right: 0
+                            }}
+                        >
+                            <TouchableOpacity
+                                onPress={() => { setDeleteUserModal(!deleteUserModal) }}
+                                style={{
+                                    borderRadius: 10,
+                                    height: 50,
+                                    width: 50
+                                }}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faSolid, faX}
+                                    style={{
+                                        color: 'black',
+                                        justifyContent: 'center',
+                                        alignSelf: 'center',
+                                        marginTop: 17
+                                    }}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        {/* MIDDLE ROW */}
+                        <Text style={styles.modalText}>Are you sure you want to delete your account?</Text>
+                        <TouchableOpacity
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => handleDeleteAccount()}
+                        >
+                            <Text style={styles.textStyle}>Delete</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+        </View>
+    );
 
 }
+
+const styles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "#edf2f4",
+        borderRadius: 10,
+        borderWidth: 3,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        width: WidthRatio(300)
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        backgroundColor: '#d90429'
+    },
+    buttonOpen: {
+        backgroundColor: "#F194FF",
+    },
+    buttonClose: {
+        backgroundColor: "#4361ee",
+        borderRadius: 10,
+        padding: 20
+    },
+    textStyle: {
+        color: "white",
+        fontSize: HeightRatio(25),
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center",
+        color: 'black',
+        fontSize: HeightRatio(30),
+        fontWeight: 'bold'
+    }
+});
