@@ -155,7 +155,12 @@ function HomeScreen({ navigation }) {
               <TouchableOpacity
                 onPress={() => console.log(i)}
               >
-                <Text style={styles.letters}>{demoText[i]}</Text>
+                <Text 
+                  style={styles.letters}
+                  allowFontScaling={false}
+                >
+                  {demoText[i]}
+                </Text>
               </TouchableOpacity>
             </LinearGradient>
             :
@@ -167,7 +172,12 @@ function HomeScreen({ navigation }) {
               <TouchableOpacity
                 onPress={() => console.log(i)}
               >
-                <Text style={styles.letters}>{demoText[i]}</Text>
+                <Text 
+                  style={styles.letters}
+                  allowFontScaling={false}
+                >
+                  {demoText[i]}
+                </Text>
               </TouchableOpacity>
             </LinearGradient>
           }
@@ -216,7 +226,12 @@ function HomeScreen({ navigation }) {
 
               }}
             >
-              <Text style={{ color: 'white', fontSize: HeightRatio(24), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}>Choose a background color:</Text>
+              <Text 
+                style={{ color: 'white', fontSize: HeightRatio(24), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}
+                allowFontScaling={false}
+              >
+                Choose a background color:
+              </Text>
 
               <View style={styles.circlecontainer}>
                 {colors.map((color) => (
@@ -239,7 +254,10 @@ function HomeScreen({ navigation }) {
                 borderBottomLeftRadius: 50,
               }}
             >
-              <Text style={{ color: 'white', fontSize: HeightRatio(24), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}>
+              <Text 
+                style={{ color: 'white', fontSize: HeightRatio(24), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}
+                allowFontScaling={false}
+              >
                 How to play:
               </Text>
               <View
@@ -285,7 +303,10 @@ function HomeScreen({ navigation }) {
                     borderBottomLeftRadius: 30,
                   }}
                 >
-                  <Text style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}>
+                  <Text 
+                    style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
+                    allowFontScaling={false}
+                  >
                     1
                   </Text>
                 </View>
@@ -313,7 +334,10 @@ function HomeScreen({ navigation }) {
                     borderBottomLeftRadius: 30,
                   }}
                 >
-                  <Text style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}>
+                  <Text 
+                    style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
+                    allowFontScaling={false}
+                  >
                     2
                   </Text>
                 </View>
@@ -344,7 +368,10 @@ function HomeScreen({ navigation }) {
                     borderBottomLeftRadius: 30,
                   }}
                 >
-                  <Text style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}>
+                  <Text 
+                    style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
+                    allowFontScaling={false}
+                  >
                     3
                   </Text>
                 </View>
@@ -375,7 +402,10 @@ function HomeScreen({ navigation }) {
                     borderBottomLeftRadius: 30,
                   }}
                 >
-                  <Text style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}>
+                  <Text 
+                    style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
+                    allowFontScaling={false}
+                  >
                     4
                   </Text>
                 </View>
@@ -403,7 +433,10 @@ function HomeScreen({ navigation }) {
                     borderBottomLeftRadius: 30,
                   }}
                 >
-                  <Text style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}>
+                  <Text 
+                    style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
+                    allowFontScaling={false}
+                  >
                     5
                   </Text>
                 </View>
@@ -658,6 +691,7 @@ function LeaderScreen({ navigation }) {
               marginTop: HeightRatio(30), 
               marginLeft: WidthRatio(20) 
             }}
+            allowFontScaling={false}
           >
             {pos}
           </Text>
@@ -667,12 +701,13 @@ function LeaderScreen({ navigation }) {
             <View style={{ flexDirection: 'row', alignSelf: 'flex-start', margin: windowWidth * 0.01 }}>
               <Text
                 style={{
-                  fontSize: windowWidth * 0.06,
+                  fontSize: windowWidth * 0.08,
                   fontWeight: 'bold',
                   color: '#efea5a'
                 }}
                 numberOfLines={1}
                 ellipsizeMode='tail'
+                allowFontScaling={false}
               >
                 {username}
               </Text>
@@ -696,10 +731,16 @@ function LeaderScreen({ navigation }) {
                 }}
                 numberOfLines={1}
                 ellipsizeMode='tail'
+                allowFontScaling={false}
               >
                 {score}
               </Text>
-              <Text style={{ fontSize: windowWidth * 0.04, fontWeight: 'bold', color: '#83e377', alignSelf: 'flex-end', marginLeft: 4 }}>points</Text>
+              <Text 
+                style={{ fontSize: windowWidth * 0.05, fontWeight: 'bold', color: '#83e377', alignSelf: 'flex-end', marginLeft: 4 }}
+                allowFontScaling={false}
+              >
+                points
+              </Text>
             </View>
           </View>
         </View>
@@ -1092,7 +1133,12 @@ const Auth = ({ navigation }) => {
             <>
               {newUser ?
                 <>
-                  <Text style={{ color: 'white', alignSelf: 'center', fontSize: 20, marginTop: 20, fontWeight: 'bold' }}>Sign Up</Text>
+                  <Text 
+                    style={{ color: 'white', alignSelf: 'center', fontSize: 50, marginTop: 20, fontWeight: 'bold' }}
+                    allowFontScaling={false}
+                  >
+                    Sign Up
+                  </Text>
                   <>
                     {/* [[[CHECK BOXES]]] */}
                     <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 20 }}>
@@ -1280,7 +1326,12 @@ const Auth = ({ navigation }) => {
                           }}
 
                         >
-                          <Text style={{ color: '#001219', fontSize: 20, fontWeight: 'bold', alignSelf: 'center' }}>SIGN UP</Text>
+                          <Text 
+                            style={{ color: '#001219', fontSize: 30, fontWeight: 'bold', alignSelf: 'center' }}
+                            allowFontScaling={false}
+                          >
+                            SIGN UP
+                          </Text>
                         </View>
                       </TouchableOpacity>
                       :
@@ -1300,11 +1351,21 @@ const Auth = ({ navigation }) => {
                             width: windowWidth - 80
                           }}
                         >
-                          <Text style={{ color: '#001219', fontSize: 20, fontWeight: 'bold', alignSelf: 'center' }}>SIGN UP</Text>
+                          <Text 
+                            style={{ color: '#001219', fontSize: 30, fontWeight: 'bold', alignSelf: 'center' }}
+                            allowFontScaling={false}
+                          >
+                            SIGN UP
+                          </Text>
                         </View>
                       </TouchableOpacity>
                   }
-                  <Text style={{ color: 'white', alignSelf: 'center', fontSize: 20, margin: 20, fontWeight: 'bold' }}>Have an account?</Text>
+                  <Text 
+                    style={{ color: 'white', alignSelf: 'center', fontSize: 30, margin: 20, fontWeight: 'bold' }}
+                    allowFontScaling={false}
+                  >
+                    Have an account?
+                  </Text>
                   <TouchableOpacity
                     onPress={() => {
                       setPromptEmailInput("")
@@ -1325,7 +1386,11 @@ const Auth = ({ navigation }) => {
                         width: windowWidth - 200
                       }}
                     >
-                      <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', alignSelf: 'center' }}>Login</Text>
+                      <Text 
+                        style={{ color: 'white', fontSize: 25, fontWeight: 'bold', alignSelf: 'center' }}
+                        allowFontScaling={false}
+                      >
+                        Login</Text>
                     </View>
                   </TouchableOpacity>
                 </>
@@ -1335,7 +1400,12 @@ const Auth = ({ navigation }) => {
                     <Loading />
                     :
                     <>
-                      <Text style={{ color: 'white', alignSelf: 'center', fontSize: 20, margin: 20, fontWeight: 'bold' }}>Login</Text>
+                      <Text 
+                        style={{ color: 'white', alignSelf: 'center', fontSize: 50, margin: 20, fontWeight: 'bold' }}
+                        allowFontScaling={false}
+                      >
+                        Login
+                      </Text>
                       <TextInput
                         type="text"
                         name="username"
@@ -1385,7 +1455,10 @@ const Auth = ({ navigation }) => {
                       />
                       {displayLoginFailureAlert &&
                         <View style={{ alignSelf: 'center' }}>
-                          <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'red' }}>
+                          <Text 
+                            style={{ fontSize: 30, fontWeight: 'bold', color: 'red' }}
+                            allowFontScaling={false}
+                          >
                             Incorrect Credentials
                           </Text>
                         </View>
@@ -1405,7 +1478,12 @@ const Auth = ({ navigation }) => {
                               width: windowWidth - 80
                             }}
                           >
-                            <Text style={{ color: '#001219', fontSize: 20, fontWeight: 'bold', alignSelf: 'center' }}>LOGIN</Text>
+                            <Text 
+                              style={{ color: '#001219', fontSize: 30, fontWeight: 'bold', alignSelf: 'center' }}
+                              allowFontScaling={false}
+                            >
+                              LOGIN
+                            </Text>
                           </View>
                         </TouchableOpacity>
                         :
@@ -1426,11 +1504,21 @@ const Auth = ({ navigation }) => {
                               width: windowWidth - 80
                             }}
                           >
-                            <Text style={{ color: '#001219', fontSize: 20, fontWeight: 'bold', alignSelf: 'center' }}>LOGIN</Text>
+                            <Text 
+                              style={{ color: '#001219', fontSize: 30, fontWeight: 'bold', alignSelf: 'center' }}
+                              allowFontScaling={false}
+                            >
+                              LOGIN
+                            </Text>
                           </View>
                         </TouchableOpacity>
                       }
-                      <Text style={{ color: 'white', alignSelf: 'center', fontSize: 20, margin: 20, fontWeight: 'bold' }}>Don't have an account?</Text>
+                      <Text 
+                        style={{ color: 'white', alignSelf: 'center', fontSize: 30, margin: 20, fontWeight: 'bold' }}
+                        allowFontScaling={false}
+                      >
+                        Don't have an account?
+                      </Text>
                       <TouchableOpacity onPress={() => { setNewUser(true) }}>
                         <View
                           style={{
@@ -1444,7 +1532,12 @@ const Auth = ({ navigation }) => {
                             width: windowWidth - 200
                           }}
                         >
-                          <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', alignSelf: 'center' }}>Sign Up</Text>
+                          <Text 
+                            style={{ color: 'white', fontSize: 25, fontWeight: 'bold', alignSelf: 'center' }}
+                            allowFontScaling={false}
+                          >
+                            Sign Up
+                          </Text>
                         </View>
                       </TouchableOpacity>
 

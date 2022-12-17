@@ -110,7 +110,12 @@ export const Navbar = (props) => {
                         style={{ color: '#7678ed', alignSelf: 'center' }}
                         size={25}
                     />
-                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}>Home</Text>
+                    <Text 
+                        style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}
+                        allowFontScaling={false}
+                    >
+                        Home
+                    </Text>
                 </View>
             </TouchableOpacity>
            
@@ -132,7 +137,12 @@ export const Navbar = (props) => {
                         style={{ color: '#aaf683', alignSelf: 'center' }}
                         size={25}
                     />
-                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}>Game</Text>
+                    <Text 
+                        style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}
+                        allowFontScaling={false}
+                    >
+                        Game
+                    </Text>
                 </View>
             </TouchableOpacity>
             {/* [[[LEADER BOARD]]] */}
@@ -154,7 +164,12 @@ export const Navbar = (props) => {
                         style={{ color: '#efea5a', alignSelf: 'center' }}
                         size={25}
                     />
-                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}>Leader</Text>
+                    <Text 
+                        style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}
+                        allowFontScaling={false}
+                    >
+                        Leader
+                    </Text>
                 </View>
             </TouchableOpacity>
             
@@ -177,7 +192,12 @@ export const Navbar = (props) => {
                         style={{ color: '#00b2ca', alignSelf: 'center' }}
                         size={25}
                     />
-                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}>Profile</Text>
+                    <Text 
+                        style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}
+                        allowFontScaling={false}
+                    >
+                        Profile
+                    </Text>
                 </View>
             </TouchableOpacity>
             :
@@ -198,7 +218,12 @@ export const Navbar = (props) => {
                         style={{ color: '#00b2ca', alignSelf: 'center' }}
                         size={25}
                     />
-                    <Text style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}>Profile</Text>
+                    <Text 
+                        style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}
+                        allowFontScaling={false}
+                    >
+                        Profile
+                    </Text>
                 </View>
             </TouchableOpacity>
 

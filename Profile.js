@@ -110,7 +110,7 @@ export const Profile = (props) => {
                                 style={{ ...styles.modalFontAwesomeIcons, color: 'white' }}
                                 size={30}
                             />
-                            <Text style={styles.modalScoringVarText}>
+                            <Text style={styles.modalScoringVarText} allowFontScaling={false}>
                                 User Details
                             </Text>
                         </View>
@@ -140,13 +140,13 @@ export const Profile = (props) => {
                                 style={{ ...styles.modalFontAwesomeIcons, color: 'white' }}
                                 size={30}
                             />
-                            <Text style={styles.modalScoringVarText}>
+                            <Text style={styles.modalScoringVarText} allowFontScaling={false}>
                                 Recent Games
                             </Text>
                         </View>
                     </TouchableOpacity>
                     {recentGamesOpen ?
-                        <View style={{ marginLeft: 40 }}>
+                        <View style={{ marginLeft: 10 }}>
                             {/* <UserDetails currentuser={userByID?.user} /> */}
                             <RecentGames currentuser={userByID?.user._id} />
                         </View>
@@ -199,7 +199,12 @@ export const Profile = (props) => {
                             colors={['#aacc00', '#80b918']}
                             style={styles.modalWordButton}
                         >
-                            <Text style={{...styles.modalWordButtonText, fontSize: windowWidth*0.06, }}>Logout</Text>
+                            <Text 
+                                style={{...styles.modalWordButtonText, fontSize: windowWidth*0.08, }}
+                                allowFontScaling={false}
+                            >
+                                Logout
+                            </Text>
                         </LinearGradient>
                     </TouchableOpacity>
                 </View>

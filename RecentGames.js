@@ -23,7 +23,8 @@ import {
     SafeAreaView,
     ScrollView,
     Button,
-    Image
+    Image,
+    PixelRatio
 } from 'react-native';
 import {
     faSolid,
@@ -42,6 +43,24 @@ import {
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
+const {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+} = Dimensions.get('window');
+
+const scaleWidth = SCREEN_WIDTH / 360;
+const scaleHeight = SCREEN_HEIGHT / 800;
+
+const WidthRatio = (size) => {
+    const newSize = size * scaleWidth;
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+}
+
+const HeightRatio = (size) => {
+    const newSize = size * scaleHeight;
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+}
 
 const COLORS = [
     '#f94144',
@@ -106,11 +125,12 @@ export const RecentGames = (props) => {
                     borderLeftWidth: 2, 
                     borderBottomWidth: 2, 
                     marginTop: 5, 
-                    marginBottom: 5 
+                    marginBottom: 5,
+                    width: windowWidth*0.9,
                 }}
                 key={i}
             >
-                <View style={{ flexDirection: 'column', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: 100, width: 50, height: 50, marginRight: 10, borderLeftWidth: 2, borderBottomWidth: 2 }}>
+                <View style={{ flexDirection: 'column', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: 100, width: WidthRatio(50), height: WidthRatio(50), marginRight: 10, borderLeftWidth: 2, borderBottomWidth: 2 }}>
                     <FontAwesomeIcon
                         icon={faSolid, faFlagCheckered}
                         style={{ color: 'white', alignSelf: 'center', marginRight: 10 }}
@@ -121,18 +141,33 @@ export const RecentGames = (props) => {
                     <View style={{ flexDirection: 'row' }}>
                         
 
-                        <Text style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: '#efea5a', marginRight: 10 }}>{userByID?.user.games[i].score} points</Text>
+                        <Text 
+                            style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: '#efea5a', marginRight: 10 }}
+                            allowFontScaling={false}
+                        >{userByID?.user.games[i].score} points</Text>
                         <FontAwesomeIcon
                             icon={faSolid, faClock}
                             style={{ color: 'white', alignSelf: 'center', marginRight: 10 }}
                             size={20}
                         />
-                        <Text style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: 'white', marginRight: 10 }}>{userByID?.user.games[i].time} seconds</Text>
+                        <Text 
+                            style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: 'white', marginRight: 10 }}
+                            allowFontScaling={false}
+                            >{userByID?.user.games[i].time} seconds</Text>
                     </View>
                     <View style={{ flexDirection: 'row', marginLeft: 30 }}>
-                        <Text style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: '#aaf683', marginRight: 10 }}>Words:</Text>
-                        <Text style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: 'white', marginRight: 10 }}>{userByID?.user.games[i].w1},</Text>
-                        <Text style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: 'white', marginRight: 10 }}>{userByID?.user.games[i].w2}</Text>
+                        <Text 
+                            style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: '#aaf683', marginRight: 10 }}
+                            allowFontScaling={false}
+                        >Words:</Text>
+                        <Text 
+                            style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: 'white', marginRight: 10 }}
+                            allowFontScaling={false}
+                        >{userByID?.user.games[i].w1},</Text>
+                        <Text 
+                            style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: 'white', marginRight: 10 }}
+                            allowFontScaling={false}
+                        >{userByID?.user.games[i].w2}</Text>
                     </View>
                 </View>
             </View>

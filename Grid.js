@@ -208,6 +208,7 @@ export const Grid = (props) => {
                         >
                             <Text
                                 style={{ color: '#001219', fontSize: HeightRatio(30), fontWeight: 'bold', marginLeft: WidthRatio(6) }}
+                                allowFontScaling={false}
                             >
                                 {keyContainer[i]}
                             </Text>
@@ -410,7 +411,7 @@ export const Grid = (props) => {
                                     <TouchableOpacity
                                         onPress={() => console.log(i)}
                                     >
-                                        <Text style={styles.letters}>{tempGridArray_0[i]}</Text>
+                                        <Text style={styles.letters} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
                                     </TouchableOpacity>
                                 </LinearGradient>
                                 :
@@ -425,7 +426,7 @@ export const Grid = (props) => {
                                                 onPress={() => console.log(i)}
 
                                             >
-                                                <Text style={styles.letters}>{tempGridArray_0[i]}</Text>
+                                                <Text style={styles.letters} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
                                             </TouchableOpacity>
                                         </LinearGradient>
                                         :
@@ -440,7 +441,7 @@ export const Grid = (props) => {
 
                                                 >
                                                     {i == (u0 + u1) ?
-                                                        <Text style={styles.letters}>{tempGridArray_0[i]}</Text>
+                                                        <Text style={styles.letters} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
                                                         :
                                                         null
                                                     }
@@ -500,8 +501,9 @@ export const Grid = (props) => {
                                         style={{
                                             color: 'black',
                                             fontWeight: 'bold',
-                                            fontSize: HeightRatio(20),
+                                            fontSize: HeightRatio(25),
                                         }}
+                                        allowFontScaling={false}
                                     >
                                         {storedGuesses[i]}
                                     </Text>
@@ -528,8 +530,9 @@ export const Grid = (props) => {
                                 style={{
                                     color: 'black',
                                     fontWeight: 'bold',
-                                    fontSize: HeightRatio(20),
+                                    fontSize: HeightRatio(25),
                                 }}
+                                allowFontScaling={false}
                             >
                                 {storedGuesses[i]}
                             </Text>
@@ -710,7 +713,7 @@ export const Grid = (props) => {
 
         setScore(localScore);
 
-        handleAddGame(word1, word2, localTimeTaken, localScore);
+        // handleAddGame(word1, word2, localTimeTaken, localScore);
 
         setModalVisible(true)
     };
@@ -941,7 +944,8 @@ export const Grid = (props) => {
                                         }}
                                     >
                                         <Text
-                                            style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(35), fontWeight: 'bold' }}
+                                            style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(45), fontWeight: 'bold' }}
+                                            allowFontScaling={false}
                                         >
                                             {promptGuessInput}
                                         </Text>
@@ -961,11 +965,6 @@ export const Grid = (props) => {
                                     marginRight: WidthRatio(4),
                                 }}
                             >
-                                {guesses.length == 0 &&
-                                    <Text style={{position: 'absolute', color: 'white', fontSize: HeightRatio(40), fontWeight: 'bold', }}>
-                                        GUESSES
-                                    </Text>
-                                }
                                 <PreviousGuess />
                             </View>
                         </View>
@@ -1000,7 +999,13 @@ export const Grid = (props) => {
                         {/* - - - - - - - - - - - - - -  */}
                         <TouchableOpacity
                             onPress={() => { Generate(); start(); }}
-                            style={{ borderWidth: 2, borderColor: 'white', width: WidthRatio(320), height: HeightRatio(600), borderRadius: WidthRatio(20), }}
+                            style={{ 
+                                borderWidth: 2, 
+                                borderColor: 'white', 
+                                width: WidthRatio(320), 
+                                height: HeightRatio(600), 
+                                borderRadius: WidthRatio(20),
+                            }}
                         >
                             {/* <LinearGradient
                                 // Button Linear Gradient
@@ -1012,19 +1017,20 @@ export const Grid = (props) => {
                                 style={{
                                     ...styles.modalFontAwesomeIcons,
                                     color: 'white',
-                                    marginTop: WidthRatio(90)
+                                    marginTop: WidthRatio(90),
                                 }}
-                                size={300}
+                                size={260}
                             />
                             <Text
                                 style={{
                                     color: 'white',
                                     fontWeight: 'bold',
-                                    fontSize: WidthRatio(50),
+                                    fontSize: WidthRatio(60),
                                     alignSelf: 'center',
                                     // justifyContent: 'center',
                                     // margin: 4
                                 }}
+                                allowFontScaling={false}
                             >
                                 New Game
                             </Text>
@@ -1090,10 +1096,14 @@ export const Grid = (props) => {
                                     style={{ flexDirection: 'column', marginTop: 10, marginBottom: 10 }}
                                 >
                                     <View style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: HeightRatio(20), marginBottom: HeightRatio(20), marginLeft: WidthRatio(20) }}>
-                                        <Text style={{ color: 'white',  fontSize: HeightRatio(30), fontWeight: 'bold', width: WidthRatio(280) }}>
+                                        <Text 
+                                            style={{ color: 'white',  fontSize: HeightRatio(40), fontWeight: 'bold', width: WidthRatio(280) }}
+                                            allowFontScaling={false}>
                                             Warning:
                                         </Text>
-                                        <Text style={{ color: 'white', fontSize: HeightRatio(30), width: WidthRatio(280), alignSelf: 'center' }}>
+                                        <Text 
+                                            style={{ color: 'white', fontSize: HeightRatio(30), width: WidthRatio(280), alignSelf: 'center' }}
+                                            >
                                             Selecting hint reduces your score by 10 points!
                                         </Text>
                                     </View>
@@ -1108,7 +1118,7 @@ export const Grid = (props) => {
                                             colors={['#aacc00', '#80b918']}
                                             style={styles.modalWordButton}
                                         >
-                                            <Text style={styles.modalWordButtonText}>
+                                            <Text style={styles.modalWordButtonText} allowFontScaling={false}>
                                                 Hint: Top to Bottom
                                             </Text>
                                             {/* <Text style={styles.modalWordButtonText}>
@@ -1227,7 +1237,10 @@ export const Grid = (props) => {
                                     style={{ flexDirection: 'column', marginTop: 10, marginBottom: 10 }}
                                 >
                                     <View style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: HeightRatio(20), marginBottom: HeightRatio(20), marginLeft: WidthRatio(20) }}>
-                                        <Text style={{ color: 'white',  fontSize: HeightRatio(30), fontWeight: 'bold', width: WidthRatio(280) }}>
+                                        <Text 
+                                            style={{ color: 'white',  fontSize: HeightRatio(40), fontWeight: 'bold', width: WidthRatio(280) }}
+                                            allowFontScaling={false}
+                                        >
                                             Warning:
                                         </Text>
                                         <Text style={{ color: 'white', fontSize: HeightRatio(30), width: WidthRatio(280), alignSelf: 'center' }}>
@@ -1244,7 +1257,7 @@ export const Grid = (props) => {
                                             colors={['#aacc00', '#80b918']}
                                             style={styles.modalWordButton}
                                         >
-                                            <Text style={styles.modalWordButtonText}>
+                                            <Text style={styles.modalWordButtonText} allowFontScaling={false}>
                                                 Hint: Left to Right
                                             </Text>
                                             {/* <Text style={styles.modalWordButtonText}>
@@ -1385,7 +1398,10 @@ export const Grid = (props) => {
                                                         colors={['#aacc00', '#80b918']}
                                                         style={styles.modalWordButton}
                                                     >
-                                                        <Text style={styles.modalWordButtonText}>
+                                                        <Text 
+                                                            style={styles.modalWordButtonText}
+                                                            allowFontScaling={false}
+                                                        >
                                                             {word1}
                                                         </Text>
                                                         <FontAwesomeIcon
@@ -1479,7 +1495,10 @@ export const Grid = (props) => {
                                                             colors={['#aacc00', '#80b918']}
                                                             style={styles.modalWordButton}
                                                         >
-                                                            <Text style={styles.modalWordButtonText}>
+                                                            <Text 
+                                                                style={styles.modalWordButtonText}
+                                                                allowFontScaling={false}
+                                                            >
                                                                 {word2}
                                                             </Text>
                                                             <FontAwesomeIcon
@@ -1566,7 +1585,9 @@ export const Grid = (props) => {
                                                     style={{ ...styles.modalFontAwesomeIcons, color: 'white' }}
                                                     size={30}
                                                 />
-                                                <Text style={styles.modalScoringVarText}>
+                                                <Text 
+                                                    style={styles.modalScoringVarText}
+                                                    allowFontScaling={false}>
                                                     Time: {timeTaken} seconds
                                                 </Text>
                                             </View>
@@ -1586,23 +1607,27 @@ export const Grid = (props) => {
                                                 <Text
                                                     style={{
                                                         color: '#f9c74f',
-                                                        fontSize: 30,
+                                                        fontSize: 40,
                                                         fontWeight: 'bold',
                                                     }}
+                                                    allowFontScaling={false}
                                                 >
                                                     + {extraPoints} points
                                                 </Text>
                                             </View>
-                                            <Text
-                                                style={{
-                                                    color: '#f9c74f',
-                                                    fontSize: 15,
-                                                    fontWeight: 'bold',
-                                                    alignSelf: 'center',
-                                                }}
-                                            >
-                                                Correct and fast!
-                                            </Text>
+                                            {extraPoints != 0 &&
+                                                <Text
+                                                    style={{
+                                                        color: '#f9c74f',
+                                                        fontSize: 20,
+                                                        fontWeight: 'bold',
+                                                        alignSelf: 'center',
+                                                    }}
+                                                    allowFontScaling={false}
+                                                >
+                                                    Correct and fast!
+                                                </Text>
+                                            }
                                             <View
                                                 style={{
                                                     flexDirection: 'row',
@@ -1619,9 +1644,10 @@ export const Grid = (props) => {
                                                 <Text
                                                     style={{
                                                         color: '#f9c74f',
-                                                        fontSize: 30,
+                                                        fontSize: 40,
                                                         fontWeight: 'bold',
                                                     }}
+                                                    allowFontScaling={false}
                                                 >
                                                     {leftRightHintReduction} points
                                                 </Text>
@@ -1629,10 +1655,11 @@ export const Grid = (props) => {
                                             <Text
                                                 style={{
                                                     color: '#f9c74f',
-                                                    fontSize: 15,
+                                                    fontSize: 20,
                                                     fontWeight: 'bold',
                                                     alignSelf: 'center',
                                                 }}
+                                                allowFontScaling={false}
                                             >
                                                 Left to Right hint reduction.
                                             </Text>
@@ -1652,9 +1679,10 @@ export const Grid = (props) => {
                                                 <Text
                                                     style={{
                                                         color: '#f9c74f',
-                                                        fontSize: 30,
+                                                        fontSize: 40,
                                                         fontWeight: 'bold',
                                                     }}
+                                                    allowFontScaling={false}
                                                 >
                                                     {topBottomHintReduction} points
                                                 </Text>
@@ -1662,10 +1690,11 @@ export const Grid = (props) => {
                                             <Text
                                                 style={{
                                                     color: '#f9c74f',
-                                                    fontSize: 15,
+                                                    fontSize: 20,
                                                     fontWeight: 'bold',
                                                     alignSelf: 'center',
                                                 }}
+                                                allowFontScaling={false}
                                             >
                                                 Top to Bottom hint reduction.
                                             </Text>
@@ -1682,6 +1711,7 @@ export const Grid = (props) => {
                                                 />
                                                 <Text
                                                     style={styles.modalScoringVarText}
+                                                    allowFontScaling={false}
                                                 >
                                                     Correct: {storeCorrectAnswers}
                                                 </Text>
@@ -1902,29 +1932,29 @@ const styles = StyleSheet.create({
     },
     modalWordButtonText: {
         color: '#001219',
-        fontSize: 20,
+        fontSize: 30,
         fontWeight: 'bold',
         alignSelf: 'center'
     },
     modalContentHeader: {
         color: '#4cc9f0',
-        fontSize: 20,
+        fontSize: 30,
         fontWeight: 'bold',
     },
     modalContent: {
         color: 'white',
-        fontSize: 20,
+        fontSize: 25,
         fontWeight: 'bold',
         alignSelf: 'center'
     },
     modalFontAwesomeIcons: {
         justifyContent: 'center',
         alignSelf: 'center',
-        marginRight: 10
+        // marginRight: 10
     },
     modalScoringVarText: {
         color: 'white',
-        fontSize: 30,
+        fontSize: 40,
         fontWeight: 'bold',
     },
     modalDivisionLine: {
