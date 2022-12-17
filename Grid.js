@@ -713,7 +713,7 @@ export const Grid = (props) => {
 
         setScore(localScore);
 
-        // handleAddGame(word1, word2, localTimeTaken, localScore);
+        handleAddGame(word1, word2, localTimeTaken, localScore);
 
         setModalVisible(true)
     };

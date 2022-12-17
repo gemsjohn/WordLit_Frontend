@@ -163,7 +163,7 @@ export const ADD_USER = gql`
 `;
 
 export const DELETE_USER = gql`
-  mutation DeleteUser($deleteUserId: ID!) {
+  mutation Mutation($deleteUserId: ID!) {
     deleteUser(id: $deleteUserId)
   }
 `;

@@ -117,7 +117,7 @@ export const Profile = (props) => {
                     </TouchableOpacity>
                     {userDetailsOpen ?
                         <View style={{ alignSelf: 'center' }}>
-                            <UserDetails currentuser={userByID?.user} />
+                            <UserDetails currentuser={userByID?.user} nav={props.nav} />
                         </View>
                         :
                         null

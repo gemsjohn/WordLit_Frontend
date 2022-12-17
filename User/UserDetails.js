@@ -4,12 +4,14 @@ import { Dimensions } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faSolid, faAddressCard, faEnvelope, faSackDollar, faStar, faX, faPenToSquare, faCopy } from '@fortawesome/free-solid-svg-icons'
 import { useMutation, useQuery } from '@apollo/client';
-import { UPDATE_USER, LOGIN_USER, UPDATE_USER_PASSWORD } from '../utils/mutations';
+import { UPDATE_USER, LOGIN_USER, UPDATE_USER_PASSWORD, DELETE_USER } from '../utils/mutations';
 import { GET_USER_BY_ID } from '../utils/queries';
 import axios from 'axios';
 import { Loading } from '../components/Loading';
 import { DemoAppInvoiceAndQuote } from './VerificationInvoiceAndQuote';
 import * as Clipboard from 'expo-clipboard';
+import { CommonActions } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const UserDetails = (props) => {
     // console.log(props)
@@ -18,6 +20,7 @@ export const UserDetails = (props) => {
 
     const [updateUser] = useMutation(UPDATE_USER);
     const [updateUserPassword] = useMutation(UPDATE_USER_PASSWORD);
+    const [deleteUser] = useMutation(DELETE_USER);
 
     const [showEditableFieldUsername, setShowEditableFieldUsername] = useState(false);
     const [showEditableFieldEmail, setShowEditableFieldEmail] = useState(false);
@@ -44,6 +47,34 @@ export const UserDetails = (props) => {
     const copyToClipboard = async () => {
         await Clipboard.setStringAsync(props.currentuser._id);
     };
+
+    const storeAuthState = async (value) => {
+        try {
+            await AsyncStorage.setItem('@authState', value)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+    const storeBearerToken = async (value) => {
+        try {
+            await AsyncStorage.setItem('@storage_Key', value)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const storeUserID = async (value) => {
+        try {
+            await AsyncStorage.setItem('@userID', value)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const resetActionAuth = CommonActions.reset({
+        index: 1,
+        routes: [{ name: 'Auth', params: {} }]
+    });
 
 
     // [[[USER DETAILS]]]
@@ -81,8 +112,6 @@ export const UserDetails = (props) => {
             setprompt: setPromptDeleteInput
         }
     ]
-
-
 
 
     // [[[UPDATE USER BASED ON USER DETAIL SELECTED]]]
@@ -123,6 +152,17 @@ export const UserDetails = (props) => {
                     }
                 });
                 refetch();
+            }
+            catch (e) { console.error(e); }
+        } else if (showEditableFieldDelete) {
+            try {
+                await deleteUser({
+                    variables: { deleteUserId: promptDeleteInput }
+                  });
+                storeAuthState('false')
+                storeBearerToken('')
+                storeUserID('')
+                props.nav.dispatch(resetActionAuth)
             }
             catch (e) { console.error(e); }
         }
@@ -225,7 +265,7 @@ export const UserDetails = (props) => {
                                                         <TextInput
                                                             type="text"
                                                             name={EditableFields[i].title}
-                                                            placeholder={i == 3? 'Paste ID' : EditableFields[i].title}
+                                                            placeholder={i == 3 ? 'Paste ID' : EditableFields[i].title}
                                                             placeholderTextColor='white'
                                                             value={EditableFields[i].prompt}
                                                             onChangeText={EditableFields[i].setprompt}
