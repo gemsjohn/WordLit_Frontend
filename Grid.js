@@ -929,14 +929,15 @@ export const Grid = (props) => {
                             {/* Guess Box */}
                             {/* - - - - - - - - - - - - - -  */}
                             <View style={{ flexDirection: 'column' }}>
-                                <Image
-                                    style={{height: HeightRatio(25), width: WidthRatio(60), position: 'absolute', zIndex: 10, top: -12, left: -8}}
-                                    source={require('./assets/click.png')}
-                                />
+                                
                                 <TouchableOpacity
                                     disabled={promptGuessInput == '' ? true : false}
                                     onPress={() => { CheckArray(promptGuessInput); setPromptGuessInput([]) }}
                                 >
+                                    <Image
+                                        style={{height: HeightRatio(25), width: WidthRatio(60), position: 'absolute', zIndex: 10, top: -12, left: -8}}
+                                        source={require('./assets/click.png')}
+                                    />
                                     <View
                                         style={{
                                             backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -1113,23 +1114,10 @@ export const Grid = (props) => {
                                         // style={styles.modalWordButton}
                                         disabled={!displayTopBottomHint ? false : true}
                                     >
-                                        <LinearGradient
-                                            // Button Linear Gradient
-                                            colors={['#aacc00', '#80b918']}
-                                            style={styles.modalWordButton}
-                                        >
-                                            <Text style={styles.modalWordButtonText} allowFontScaling={false}>
-                                                Hint: Top to Bottom
-                                            </Text>
-                                            {/* <Text style={styles.modalWordButtonText}>
-                                                {word2}
-                                            </Text> */}
-                                            <FontAwesomeIcon
-                                                icon={faSolid, faCaretDown}
-                                                style={{ ...styles.modalFontAwesomeIcons, color: '#001219', marginLeft: 10 }}
-                                                size={20}
-                                            />
-                                        </LinearGradient>
+                                        <Image  
+                                                style={{height: 150, width: 150}}
+                                                source={require('./assets/hint.png')}
+                                        />
                                     </TouchableOpacity>
                                     <View style={{ width: WidthRatio(280), alignSelf: 'center' }}>
                                         {definition3 != '' || definition4 != '' || definition5 != '' ?
@@ -1252,23 +1240,10 @@ export const Grid = (props) => {
                                         // style={styles.modalWordButton}
                                         disabled={!displayLeftRightHint ? false : true}
                                     >
-                                        <LinearGradient
-                                            // Button Linear Gradient
-                                            colors={['#aacc00', '#80b918']}
-                                            style={styles.modalWordButton}
-                                        >
-                                            <Text style={styles.modalWordButtonText} allowFontScaling={false}>
-                                                Hint: Left to Right
-                                            </Text>
-                                            {/* <Text style={styles.modalWordButtonText}>
-                                                {word1}
-                                            </Text> */}
-                                            <FontAwesomeIcon
-                                                icon={faSolid, faCaretDown}
-                                                style={{ ...styles.modalFontAwesomeIcons, color: '#001219', marginLeft: 10 }}
-                                                size={20}
-                                            />
-                                        </LinearGradient>
+                                        <Image  
+                                            style={{height: 150, width: 150}}
+                                            source={require('./assets/hint.png')}
+                                        />
                                     </TouchableOpacity>
                                     <View style={{ width: WidthRatio(280), alignSelf: 'center' }}>
                                         {definition0 != '' || definition1 != '' || definition2 != '' ?
@@ -1806,7 +1781,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        borderColor: '#ffb600',
+        borderColor: '#00b4d8',
         borderWidth: WidthRatio(4),
         borderRadius: WidthRatio(5)
     },

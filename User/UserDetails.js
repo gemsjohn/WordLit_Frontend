@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Button, View, TouchableOpacity, Text, TextInput } from "react-native";
 import { Dimensions } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faSolid, faAddressCard, faEnvelope, faSackDollar, faStar, faX, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faSolid, faAddressCard, faEnvelope, faSackDollar, faStar, faX, faPenToSquare, faCopy } from '@fortawesome/free-solid-svg-icons'
 import { useMutation, useQuery } from '@apollo/client';
 import { UPDATE_USER, LOGIN_USER, UPDATE_USER_PASSWORD } from '../utils/mutations';
 import { GET_USER_BY_ID } from '../utils/queries';
 import axios from 'axios';
 import { Loading } from '../components/Loading';
 import { DemoAppInvoiceAndQuote } from './VerificationInvoiceAndQuote';
+import * as Clipboard from 'expo-clipboard';
 
 export const UserDetails = (props) => {
     // console.log(props)
@@ -22,11 +23,16 @@ export const UserDetails = (props) => {
     const [showEditableFieldEmail, setShowEditableFieldEmail] = useState(false);
     const [showEditableFieldPassword, setShowEditableFieldPassword] = useState(false);
     const [showEditableFieldVerification, setShowEditableFieldVerification] = useState(false);
+    const [showEditableFieldDelete, setShowEditableFieldDelete] = useState(false);
 
     const [promptUsernameInput, setPromptUsernameInput] = useState("")
     const [promptEmailInput, setPromptEmailInput] = useState("")
-    const [promptPasswordInput, setPromptPasswordInput] = useState("")
+    const [promptPasswordInput1, setPromptPasswordInput1] = useState("")
+    const [promptPasswordInput2, setPromptPasswordInput2] = useState("")
     const [promptVerificationInput, setPromptVerificationInput] = useState("")
+    const [promptDeleteInput, setPromptDeleteInput] = useState("")
+
+    const [copiedText, setCopiedText] = React.useState('');
 
     let userDetailsArray = [];
 
@@ -34,6 +40,10 @@ export const UserDetails = (props) => {
     const { data: userByID, refetch } = useQuery(GET_USER_BY_ID, {
         variables: { id: props.currentuser._id }
     });
+
+    const copyToClipboard = async () => {
+        await Clipboard.setStringAsync(props.currentuser._id);
+    };
 
 
     // [[[USER DETAILS]]]
@@ -59,8 +69,16 @@ export const UserDetails = (props) => {
             detail: '* * * * *',
             edit: showEditableFieldPassword,
             setedit: setShowEditableFieldPassword,
-            prompt: promptPasswordInput,
-            setprompt: setPromptPasswordInput
+            prompt: promptPasswordInput1,
+            setprompt: setPromptPasswordInput1
+        },
+        {
+            title: 'Delete Account',
+            detail: '',
+            edit: showEditableFieldDelete,
+            setedit: setShowEditableFieldDelete,
+            prompt: promptDeleteInput,
+            setprompt: setPromptDeleteInput
         }
     ]
 
@@ -97,11 +115,11 @@ export const UserDetails = (props) => {
                 refetch();
             }
             catch (e) { console.error(e); }
-        } else if (showEditableFieldPassword) {
+        } else if (showEditableFieldPassword && promptPasswordInput1 == promptPasswordInput2) {
             try {
                 await updateUserPassword({
                     variables: {
-                        password: promptPasswordInput
+                        password: promptPasswordInput1
                     }
                 });
                 refetch();
@@ -120,10 +138,12 @@ export const UserDetails = (props) => {
                         setShowEditableFieldEmail(false);
                         setShowEditableFieldPassword(false);
                         setShowEditableFieldVerification(false);
+                        setShowEditableFieldDelete(false);
                         EditableFields[i].setedit(current => !current);
                         setPromptUsernameInput("");
                         setPromptEmailInput("");
-                        setPromptPasswordInput("");
+                        setPromptPasswordInput1("");
+                        setPromptPasswordInput2("");
                         setPromptVerificationInput("");
                     }}
                 >
@@ -147,10 +167,10 @@ export const UserDetails = (props) => {
 
                     >
                         <View style={{ flexDirection: 'row', }}>
-                            <Text style={{ color: 'white', marginRight: 10, fontSize: windowWidth*0.06, fontWeight: 'bold', alignSelf: 'center' }}>{EditableFields[i].title}</Text>
+                            <Text style={{ color: 'white', marginRight: 10, fontSize: windowWidth * 0.06, fontWeight: 'bold', alignSelf: 'center' }}>{EditableFields[i].title}</Text>
 
                             <Text
-                                style={{ color: 'white', alignSelf: 'center', fontSize: windowWidth*0.03, width: windowWidth/2.3  }}
+                                style={{ color: 'white', alignSelf: 'center', fontSize: windowWidth * 0.03, width: windowWidth / 2.3 }}
                                 numberOfLines={1}
                                 ellipsizeMode='tail'
                             >
@@ -184,84 +204,183 @@ export const UserDetails = (props) => {
                         {EditableFields[i].edit ?
                             <>
                                 <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-                                    {/* [[[IF USER DETAIL/PASSWORD ELSE]]] */}
-                                    {promptPasswordInput ?
-                                        <TextInput
-                                            type="password"
-                                            name={EditableFields[i].title}
-                                            placeholder={EditableFields[i].title}
-                                            value={EditableFields[i].prompt}
-                                            onChangeText={EditableFields[i].setprompt}
-                                            secureTextEntry={true}
-                                            style={{
-                                                outline: 'none',
-                                                backgroundColor: '#e9ecef',
-                                                color: '#001219',
-                                                display: 'flex',
-                                                justifyContent: 'flex-start',
-                                                padding: 10,
-                                                border: 'solid',
-                                                borderColor: 'white',
-                                                borderTopLeftRadius: 10,
-                                                borderBottomLeftRadius: 10,
-                                                alignSelf: 'center',
-                                                marginTop: 10,
-                                                marginBottom: 10,
-                                                width: windowWidth - 120
-                                            }}
-                                        />
-                                        :
-                                        <>
-                                            <TextInput
-                                                type="text"
-                                                name={EditableFields[i].title}
-                                                placeholder={EditableFields[i].title}
-                                                value={EditableFields[i].prompt}
-                                                onChangeText={EditableFields[i].setprompt}
-                                                style={{
-                                                    outline: 'none',
-                                                    backgroundColor: '#e9ecef',
-                                                    color: '#001219',
-                                                    display: 'flex',
-                                                    justifyContent: 'flex-start',
-                                                    padding: 10,
-                                                    border: 'solid',
-                                                    borderColor: 'white',
-                                                    borderTopLeftRadius: 10,
-                                                    borderBottomLeftRadius: 10,
-                                                    alignSelf: 'center',
-                                                    marginTop: 10,
-                                                    marginBottom: 10,
-                                                    width: windowWidth - 120
-                                                }}
-                                            />
-                                        </>
-                                    }
-                                    {i != 4 &&
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                handleFormSubmit();
-                                                setShowEditableFieldUsername(false);
-                                                setShowEditableFieldEmail(false);
-                                                setShowEditableFieldPassword(false);
-                                                setShowEditableFieldVerification(false);
-                                            }}
-                                        >
-                                            <View
-                                                style={{
-                                                    backgroundColor: '#4cc9f0',
-                                                    padding: 10,
-                                                    borderTopRightRadius: 10,
-                                                    borderBottomRightRadius: 10,
-                                                    marginTop: 10,
-                                                    marginBottom: 10,
-                                                    flex: 1, alignItems: 'center', justifyContent: 'center'
-                                                }}
-                                            >
-                                                <Text style={{ color: 'white', alignSelf: 'center', }}>Submit</Text>
+                                    <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10 }}>
+                                        <View style={{ flexDirection: 'column' }}>
+                                            {i != 2 &&
+                                            <>
+                                            {i == 3 && 
+                                                <TouchableOpacity onPress={() => copyToClipboard()} style={{marginLeft: 10}}>
+                                                    <View style={{flexDirection: 'row', backgroundColor: 'rgba(0, 0, 0, 0.3)', width: windowWidth-170, borderRadius: 10, padding: 5}}>
+                                                        <Text style={{color: 'white', fontSize: windowHeight*0.02, fontWeight: 'bold', marginLeft: windowWidth*0.02}}>{props.currentuser._id}</Text>
+                                                        <FontAwesomeIcon
+                                                            icon={faSolid, faCopy}
+                                                            style={{ color: 'white', justifyContent: 'center', alignSelf: 'center', marginLeft: windowWidth*0.01 }}
+                                                        />
+                                                    </View>
+                                                </TouchableOpacity>
+                                            }
+                                            <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10 }}>
+                                                
+                                                <TextInput
+                                                    type="text"
+                                                    name={EditableFields[i].title}
+                                                    placeholder={'Update ' + EditableFields[i].title}
+                                                    placeholderTextColor='white'
+                                                    value={EditableFields[i].prompt}
+                                                    onChangeText={EditableFields[i].setprompt}
+                                                    multiline
+                                                    numberOfLines={1}
+                                                    style={{
+                                                        outline: 'none',
+                                                        backgroundColor: 'transparent',
+                                                        color: 'white',
+                                                        display: 'flex',
+                                                        justifyContent: 'flex-start',
+                                                        padding: 20,
+                                                        border: 'solid',
+                                                        borderColor: 'white',
+                                                        borderTopWidth: 1,
+                                                        borderLeftWidth: 1,
+                                                        borderBottomWidth: 1,
+                                                        borderTopLeftRadius: 30,
+                                                        borderBottomLeftRadius: 30,
+                                                        alignSelf: 'center',
+                                                        marginTop: 10,
+                                                        marginBottom: 4,
+                                                        width: windowWidth - 150
+                                                    }}
+                                                />
+                                                {/* [[[SUMBIT BUTTON]]] */}
+                                                <TouchableOpacity
+                                                    onPress={() => {
+                                                        handleFormSubmit();
+                                                        setShowEditableFieldUsername(false);
+                                                        setShowEditableFieldEmail(false);
+                                                        setShowEditableFieldPassword(false);
+                                                        setShowEditableFieldVerification(false);
+                                                        setShowEditableFieldDelete(false);
+                                                    }}
+                                                    style={{
+                                                        // backgroundColor: 'green',
+                                                        // width: windowWidth - 30,
+                                                        padding: 10,
+                                                        // borderRadius: 10,
+                                                        border: 'solid',
+                                                        borderColor: 'white',
+                                                        borderTopWidth: 1,
+                                                        borderRightWidth: 1,
+                                                        borderBottomWidth: 1,
+                                                        borderTopRightRadius: 30,
+                                                        borderBottomRightRadius: 30,
+                                                        marginTop: 10,
+                                                        marginBottom: 4,
+                                                    }}
+                                                >
+                                                    <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }}>SUMBIT</Text>
+                                                </TouchableOpacity>
                                             </View>
-                                        </TouchableOpacity>
-                                    }
+                                            </>
+                                            }
+
+
+                                            {i == 2 &&
+                                                <>
+                                                    <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10 }}>
+                                                        <TextInput
+                                                            type="password"
+                                                            name={EditableFields[i].title}
+                                                            placeholder={'Update ' + EditableFields[i].title}
+                                                            placeholderTextColor='white'
+                                                            value={promptPasswordInput1}
+                                                            onChangeText={setPromptPasswordInput1}
+                                                            secureTextEntry={true}
+                                                            style={{
+                                                                outline: 'none',
+                                                                backgroundColor: 'transparent',
+                                                                color: 'white',
+                                                                display: 'flex',
+                                                                justifyContent: 'flex-start',
+                                                                padding: 20,
+                                                                border: 'solid',
+                                                                borderColor: 'white',
+                                                                borderWidth: 1,
+                                                                borderRadius: 30,
+                                                                alignSelf: 'center',
+                                                                marginTop: 10,
+                                                                marginBottom: 4,
+                                                                width: windowWidth - 70
+                                                            }}
+                                                        />
+                                                    </View>
+                                                    <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10 }}>
+                                                        <TextInput
+                                                            type="password"
+                                                            name={EditableFields[i].title}
+                                                            placeholder='Check Password'
+                                                            placeholderTextColor='white'
+                                                            value={promptPasswordInput2}
+                                                            onChangeText={setPromptPasswordInput2}
+                                                            secureTextEntry={true}
+                                                            style={{
+                                                                outline: 'none',
+                                                                backgroundColor: 'transparent',
+                                                                color: 'white',
+                                                                display: 'flex',
+                                                                justifyContent: 'flex-start',
+                                                                padding: 20,
+                                                                border: 'solid',
+                                                                borderColor: 'white',
+                                                                borderTopWidth: 1,
+                                                                borderLeftWidth: 1,
+                                                                borderBottomWidth: 1,
+                                                                borderTopLeftRadius: 30,
+                                                                borderBottomLeftRadius: 30,
+                                                                alignSelf: 'center',
+                                                                marginTop: 10,
+                                                                marginBottom: 4,
+                                                                width: windowWidth - 150
+                                                            }}
+                                                        />
+                                                        {/* [[[SUMBIT BUTTON]]] */}
+                                                        <TouchableOpacity
+                                                            onPress={() => {
+                                                                handleFormSubmit();
+                                                                setShowEditableFieldUsername(false);
+                                                                setShowEditableFieldEmail(false);
+                                                                setShowEditableFieldPassword(false);
+                                                                setShowEditableFieldVerification(false);
+                                                                setShowEditableFieldDelete(false);
+                                                            }}
+                                                            style={{
+                                                                // backgroundColor: 'green',
+                                                                // width: windowWidth - 30,
+                                                                padding: 10,
+                                                                // borderRadius: 10,
+                                                                border: 'solid',
+                                                                borderColor: 'white',
+                                                                borderTopWidth: 1,
+                                                                borderRightWidth: 1,
+                                                                borderBottomWidth: 1,
+                                                                borderTopRightRadius: 30,
+                                                                borderBottomRightRadius: 30,
+                                                                marginTop: 10,
+                                                                marginBottom: 4,
+                                                            }}
+                                                        >
+                                                            <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }}>SUMBIT</Text>
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                </>
+                                            }
+                                            {promptPasswordInput1 != '' && promptPasswordInput2 != '' && promptPasswordInput1 == promptPasswordInput2 &&
+                                                <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                                                    <Text style={{ color: 'white', fontSize: windowHeight*0.03 }}>
+                                                        Passwords Match!
+                                                    </Text>
+                                                </View>
+                                            }
+                                        </View>
+                                    </View>
                                 </View>
                             </>
                             :
