@@ -2,13 +2,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import { ApolloProvider, ApolloClient, HttpLink, InMemoryCache, useMutation, useQuery } from "@apollo/client";
 import { setContext } from '@apollo/link-context';
 import jwtDecode from "jwt-decode";
-import { LOGIN_USER, ADD_USER } from './utils/mutations';
+import { LOGIN_USER, ADD_USER, REQUEST_RESET, RESET_PASSWORD } from './utils/mutations';
 import { GET_USER_BY_ID, LEADERBOARD } from './utils/queries';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Alert, StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, StatusBar, SafeAreaView, Dimensions, Button, Linking, ImageBackground, FlatList, PixelRatio } from 'react-native';
+import { Alert, StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, StatusBar, SafeAreaView, Dimensions, Button, Linking, ImageBackground, FlatList, PixelRatio, Modal } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faSolid, faUser, faPlus, faUpLong, faMagnifyingGlass, faCheck, faLocationPin, faEnvelope, faLock, faGear } from '@fortawesome/free-solid-svg-icons';
+import { faSolid, faUser, faPlus, faUpLong, faMagnifyingGlass, faCheck, faLocationPin, faEnvelope, faLock, faGear, faX } from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from './Navbar';
 import { Profile } from './Profile';
 import { Loading } from './components/Loading';
@@ -155,7 +155,7 @@ function HomeScreen({ navigation }) {
               <TouchableOpacity
                 onPress={() => console.log(i)}
               >
-                <Text 
+                <Text
                   style={styles.letters}
                   allowFontScaling={false}
                 >
@@ -172,7 +172,7 @@ function HomeScreen({ navigation }) {
               <TouchableOpacity
                 onPress={() => console.log(i)}
               >
-                <Text 
+                <Text
                   style={styles.letters}
                   allowFontScaling={false}
                 >
@@ -226,7 +226,7 @@ function HomeScreen({ navigation }) {
 
               }}
             >
-              <Text 
+              <Text
                 style={{ color: 'white', fontSize: HeightRatio(24), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}
                 allowFontScaling={false}
               >
@@ -254,7 +254,7 @@ function HomeScreen({ navigation }) {
                 borderBottomLeftRadius: 50,
               }}
             >
-              <Text 
+              <Text
                 style={{ color: 'white', fontSize: HeightRatio(24), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}
                 allowFontScaling={false}
               >
@@ -303,7 +303,7 @@ function HomeScreen({ navigation }) {
                     borderBottomLeftRadius: 30,
                   }}
                 >
-                  <Text 
+                  <Text
                     style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
                     allowFontScaling={false}
                   >
@@ -334,7 +334,7 @@ function HomeScreen({ navigation }) {
                     borderBottomLeftRadius: 30,
                   }}
                 >
-                  <Text 
+                  <Text
                     style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
                     allowFontScaling={false}
                   >
@@ -368,7 +368,7 @@ function HomeScreen({ navigation }) {
                     borderBottomLeftRadius: 30,
                   }}
                 >
-                  <Text 
+                  <Text
                     style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
                     allowFontScaling={false}
                   >
@@ -402,7 +402,7 @@ function HomeScreen({ navigation }) {
                     borderBottomLeftRadius: 30,
                   }}
                 >
-                  <Text 
+                  <Text
                     style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
                     allowFontScaling={false}
                   >
@@ -433,7 +433,7 @@ function HomeScreen({ navigation }) {
                     borderBottomLeftRadius: 30,
                   }}
                 >
-                  <Text 
+                  <Text
                     style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
                     allowFontScaling={false}
                   >
@@ -672,31 +672,31 @@ function LeaderScreen({ navigation }) {
 
   const Item = ({ username, score, pos }) => (
     <View>
-      <View 
+      <View
         style={{
-            backgroundColor: '#001219', 
-            height: HeightRatio(100), 
-            width: WidthRatio(340), 
-            alignSelf: 'center', 
-            borderRadius: 50,
-            flexDirection: 'row'
+          backgroundColor: '#001219',
+          height: HeightRatio(100),
+          width: WidthRatio(340),
+          alignSelf: 'center',
+          borderRadius: 50,
+          flexDirection: 'row'
         }}
       >
-        <View style={{flexDirection: 'column'}}>
+        <View style={{ flexDirection: 'column' }}>
           <Text
-            style={{ 
-              color: 'white', 
-              fontSize: HeightRatio(30), 
-              fontWeight: 'bold', 
-              marginTop: HeightRatio(30), 
-              marginLeft: WidthRatio(20) 
+            style={{
+              color: 'white',
+              fontSize: HeightRatio(30),
+              fontWeight: 'bold',
+              marginTop: HeightRatio(30),
+              marginLeft: WidthRatio(20)
             }}
             allowFontScaling={false}
           >
             {pos}
           </Text>
         </View>
-        <View style={{flexDirection: 'column', alignSelf: 'center', marginLeft: WidthRatio(20)}}>
+        <View style={{ flexDirection: 'column', alignSelf: 'center', marginLeft: WidthRatio(20) }}>
           <View style={{ flexDirection: 'column', width: WidthRatio(240) }}>
             <View style={{ flexDirection: 'row', alignSelf: 'flex-start', margin: windowWidth * 0.01 }}>
               <Text
@@ -735,7 +735,7 @@ function LeaderScreen({ navigation }) {
               >
                 {score}
               </Text>
-              <Text 
+              <Text
                 style={{ fontSize: windowWidth * 0.05, fontWeight: 'bold', color: '#83e377', alignSelf: 'flex-end', marginLeft: 4 }}
                 allowFontScaling={false}
               >
@@ -744,7 +744,7 @@ function LeaderScreen({ navigation }) {
             </View>
           </View>
         </View>
-        </View>
+      </View>
       <View style={styles.modalDivisionLine}></View>
     </View>
     // <View
@@ -971,6 +971,7 @@ const Auth = ({ navigation }) => {
   const [newUser, setNewUser] = useState(false);
   const [displayLoginFailureAlert, setDisplayLoginFailureAlert] = useState(false)
 
+
   // Sign Up: Email
   const [promptEmailInput, setPromptEmailInput] = useState("");
 
@@ -985,9 +986,23 @@ const Auth = ({ navigation }) => {
   const [promptInput_1, setPromptInput_1] = useState("");
   const [userID, setUserID] = useState("")
 
+  // Forgot Password
+  const [displayForgotPasswordContent, setDisplayForgotPasswordContent] = useState(false);
+  const [promptResetEmail, setPromptResetEmail] = useState('');
+  const [resetRequestStatus, setResetRequestStatus] = useState('');
+  const [displayForgotPasswordForm, setDisplayForgotPasswordForm] = useState(false);
+  const [promptResetUsername, setPromptResetUsername] = useState('');
+  const [promptResetPassword_0, setPromptResetPassword_0] = useState('');
+  const [promptResetPassword_1, setPromptResetPassword_1] = useState('');
+  const [promptResetToken, setPromptResetToken] = useState('');
+  const [displayResetSuccessModal, setDisplayResetSuccessModal] = useState(false);
+
+
   // Apollo 
   const [login, { error }] = useMutation(LOGIN_USER);
   const [addUser] = useMutation(ADD_USER);
+  const [requestReset] = useMutation(REQUEST_RESET);
+  const [resetPassword] = useMutation(RESET_PASSWORD);
 
 
   const storeBearerToken = async (value) => {
@@ -1120,7 +1135,47 @@ const Auth = ({ navigation }) => {
     }
   };
 
-  // console.log("AUTH: " + authState)
+  const handleRequestReset = async () => {
+    console.log(promptResetEmail)
+    try {
+      await requestReset({
+        variables: {
+          email: promptResetEmail
+        },
+      });
+      setResetRequestStatus("Check your email for a Reset Token!")
+    } catch (e) {
+      console.error(e);
+      setResetRequestStatus("No user found with that email.")
+    }
+
+  };
+
+  const handleResetPassword = async () => {
+    if (promptResetEmail != '' && promptResetPassword_0 != '' && promptResetPassword_1 != '' && promptResetToken != '' && promptResetPassword_0 == promptResetPassword_1) {
+      try {
+        await resetPassword({
+          variables: {
+            email: promptResetEmail,
+            password: promptResetPassword_0,
+            confirmPassword: promptResetPassword_1,
+            resetToken: promptResetToken
+          }
+        })
+        console.log("Ok all set, try to log in.")
+        setDisplayResetSuccessModal(true);
+        setPromptResetEmail('');
+        setResetRequestStatus('');
+        setDisplayForgotPasswordForm(false);
+        setPromptResetUsername('');
+        setPromptResetPassword_0('');
+        setPromptResetPassword_1('');
+      } catch (e) {
+        console.error(e)
+        console.log("Token expired or incorrect");
+      }
+    }
+  }
 
   return (
     <>
@@ -1133,7 +1188,7 @@ const Auth = ({ navigation }) => {
             <>
               {newUser ?
                 <>
-                  <Text 
+                  <Text
                     style={{ color: 'white', alignSelf: 'center', fontSize: 50, marginTop: 20, fontWeight: 'bold' }}
                     allowFontScaling={false}
                   >
@@ -1326,7 +1381,7 @@ const Auth = ({ navigation }) => {
                           }}
 
                         >
-                          <Text 
+                          <Text
                             style={{ color: '#001219', fontSize: 30, fontWeight: 'bold', alignSelf: 'center' }}
                             allowFontScaling={false}
                           >
@@ -1351,7 +1406,7 @@ const Auth = ({ navigation }) => {
                             width: windowWidth - 80
                           }}
                         >
-                          <Text 
+                          <Text
                             style={{ color: '#001219', fontSize: 30, fontWeight: 'bold', alignSelf: 'center' }}
                             allowFontScaling={false}
                           >
@@ -1360,7 +1415,7 @@ const Auth = ({ navigation }) => {
                         </View>
                       </TouchableOpacity>
                   }
-                  <Text 
+                  <Text
                     style={{ color: 'white', alignSelf: 'center', fontSize: 30, margin: 20, fontWeight: 'bold' }}
                     allowFontScaling={false}
                   >
@@ -1386,7 +1441,7 @@ const Auth = ({ navigation }) => {
                         width: windowWidth - 200
                       }}
                     >
-                      <Text 
+                      <Text
                         style={{ color: 'white', fontSize: 25, fontWeight: 'bold', alignSelf: 'center' }}
                         allowFontScaling={false}
                       >
@@ -1400,7 +1455,7 @@ const Auth = ({ navigation }) => {
                     <Loading />
                     :
                     <>
-                      <Text 
+                      <Text
                         style={{ color: 'white', alignSelf: 'center', fontSize: 50, margin: 20, fontWeight: 'bold' }}
                         allowFontScaling={false}
                       >
@@ -1455,7 +1510,7 @@ const Auth = ({ navigation }) => {
                       />
                       {displayLoginFailureAlert &&
                         <View style={{ alignSelf: 'center' }}>
-                          <Text 
+                          <Text
                             style={{ fontSize: 30, fontWeight: 'bold', color: 'red' }}
                             allowFontScaling={false}
                           >
@@ -1478,7 +1533,7 @@ const Auth = ({ navigation }) => {
                               width: windowWidth - 80
                             }}
                           >
-                            <Text 
+                            <Text
                               style={{ color: '#001219', fontSize: 30, fontWeight: 'bold', alignSelf: 'center' }}
                               allowFontScaling={false}
                             >
@@ -1504,7 +1559,7 @@ const Auth = ({ navigation }) => {
                               width: windowWidth - 80
                             }}
                           >
-                            <Text 
+                            <Text
                               style={{ color: '#001219', fontSize: 30, fontWeight: 'bold', alignSelf: 'center' }}
                               allowFontScaling={false}
                             >
@@ -1513,7 +1568,331 @@ const Auth = ({ navigation }) => {
                           </View>
                         </TouchableOpacity>
                       }
-                      <Text 
+
+                      <View style={styles.modalDivisionLine}></View>
+
+                      <TouchableOpacity onPress={() => setDisplayForgotPasswordContent(true)}>
+                        <View
+                          style={{
+                            // backgroundColor: '#ffbe0b',
+                            // display: 'flex',
+                            // justifyContent: 'flex-start',
+                            // padding: 5,
+                            // borderRadius: 40,
+                            // alignSelf: 'center',
+                            // margin: 10,
+                            // width: windowWidth - 200
+                          }}
+                        >
+                          <Text
+                            style={{ color: '#80ffdb', alignSelf: 'center', fontSize: 30, margin: 10, fontWeight: 'bold' }}
+                            allowFontScaling={false}
+                          >
+                            Forgot Password?
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                      {displayForgotPasswordContent &&
+                        <View
+                          style={{
+                            alignSelf: 'center',
+                            margin: 10,
+                            width: windowWidth - 80
+                          }}
+                        >
+                          {/* <Text style={{ color: 'white', alignSelf: 'center' }}>Enter email address and select submit:</Text> */}
+                          <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10, marginTop: -5 }}>
+
+                            <TextInput
+                              type="text"
+                              name="resetemail"
+                              placeholder="Email"
+                              placeholderTextColor='white'
+                              value={promptResetEmail}
+                              onChangeText={setPromptResetEmail}
+                              allowFontScaling={false}
+                              style={{
+                                outline: 'none',
+                                // backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                                color: 'white',
+                                display: 'flex',
+                                justifyContent: 'flex-start',
+                                padding: 20,
+                                border: 'solid',
+                                borderColor: 'white',
+                                borderTopWidth: 1,
+                                borderLeftWidth: 1,
+                                borderBottomWidth: 1,
+                                borderTopLeftRadius: 30,
+                                borderBottomLeftRadius: 30,
+                                alignSelf: 'center',
+                                marginTop: 10,
+                                marginBottom: 4,
+                                width: windowWidth - 160
+                              }}
+                            />
+                            {/* [[[SUMBIT BUTTON]]] */}
+                            <TouchableOpacity
+                              onPress={() => {
+                                // handleFormSubmit();
+                                // setShowEditableFieldUsername(false);
+                                // setShowEditableFieldEmail(false);
+                                // setShowEditableFieldPassword(false);
+                                // setShowEditableFieldVerification(false);
+                                // setShowEditableFieldDelete(false);
+                                handleRequestReset()
+                              }}
+                              style={{
+                                // backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                                // width: windowWidth - 30,
+                                padding: 10,
+                                // borderRadius: 10,
+                                border: 'solid',
+                                borderColor: 'white',
+                                borderTopWidth: 1,
+                                borderRightWidth: 1,
+                                borderBottomWidth: 1,
+                                borderTopRightRadius: 30,
+                                borderBottomRightRadius: 30,
+                                marginTop: 10,
+                                marginBottom: 4,
+                              }}
+                            >
+                              <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }} allowFontScaling={false}>SUMBIT</Text>
+                            </TouchableOpacity>
+                          </View>
+                          {resetRequestStatus != '' &&
+                            <View style={{}}>
+                              <Text
+                                style={{ color: 'white', alignSelf: 'center', fontSize: 30, margin: 10, fontWeight: 'bold' }}
+                                allowFontScaling={false}
+                              >{resetRequestStatus}</Text>
+                            </View>
+                          }
+
+                          <TouchableOpacity onPress={() => setDisplayForgotPasswordForm(true)}>
+                            <View
+                              style={{
+                                backgroundColor: '#ffbe0b',
+                                display: 'flex',
+                                justifyContent: 'flex-start',
+                                padding: 5,
+                                borderRadius: 40,
+                                alignSelf: 'center',
+                                margin: 10,
+                                width: windowWidth - 130
+                              }}
+                            >
+                              <Text
+                                style={{ color: 'black', alignSelf: 'center', fontSize: 30, margin: 10, fontWeight: 'bold' }}
+                                allowFontScaling={false}
+                              >Have a reset token?</Text>
+                            </View>
+                          </TouchableOpacity>
+                          {displayForgotPasswordForm &&
+                            <>
+                              <TextInput
+                                type="text"
+                                name="resetoken"
+                                placeholder="Reset Token"
+                                placeholderTextColor="white"
+                                value={promptResetToken}
+                                onChangeText={setPromptResetToken}
+                                style={{
+                                  outline: 'none',
+                                  backgroundColor: 'transparent',
+                                  color: 'white',
+                                  display: 'flex',
+                                  justifyContent: 'flex-start',
+                                  padding: 20,
+                                  border: 'solid',
+                                  borderWidth: 2,
+                                  borderColor: 'white',
+                                  borderRadius: 30,
+                                  alignSelf: 'center',
+                                  margin: 10,
+                                  width: windowWidth - 80
+                                }}
+                              />
+                              <TextInput
+                                type="text"
+                                name="username"
+                                placeholder="Username"
+                                placeholderTextColor="white"
+                                value={promptResetUsername}
+                                onChangeText={setPromptResetUsername}
+                                style={{
+                                  outline: 'none',
+                                  backgroundColor: 'transparent',
+                                  color: 'white',
+                                  display: 'flex',
+                                  justifyContent: 'flex-start',
+                                  padding: 20,
+                                  border: 'solid',
+                                  borderWidth: 2,
+                                  borderColor: 'white',
+                                  borderRadius: 30,
+                                  alignSelf: 'center',
+                                  margin: 10,
+                                  width: windowWidth - 80
+                                }}
+                              />
+                              <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10 }}>
+                                <TextInput
+                                  type="password"
+                                  name="resetpassword_0"
+                                  placeholder="New Password"
+                                  placeholderTextColor='white'
+                                  value={promptResetPassword_0}
+                                  onChangeText={setPromptResetPassword_0}
+                                  secureTextEntry={true}
+                                  allowFontScaling={false}
+                                  style={{
+                                    outline: 'none',
+                                    // backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                                    color: 'white',
+                                    display: 'flex',
+                                    justifyContent: 'flex-start',
+                                    padding: 20,
+                                    border: 'solid',
+                                    borderColor: 'white',
+                                    borderWidth: 1,
+                                    borderRadius: 30,
+                                    alignSelf: 'center',
+                                    marginTop: 10,
+                                    marginBottom: 4,
+                                    width: windowWidth - 80
+                                  }}
+                                />
+                              </View>
+
+                              <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10 }}>
+                                <TextInput
+                                  type="password"
+                                  name="resetpassword_1"
+                                  placeholder='Confirm Password'
+                                  placeholderTextColor='white'
+                                  value={promptResetPassword_1}
+                                  onChangeText={setPromptResetPassword_1}
+                                  secureTextEntry={true}
+                                  allowFontScaling={false}
+                                  style={{
+                                    outline: 'none',
+                                    // backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                                    color: 'white',
+                                    display: 'flex',
+                                    justifyContent: 'flex-start',
+                                    padding: 20,
+                                    border: 'solid',
+                                    borderColor: 'white',
+                                    borderTopWidth: 1,
+                                    borderLeftWidth: 1,
+                                    borderBottomWidth: 1,
+                                    borderTopLeftRadius: 30,
+                                    borderBottomLeftRadius: 30,
+                                    alignSelf: 'center',
+                                    marginTop: 10,
+                                    marginBottom: 4,
+                                    width: windowWidth - 160
+                                  }}
+                                />
+                                {/* [[[SUMBIT BUTTON]]] */}
+                                <TouchableOpacity
+                                  onPress={() => {
+                                    // handleFormSubmit();
+                                    // setShowEditableFieldUsername(false);
+                                    // setShowEditableFieldEmail(false);
+                                    // setShowEditableFieldPassword(false);
+                                    // setShowEditableFieldVerification(false);
+                                    // setShowEditableFieldDelete(false);
+                                    handleResetPassword();
+                                  }}
+                                  style={{
+                                    // backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                                    // width: windowWidth - 30,
+                                    padding: 10,
+                                    // borderRadius: 10,
+                                    border: 'solid',
+                                    borderColor: 'white',
+                                    borderTopWidth: 1,
+                                    borderRightWidth: 1,
+                                    borderBottomWidth: 1,
+                                    borderTopRightRadius: 30,
+                                    borderBottomRightRadius: 30,
+                                    marginTop: 10,
+                                    marginBottom: 4,
+                                  }}
+
+                                >
+                                  <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }} allowFontScaling={false}>SUMBIT</Text>
+                                </TouchableOpacity>
+
+                              </View>
+                            </>
+
+                          }
+                          {/* displayResetSuccessModal */}
+                          <View>
+                            <Modal
+                              animationType="slide"
+                              transparent={true}
+                              visible={displayResetSuccessModal}
+                              onRequestClose={() => {
+                                Alert.alert("Modal has been closed.");
+                                setDisplayResetSuccessModal(!displayResetSuccessModal);
+                              }}
+                            >
+                              <View style={styles.centeredView}>
+                                <View style={styles.modalView}>
+                                  {/* TOP ROW */}
+                                  <View
+                                    style={{
+                                      backgroundColor: 'rgba(255, 0, 0, 1)',
+                                      alignSelf: 'center',
+                                      borderRadius: 8,
+                                      position: 'absolute',
+                                      zIndex: 10,
+                                      top: 0,
+                                      right: 0
+                                    }}
+                                  >
+                                    <TouchableOpacity
+                                      onPress={() => { setDisplayResetSuccessModal(!displayResetSuccessModal); setDisplayForgotPasswordContent(false); }}
+                                      style={{
+                                        borderRadius: 10,
+                                        height: 50,
+                                        width: 50
+                                      }}
+                                    >
+                                      <FontAwesomeIcon
+                                        icon={faSolid, faX}
+                                        style={{
+                                          color: 'black',
+                                          justifyContent: 'center',
+                                          alignSelf: 'center',
+                                          marginTop: 17
+                                        }}
+                                      />
+                                    </TouchableOpacity>
+                                  </View>
+                                  {/* MIDDLE ROW */}
+                                  <Text style={styles.modalText}>Reset successful, try to Login!</Text>
+                                  <TouchableOpacity
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={() => {setDisplayResetSuccessModal(!displayResetSuccessModal); setDisplayForgotPasswordContent(false);}}
+                                  >
+                                    <Text style={styles.textStyle}>Cool</Text>
+                                  </TouchableOpacity>
+                                </View>
+                              </View>
+                            </Modal>
+                          </View>
+                        </View>
+                      }
+
+                      <View style={styles.modalDivisionLine}></View>
+
+                      <Text
                         style={{ color: 'white', alignSelf: 'center', fontSize: 30, margin: 20, fontWeight: 'bold' }}
                         allowFontScaling={false}
                       >
@@ -1532,7 +1911,7 @@ const Auth = ({ navigation }) => {
                             width: windowWidth - 200
                           }}
                         >
-                          <Text 
+                          <Text
                             style={{ color: 'white', fontSize: 25, fontWeight: 'bold', alignSelf: 'center' }}
                             allowFontScaling={false}
                           >
@@ -1837,6 +2216,56 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "#edf2f4",
+    borderRadius: 10,
+    borderWidth: 3,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: WidthRatio(300)
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    backgroundColor: '#d90429'
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#4361ee",
+    borderRadius: 10,
+    padding: 20
+  },
+  textStyle: {
+    color: "white",
+    fontSize: HeightRatio(25),
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    color: 'black',
+    fontSize: HeightRatio(30),
+    fontWeight: 'bold'
+  }
 });
 
 
