@@ -9,16 +9,19 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Alert, StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, StatusBar, SafeAreaView, Dimensions, Button, Linking, ImageBackground, FlatList, PixelRatio, Modal } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSolid, faUser, faPlus, faUpLong, faMagnifyingGlass, faCheck, faLocationPin, faEnvelope, faLock, faGear, faX } from '@fortawesome/free-solid-svg-icons';
-import { Navbar } from './Navbar';
-import { Profile } from './Profile';
+import { Navbar } from './components/Navbar';
+import { Profile } from './pages/profile/Profile';
 import { Loading } from './components/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Grid } from './Grid';
-import { dalle_1 } from './assets/dalle_1.png';
+import { Grid } from './pages/game/Game';
+import { Home } from './pages/home/Home';
+import { Leader } from './pages/leader/Leader';
 
-
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+// [GLOBAL] - [[[Variables: Dimensions]]] - - - - 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -45,466 +48,62 @@ const HeightRatio = (size) => {
   return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
 }
 
-function HomeScreen({ navigation }) {
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+// [GLOBAL] - [[[Variables: Styling]]] - - - - 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+const DisplayGradient = (props) => {
+  return (
+    <>
+      <Image source={props.image} style={{ ...styles.background, opacity: 0.4 }} />
+      <LinearGradient
+        colors={props.gradient}
+        style={{ ...styles.background, opacity: 0.5 }}
+      />
+    </>
+  )
+}
+
+
+const HomeScreen = ({ navigation }) => {
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
+  // [LOCAL] - [[[Variables: Authorization, Preferences]]] - - - - 
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   const [userID, setUserID] = useState('');
   const [authState, setAuthState] = useState(false);
-
-  const [selectedColor, setSelectedColor] = useState(null);
-  const [difficulty, setDifficulty] = useState('easy');
-  // const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
-  const colors = [
-    { value: 'red', gradient: ['#4f000b', '#ff595e'], image: require('./assets/dalle_1.png'), id: 0 },
-    { value: 'orange', gradient: ['#b21e35', '#faa307'], image: require('./assets/dalle_4.png'), id: 1 },
-    { value: 'green', gradient: ['#132a13', '#83e377'], image: require('./assets/dalle_2.png'), id: 2 },
-    { value: 'blue', gradient: ['#00171f', '#0466c8'], image: require('./assets/dalle_3.png'), id: 3 },
-    { value: 'purple', gradient: ['#240046', '#c77dff'], image: require('./assets/dalle_5.png'), id: 4 },
-    { value: '#0b132b', gradient: ['#0b132b', '#3a506b'], image: require('./assets/dalle_7.png'), id: 5 },
-  ];
 
   const CheckAuthState = async () => {
     let value = await AsyncStorage.getItem('@authState')
     if (value === 'true') {
-      setAuthState(true)
+      setAuthState(true);
     } else if (value === 'false') {
-      setAuthState(false)
+      setAuthState(false);
     }
   }
-
-
+  
   const CurrentUser = async () => {
     let value = await AsyncStorage.getItem('@userID', value);
-    setUserID(value)
+    setUserID(value);
   }
-
-
-  const selectColor = async (color) => {
-    // console.log(color)
-    setSelectedColor(color);
-    try {
-      const jsonValue = JSON.stringify(color)
-      await AsyncStorage.setItem('selectedColor', jsonValue);
-    } catch (e) {
-      console.error(e)
-    }
-  };
-
-  const getSelectedColor = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('selectedColor')
-      if (jsonValue != null) {
-        let color = JSON.parse(jsonValue)
-        // console.log(color)
-        setSelectedColor(color);
-      }
-    } catch (e) {
-      // error reading value
-    }
-  }
-
 
   useEffect(() => {
     CheckAuthState();
     CurrentUser();
-    getSelectedColor();
   }, [])
-
-
-  const DisplayGradient = (props) => {
-    return (
-      <>
-        <Image source={props.image} style={{ ...styles.background, opacity: 0.4 }} />
-        <LinearGradient
-          colors={props.gradient}
-          style={{ ...styles.background, opacity: 0.5 }}
-        />
-      </>
-    )
-  }
-
-
-
-  // useEffect(() => {
-  //   // DisplayGradient(selectColor)
-  // }, [selectedColor])
-
-  // const LEVEL_KEY = 'selected_level';
-
-  const selectLevel = async (level) => {
-    // console.log(level)
-    try {
-      await AsyncStorage.setItem('LEVEL_KEY', level);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // const selectedLevel = getSelectedLevel();
-  // console.log(selectedLevel); // Outputs 'Easy'
-  let buttonArray = [];
-  let demoText = ["", "E", "", "", "", "", "Q", "", "", "", "P", "U", "T", "T", "Y", "", "I", "", "", "", "", "P", "", "", "", "", "", "", ""]
-  const DemoGrid = () => {
-    for (let i = 0; i < 25; i++) {
-      buttonArray[i] =
-        <View key={i}>
-          {i == 11 ?
-            <LinearGradient
-              // Button Linear Gradient
-              colors={['#ffba08', '#faa307']}
-              style={styles.gridBlock}
-            >
-              <TouchableOpacity
-                onPress={() => console.log(i)}
-              >
-                <Text
-                  style={styles.letters}
-                  allowFontScaling={false}
-                >
-                  {demoText[i]}
-                </Text>
-              </TouchableOpacity>
-            </LinearGradient>
-            :
-            <LinearGradient
-              // Button Linear Gradient
-              colors={['#f8f9fa', '#ced4da']}
-              style={styles.gridBlock}
-            >
-              <TouchableOpacity
-                onPress={() => console.log(i)}
-              >
-                <Text
-                  style={styles.letters}
-                  allowFontScaling={false}
-                >
-                  {demoText[i]}
-                </Text>
-              </TouchableOpacity>
-            </LinearGradient>
-          }
-        </View>
-    }
-
-    return buttonArray;
-  }
-
-
-
 
   return (
     <>
-      {/* <View style={{backgroundColor: 'red', height: 100, width: windowWidth, position: 'absolute', zIndex: 10}}></View> */}
       <View style={styles.container}>
-
-        {selectedColor && selectedColor.gradient && selectedColor.image ?
-          <>
-            <DisplayGradient gradient={selectedColor.gradient} image={selectedColor.image} />
-
-          </>
-          :
-          <>
-            <Image source={require('./assets/dalle_7.png')} style={{ ...styles.background, opacity: 0.4 }} />
-            <LinearGradient
-              colors={['#0b132b', '#3a506b']}
-              style={{ ...styles.background, opacity: 0.5 }}
-            />
-          </>
-        }
-
         <Navbar nav={navigation} auth={authState} position={'relative'} from={'home'} />
-        <SafeAreaView style={styles.scrollContainer}>
-          <ScrollView style={styles.scrollView}>
+        <View>
+          <Home nav={navigation} currentuser={userID} auth={authState} />
+        </View>
 
-            <View
-              style={{
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                marginTop: windowHeight / 24,
-                padding: 20,
-                marginLeft: 10,
-                marginRight: 10,
-                borderTopLeftRadius: 10,
-                borderBottomLeftRadius: 50,
-
-              }}
-            >
-              <Text
-                style={{ color: 'white', fontSize: HeightRatio(24), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}
-                allowFontScaling={false}
-              >
-                Choose a background color:
-              </Text>
-
-              <View style={styles.circlecontainer}>
-                {colors.map((color) => (
-                  <TouchableOpacity
-                    key={color.id}
-                    style={[styles.circle, { backgroundColor: color.value }]}
-                    onPress={() => selectColor(color)}
-                  />
-                ))}
-              </View>
-            </View>
-            <View
-              style={{
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                marginTop: 20,
-                padding: 20,
-                marginLeft: 5,
-                marginRight: 5,
-                borderTopLeftRadius: 10,
-                borderBottomLeftRadius: 50,
-              }}
-            >
-              <Text
-                style={{ color: 'white', fontSize: HeightRatio(24), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}
-                allowFontScaling={false}
-              >
-                How to play:
-              </Text>
-              <View
-                style={{
-                  // alignItems: 'center',
-                  // justifyContent: 'center',
-                  // flexDirection: 'row',
-                  // flexWrap: 'wrap',
-                  // marginTop: 20,
-                  alignItems: 'center',
-                  alignSelf: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  marginTop: HeightRatio(8),
-                  width: windowWidth * 0.8
-
-                }}
-              >
-                <DemoGrid />
-              </View>
-              {/* #1 */}
-              <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
-                <View
-                  style={{
-                    // flexDirection: 'column', 
-                    // margin: 5, 
-                    // backgroundColor: 'rgba(255, 255, 255, 0.2)', 
-                    // width: 50, 
-                    // height: 50, 
-                    // borderRadius: 50
-                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    borderRadius: 20,
-                    width: windowWidth * 0.12,
-                    height: windowWidth * 0.09,
-                    marginRight: 10,
-                    marginTop: 10,
-                    // borderLeftWidth: 1, 
-                    // borderBottomWidth: 1, 
-                    borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                    borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                    borderTopLeftRadius: 10,
-                    borderBottomLeftRadius: 30,
-                  }}
-                >
-                  <Text
-                    style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
-                    allowFontScaling={false}
-                  >
-                    1
-                  </Text>
-                </View>
-                <View style={{ flexDirection: 'column' }}>
-                  <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
-                    Two words will appear.
-                  </Text>
-                </View>
-              </View>
-              {/* #2 */}
-              <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
-                <View
-                  style={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    borderRadius: 20,
-                    width: windowWidth * 0.12,
-                    height: windowWidth * 0.09,
-                    marginRight: 10,
-                    marginTop: 10,
-                    // borderLeftWidth: 1, 
-                    // borderBottomWidth: 1, 
-                    borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                    borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                    borderTopLeftRadius: 10,
-                    borderBottomLeftRadius: 30,
-                  }}
-                >
-                  <Text
-                    style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
-                    allowFontScaling={false}
-                  >
-                    2
-                  </Text>
-                </View>
-                <View style={{ flexDirection: 'column' }}>
-                  <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
-                    One letter will be revealed.
-                  </Text>
-                  <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                    That letter will always be the overlapping letter.
-                  </Text>
-                </View>
-              </View>
-              {/* #3 */}
-              <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
-                <View
-                  style={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    borderRadius: 20,
-                    width: windowWidth * 0.12,
-                    height: windowWidth * 0.09,
-                    marginRight: 10,
-                    marginTop: 10,
-                    // borderLeftWidth: 1, 
-                    // borderBottomWidth: 1, 
-                    borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                    borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                    borderTopLeftRadius: 10,
-                    borderBottomLeftRadius: 30,
-                  }}
-                >
-                  <Text
-                    style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
-                    allowFontScaling={false}
-                  >
-                    3
-                  </Text>
-                </View>
-                <View style={{ flexDirection: 'column' }}>
-                  <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
-                    Guess that letter.
-                  </Text>
-                  <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                    If you are lucky, the overlapping letter may appear in other places!
-                  </Text>
-                </View>
-              </View>
-              {/* #4 */}
-              <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
-                <View
-                  style={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    borderRadius: 20,
-                    width: windowWidth * 0.12,
-                    height: windowWidth * 0.09,
-                    marginRight: 10,
-                    marginTop: 10,
-                    // borderLeftWidth: 1, 
-                    // borderBottomWidth: 1, 
-                    borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                    borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                    borderTopLeftRadius: 10,
-                    borderBottomLeftRadius: 30,
-                  }}
-                >
-                  <Text
-                    style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
-                    allowFontScaling={false}
-                  >
-                    4
-                  </Text>
-                </View>
-                <View style={{ flexDirection: 'column' }}>
-                  <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
-                    You have 12 guesses.
-                  </Text>
-                </View>
-              </View>
-              {/* #5 */}
-              <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
-                <View
-                  style={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    borderRadius: 20,
-                    width: windowWidth * 0.12,
-                    height: windowWidth * 0.09,
-                    marginRight: 10,
-                    marginTop: 10,
-                    // borderLeftWidth: 1, 
-                    // borderBottomWidth: 1, 
-                    borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                    borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                    borderTopLeftRadius: 10,
-                    borderBottomLeftRadius: 30,
-                  }}
-                >
-                  <Text
-                    style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
-                    allowFontScaling={false}
-                  >
-                    5
-                  </Text>
-                </View>
-                <View style={{ flexDirection: 'column' }}>
-                  <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
-                    Score points are based on time and guesses.
-                  </Text>
-                  <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                    +20 points if you guess both words within 12 guesses and under 30 seconds.
-                  </Text>
-                  <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                    +10 points if you guess both words within 12 guesses and under 60 seconds.
-                  </Text>
-                  <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                    +5 points if you guess both words within 12 guesses and under 90 seconds.
-                  </Text>
-                </View>
-              </View>
-            </View>
-            <View style={{ marginBottom: 400 }}></View>
-          </ScrollView>
-        </SafeAreaView>
-        {/* <View
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            marginTop: 10,
-            padding: 20,
-            marginLeft: 10,
-            marginRight: 10,
-            borderTopLeftRadius: 10,
-            borderBottomLeftRadius: 50,
-          }}
-        >
-          <Text style={{ color: 'white', fontSize: 30, fontWeight: 'bold', alignSelf: 'center', marginTop: 20 }}>Choose a difficulty level :</Text>
-          <View>
-
-            <TouchableOpacity onPress={() => selectLevel('easy')}>
-              <LinearGradient
-                colors={['#99e2b4', '#78c6a3']}
-                style={styles.difficultyButton}
-              >
-                <Text style={styles.difficultyText}>Easy</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => selectLevel('medium')}>
-              <LinearGradient
-                colors={['#ffe169', '#edc531']}
-                style={styles.difficultyButton}
-              >
-                <Text style={styles.difficultyText}>Medium</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => selectLevel('hard')}>
-              <LinearGradient
-                colors={['#e01e37', '#c71f37']}
-                style={styles.difficultyButton}
-              >
-                <Text style={styles.difficultyText}>Hard</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-          </View>
-        </View> */}
       </View>
-
       <StatusBar
-        barStyle="light-content"
+        barStyle="default"
         hidden={false}
-        // backgroundColor="black"
+        backgroundColor="transparent"
         translucent={true}
         networkActivityIndicatorVisible={true}
       />
@@ -513,6 +112,9 @@ function HomeScreen({ navigation }) {
 }
 
 const GameScreen = ({ navigation }) => {
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
+  // [LOCAL] - [[[Variables: Authorization, Preferences]]] - - - - 
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   const [userID, setUserID] = useState('');
   const [authState, setAuthState] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
@@ -520,40 +122,28 @@ const GameScreen = ({ navigation }) => {
   const CheckAuthState = async () => {
     let value = await AsyncStorage.getItem('@authState')
     if (value === 'true') {
-      setAuthState(true)
+      setAuthState(true);
     } else if (value === 'false') {
-      setAuthState(false)
+      setAuthState(false);
     }
   }
-
-
+  
   const CurrentUser = async () => {
     let value = await AsyncStorage.getItem('@userID', value);
-    setUserID(value)
+    setUserID(value);
   }
 
+  
   const getSelectedColor = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('selectedColor')
       if (jsonValue != null) {
         let color = JSON.parse(jsonValue)
-        setSelectedColor(color)
+        setSelectedColor(color);
       }
     } catch (e) {
-      // error reading value
+      console.error(e)
     }
-  }
-
-  const DisplayGradient = (props) => {
-    return (
-      <>
-        <Image source={props.image} style={{ ...styles.background, opacity: 0.4 }} />
-        <LinearGradient
-          colors={props.gradient}
-          style={{ ...styles.background, opacity: 0.5 }}
-        />
-      </>
-    )
   }
 
 
@@ -563,17 +153,7 @@ const GameScreen = ({ navigation }) => {
     getSelectedColor();
   }, [])
 
-  const getSelectedLevel = async () => {
-    try {
-      const value = await AsyncStorage.getItem('LEVEL_KEY');
-      if (value !== null) {
-        // console.log(value)
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  getSelectedLevel();
+
 
   return (
     <>
@@ -592,13 +172,6 @@ const GameScreen = ({ navigation }) => {
         <Navbar nav={navigation} auth={authState} position={'relative'} from={'game'} />
         <View
           style={{
-            // marginTop: 40,
-            // alignItems: 'flex-start',
-            // justifyContent: 'space-evenly',
-            // flexDirection: 'row',
-            // flexWrap: 'wrap',
-            // backgroundColor: 'red',
-            // marginTop: 30,
             alignSelf: 'center',
             marginTop: WidthRatio(30)
 
@@ -609,9 +182,9 @@ const GameScreen = ({ navigation }) => {
 
       </View>
       <StatusBar
-        barStyle="light-content"
+        barStyle="default"
         hidden={false}
-        // backgroundColor="black"
+        backgroundColor="transparent"
         translucent={true}
         networkActivityIndicatorVisible={true}
       />
@@ -619,7 +192,10 @@ const GameScreen = ({ navigation }) => {
   );
 }
 
-function LeaderScreen({ navigation }) {
+const LeaderScreen = ({ navigation }) => {
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
+  // [LOCAL] - [[[Variables: Authorization, Preferences]]] - - - - 
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   const [userID, setUserID] = useState('');
   const [authState, setAuthState] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
@@ -627,218 +203,35 @@ function LeaderScreen({ navigation }) {
   const CheckAuthState = async () => {
     let value = await AsyncStorage.getItem('@authState')
     if (value === 'true') {
-      setAuthState(true)
+      setAuthState(true);
     } else if (value === 'false') {
-      setAuthState(false)
+      setAuthState(false);
     }
   }
-
+  
   const CurrentUser = async () => {
     let value = await AsyncStorage.getItem('@userID', value);
-    setUserID(value)
+    setUserID(value);
   }
 
-
+  
   const getSelectedColor = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('selectedColor')
       if (jsonValue != null) {
         let color = JSON.parse(jsonValue)
-        setSelectedColor(color)
+        setSelectedColor(color);
       }
     } catch (e) {
-      // error reading value
+      console.error(e)
     }
   }
 
-  const DisplayGradient = (props) => {
-    return (
-      <>
-        <Image source={props.image} style={{ ...styles.background, opacity: 0.4 }} />
-        <LinearGradient
-          colors={props.gradient}
-          style={{ ...styles.background, opacity: 0.5 }}
-        />
-      </>
-    )
-  }
-
-  const { data: leaderboard, refetch } = useQuery(LEADERBOARD);
-  // console.log(leaderboard)
-
-  const DATA = leaderboard?.leaderBoard;
-  // console.log(DATA)
-
-
-  const Item = ({ username, score, pos }) => (
-    <View>
-      <View
-        style={{
-          backgroundColor: '#001219',
-          height: HeightRatio(100),
-          width: WidthRatio(340),
-          alignSelf: 'center',
-          borderRadius: 50,
-          flexDirection: 'row'
-        }}
-      >
-        <View style={{ flexDirection: 'column' }}>
-          <Text
-            style={{
-              color: 'white',
-              fontSize: HeightRatio(30),
-              fontWeight: 'bold',
-              marginTop: HeightRatio(30),
-              marginLeft: WidthRatio(20)
-            }}
-            allowFontScaling={false}
-          >
-            {pos}
-          </Text>
-        </View>
-        <View style={{ flexDirection: 'column', alignSelf: 'center', marginLeft: WidthRatio(20) }}>
-          <View style={{ flexDirection: 'column', width: WidthRatio(240) }}>
-            <View style={{ flexDirection: 'row', alignSelf: 'flex-start', margin: windowWidth * 0.01 }}>
-              <Text
-                style={{
-                  fontSize: windowWidth * 0.08,
-                  fontWeight: 'bold',
-                  color: '#efea5a'
-                }}
-                numberOfLines={1}
-                ellipsizeMode='tail'
-                allowFontScaling={false}
-              >
-                {username}
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: 'column',
-              width: WidthRatio(240),
-            }}
-
-          >
-            <View style={{ flexDirection: 'row', margin: windowWidth * 0.01 }}>
-              <Text
-                style={{
-                  fontSize: windowWidth * 0.05,
-                  fontWeight: 'bold',
-                  color: 'white',
-                  alignSelf: 'flex-end',
-                  marginLeft: 10,
-                }}
-                numberOfLines={1}
-                ellipsizeMode='tail'
-                allowFontScaling={false}
-              >
-                {score}
-              </Text>
-              <Text
-                style={{ fontSize: windowWidth * 0.05, fontWeight: 'bold', color: '#83e377', alignSelf: 'flex-end', marginLeft: 4 }}
-                allowFontScaling={false}
-              >
-                points
-              </Text>
-            </View>
-          </View>
-        </View>
-      </View>
-      <View style={styles.modalDivisionLine}></View>
-    </View>
-    // <View
-    //   style={{
-    //     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    //     padding: 10,
-    //     borderRadius: 10,
-    //     borderTopLeftRadius: 10,
-    //     borderBottomLeftRadius: 40,
-    //     flexDirection: 'row',
-    //     marginTop: 5,
-    //     marginBottom: 5,
-    //     width: windowWidth - 20,
-    //     alignSelf: 'center',
-    //     borderLeftWidth: 1,
-    //     borderBottomWidth: 1,
-    //     borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-    //     borderLeftColor: 'rgba(255, 255, 255, 0.5)'
-    //   }}
-    // >
-    //   <View
-    //     style={{
-    //       flexDirection: 'column',
-    //       backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    //       borderRadius: 20,
-    //       width: windowWidth * 0.12,
-    //       height: windowWidth * 0.09,
-    //       marginRight: 10,
-    //       marginTop: 10,
-    //       // borderLeftWidth: 1, 
-    //       // borderBottomWidth: 1, 
-    //       borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-    //       borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-    //       borderTopLeftRadius: 10,
-    //       borderBottomLeftRadius: 30,
-    //     }}
-    //   >
-    //     <Text
-    //       style={{ color: 'white', alignSelf: 'center', marginleft: windowWidth * 0.01, marginTop: windowWidth * 0.01, fontSize: windowWidth * 0.04, fontWeight: 'bold' }}
-    //     >{pos}</Text>
-    //   </View>
-    //   <View style={{ flexDirection: 'column' }}>
-    //     <View style={{ flexDirection: 'column', width: windowWidth / 1.4 }}>
-    //       <View style={{ flexDirection: 'row', alignSelf: 'flex-start', margin: windowWidth * 0.01 }}>
-    //         <Text
-    //           style={{
-    //             fontSize: windowWidth * 0.06,
-    //             fontWeight: 'bold',
-    //             color: '#efea5a'
-    //           }}
-    //           numberOfLines={1}
-    //           ellipsizeMode='tail'
-    //         >
-    //           {username}
-    //         </Text>
-    //       </View>
-    //     </View>
-    //     <View
-    //       style={{
-    //         flexDirection: 'column',
-    //         width: windowWidth / 1.6
-    //       }}
-
-    //     >
-    //       <View style={{ flexDirection: 'row', margin: windowWidth * 0.01 }}>
-    //         <Text
-    //           style={{
-    //             fontSize: windowWidth * 0.05,
-    //             fontWeight: 'bold',
-    //             color: 'white',
-    //             alignSelf: 'flex-end',
-    //             marginLeft: 10,
-    //           }}
-    //           numberOfLines={1}
-    //           ellipsizeMode='tail'
-    //         >
-    //           {score}
-    //         </Text>
-    //         <Text style={{ fontSize: windowWidth * 0.04, fontWeight: 'bold', color: '#83e377', alignSelf: 'flex-end', marginLeft: 4 }}>points</Text>
-    //       </View>
-    //     </View>
-    //   </View>
-    // </View>
-  );
-
-  const renderItem = ({ item }) => (
-    <Item username={item.username} score={item.score} pos={item.position} />
-  );
 
   useEffect(() => {
     CheckAuthState();
     CurrentUser();
     getSelectedColor();
-    refetch();
   }, [])
 
   return (
@@ -856,21 +249,21 @@ function LeaderScreen({ navigation }) {
           </>
         }
         <Navbar nav={navigation} auth={authState} position={'relative'} from={'leader'} />
-        {/* <View style={{ marginTop: 40 }}>
-          <Text style={{ color: 'white', fontSize: 30, fontWeight: 'bold', alignSelf: 'center', marginTop: 80 }}>Leader Board</Text>
-        </View> */}
-        <SafeAreaView style={styles.flatlistContainer}>
-          <FlatList
-            data={DATA}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-          />
-        </SafeAreaView>
+        <View
+          style={{
+            alignSelf: 'center',
+            marginTop: WidthRatio(30)
+
+          }}
+        >
+          <Leader nav={navigation} currentuser={userID} auth={authState} />
+        </View>
+
       </View>
       <StatusBar
-        barStyle="light-content"
+        barStyle="default"
         hidden={false}
-        // backgroundColor="black"
+        backgroundColor="transparent"
         translucent={true}
         networkActivityIndicatorVisible={true}
       />
@@ -879,6 +272,9 @@ function LeaderScreen({ navigation }) {
 }
 
 function ProfileScreen({ navigation }) {
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
+  // [LOCAL] - [[[Variables: Authorization, Preferences]]] - - - - 
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   const [userID, setUserID] = useState('');
   const [authState, setAuthState] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
@@ -886,42 +282,28 @@ function ProfileScreen({ navigation }) {
   const CheckAuthState = async () => {
     let value = await AsyncStorage.getItem('@authState')
     if (value === 'true') {
-      setAuthState(true)
+      setAuthState(true);
     } else if (value === 'false') {
-      setAuthState(false)
-      { navigation.navigate('Auth') }
+      setAuthState(false);
     }
   }
-
-
+  
   const CurrentUser = async () => {
     let value = await AsyncStorage.getItem('@userID', value);
-    setUserID(value)
+    setUserID(value);
   }
 
-
+  
   const getSelectedColor = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('selectedColor')
       if (jsonValue != null) {
         let color = JSON.parse(jsonValue)
-        setSelectedColor(color)
+        setSelectedColor(color);
       }
     } catch (e) {
-      // error reading value
+      console.error(e)
     }
-  }
-
-  const DisplayGradient = (props) => {
-    return (
-      <>
-        <Image source={props.image} style={{ ...styles.background, opacity: 0.4 }} />
-        <LinearGradient
-          colors={props.gradient}
-          style={{ ...styles.background, opacity: 0.5 }}
-        />
-      </>
-    )
   }
 
 
@@ -930,8 +312,6 @@ function ProfileScreen({ navigation }) {
     CurrentUser();
     getSelectedColor();
   }, [])
-
-  // console.log("AUTH: " + authState)
 
   return (
     <>
@@ -952,9 +332,9 @@ function ProfileScreen({ navigation }) {
       </View>
 
       <StatusBar
-        barStyle="light-content"
+        barStyle="default"
         hidden={false}
-        // backgroundColor="black"
+        backgroundColor="transparent"
         translucent={true}
         networkActivityIndicatorVisible={true}
       />
@@ -963,9 +343,6 @@ function ProfileScreen({ navigation }) {
 }
 
 const Auth = ({ navigation }) => {
-  // Generic
-  const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
   const [authState, setAuthState] = useState(false);
   const [displayLoading, setDisplayLoading] = useState(false);
   const [newUser, setNewUser] = useState(false);
@@ -1020,7 +397,6 @@ const Auth = ({ navigation }) => {
     }
   }
 
-
   const storeAuthState = async (value) => {
     try {
       await AsyncStorage.setItem('@authState', value)
@@ -1052,21 +428,7 @@ const Auth = ({ navigation }) => {
   useEffect(() => {
     CheckAuthState();
     CurrentUser();
-    // getSelectedColor();
   }, [])
-
-
-  // console.log("AUTH: " + authState)
-  // console.log("USER ID: " + userID)
-
-  // if (!authState || userID == '') {
-  //   CheckAuthState();
-  //   CurrentUser();
-  //   console.log("true")
-  // }
-
-
-
 
   const handleLogin = async () => {
 
@@ -1572,18 +934,7 @@ const Auth = ({ navigation }) => {
                       <View style={styles.modalDivisionLine}></View>
 
                       <TouchableOpacity onPress={() => setDisplayForgotPasswordContent(true)}>
-                        <View
-                          style={{
-                            // backgroundColor: '#ffbe0b',
-                            // display: 'flex',
-                            // justifyContent: 'flex-start',
-                            // padding: 5,
-                            // borderRadius: 40,
-                            // alignSelf: 'center',
-                            // margin: 10,
-                            // width: windowWidth - 200
-                          }}
-                        >
+                        <View>
                           <Text
                             style={{ color: '#80ffdb', alignSelf: 'center', fontSize: 30, margin: 10, fontWeight: 'bold' }}
                             allowFontScaling={false}
@@ -1600,7 +951,6 @@ const Auth = ({ navigation }) => {
                             width: windowWidth - 80
                           }}
                         >
-                          {/* <Text style={{ color: 'white', alignSelf: 'center' }}>Enter email address and select submit:</Text> */}
                           <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10, marginTop: -5 }}>
 
                             <TextInput
@@ -1631,22 +981,13 @@ const Auth = ({ navigation }) => {
                                 width: windowWidth - 160
                               }}
                             />
-                            {/* [[[SUMBIT BUTTON]]] */}
+                            {/* [[[SUBMIT BUTTON]]] */}
                             <TouchableOpacity
                               onPress={() => {
-                                // handleFormSubmit();
-                                // setShowEditableFieldUsername(false);
-                                // setShowEditableFieldEmail(false);
-                                // setShowEditableFieldPassword(false);
-                                // setShowEditableFieldVerification(false);
-                                // setShowEditableFieldDelete(false);
                                 handleRequestReset()
                               }}
                               style={{
-                                // backgroundColor: 'rgba(0, 0, 0, 0.25)',
-                                // width: windowWidth - 30,
                                 padding: 10,
-                                // borderRadius: 10,
                                 border: 'solid',
                                 borderColor: 'white',
                                 borderTopWidth: 1,
@@ -1658,7 +999,7 @@ const Auth = ({ navigation }) => {
                                 marginBottom: 4,
                               }}
                             >
-                              <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }} allowFontScaling={false}>SUMBIT</Text>
+                              <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }} allowFontScaling={false}>SUBMIT</Text>
                             </TouchableOpacity>
                           </View>
                           {resetRequestStatus != '' &&
@@ -1698,29 +1039,6 @@ const Auth = ({ navigation }) => {
                                 placeholderTextColor="white"
                                 value={promptResetToken}
                                 onChangeText={setPromptResetToken}
-                                style={{
-                                  outline: 'none',
-                                  backgroundColor: 'transparent',
-                                  color: 'white',
-                                  display: 'flex',
-                                  justifyContent: 'flex-start',
-                                  padding: 20,
-                                  border: 'solid',
-                                  borderWidth: 2,
-                                  borderColor: 'white',
-                                  borderRadius: 30,
-                                  alignSelf: 'center',
-                                  margin: 10,
-                                  width: windowWidth - 80
-                                }}
-                              />
-                              <TextInput
-                                type="text"
-                                name="username"
-                                placeholder="Username"
-                                placeholderTextColor="white"
-                                value={promptResetUsername}
-                                onChangeText={setPromptResetUsername}
                                 style={{
                                   outline: 'none',
                                   backgroundColor: 'transparent',
@@ -1796,22 +1114,13 @@ const Auth = ({ navigation }) => {
                                     width: windowWidth - 160
                                   }}
                                 />
-                                {/* [[[SUMBIT BUTTON]]] */}
+                                {/* [[[SUBMIT BUTTON]]] */}
                                 <TouchableOpacity
                                   onPress={() => {
-                                    // handleFormSubmit();
-                                    // setShowEditableFieldUsername(false);
-                                    // setShowEditableFieldEmail(false);
-                                    // setShowEditableFieldPassword(false);
-                                    // setShowEditableFieldVerification(false);
-                                    // setShowEditableFieldDelete(false);
                                     handleResetPassword();
                                   }}
                                   style={{
-                                    // backgroundColor: 'rgba(0, 0, 0, 0.25)',
-                                    // width: windowWidth - 30,
                                     padding: 10,
-                                    // borderRadius: 10,
                                     border: 'solid',
                                     borderColor: 'white',
                                     borderTopWidth: 1,
@@ -1824,14 +1133,14 @@ const Auth = ({ navigation }) => {
                                   }}
 
                                 >
-                                  <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }} allowFontScaling={false}>SUMBIT</Text>
+                                  <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }} allowFontScaling={false}>SUBMIT</Text>
                                 </TouchableOpacity>
 
                               </View>
                             </>
 
                           }
-                          {/* displayResetSuccessModal */}
+
                           <View>
                             <Modal
                               animationType="slide"
@@ -1879,7 +1188,7 @@ const Auth = ({ navigation }) => {
                                   <Text style={styles.modalText}>Reset successful, try to Login!</Text>
                                   <TouchableOpacity
                                     style={[styles.button, styles.buttonClose]}
-                                    onPress={() => {setDisplayResetSuccessModal(!displayResetSuccessModal); setDisplayForgotPasswordContent(false);}}
+                                    onPress={() => { setDisplayResetSuccessModal(!displayResetSuccessModal); setDisplayForgotPasswordContent(false); }}
                                   >
                                     <Text style={styles.textStyle}>Cool</Text>
                                   </TouchableOpacity>
@@ -1931,9 +1240,9 @@ const Auth = ({ navigation }) => {
         </ScrollView>
       </SafeAreaView>
       <StatusBar
-        barStyle="light-content"
+        barStyle="default"
         hidden={false}
-        // backgroundColor="black"
+        backgroundColor="transparent"
         translucent={true}
         networkActivityIndicatorVisible={true}
       />

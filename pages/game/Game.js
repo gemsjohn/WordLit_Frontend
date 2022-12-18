@@ -3,14 +3,11 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios';
-import { ADD_GAME } from './utils/mutations';
+import { ADD_GAME } from '../../utils/mutations';
 import { useMutation, useQuery } from '@apollo/client';
-import { GET_USER_BY_ID } from './utils/queries';
+import { GET_USER_BY_ID } from '../../utils/queries';
 import { CommonActions } from '@react-navigation/native';
-// import { SettingsModal from './Settings';
-import { Picker } from '@react-native-picker/picker'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { qmark } from './assets/qmark.png'
+
 import {
     StyleSheet,
     Text,
@@ -147,6 +144,7 @@ export const Grid = (props) => {
     });
     // console.log(userByID?.user)
     const [addGame] = useMutation(ADD_GAME);
+    
 
 
     const handleAddGame = async (w1, w2, t, s) => {
@@ -264,7 +262,7 @@ export const Grid = (props) => {
     const Generate = () => {
         ResetAllVariables();
         // Load the JSON file containing the words
-        const data = require('./wordlist.json');
+        const data = require('../../wordlist.json');
 
         // Create an empty array to hold the chosen words
         const chosenWords = [];
@@ -838,10 +836,6 @@ export const Grid = (props) => {
 
             <View style={{ flexDirection: 'column' }}>
 
-
-
-
-
                 {/* - - - - - - - - - - - - - -  */}
                 {/* Crossword Grid / Placeholder */}
                 {/* - - - - - - - - - - - - - -  */}
@@ -880,7 +874,7 @@ export const Grid = (props) => {
                                 {/* <Text style={{ color: 'white', fontWeight: 'bold', fontSize: HeightRatio(20) }}>?</Text> */}
                                 <Image
                                     style={{ height: HeightRatio(50), width: HeightRatio(50) }}
-                                    source={require('./assets/qmark.png')}
+                                    source={require('../../assets/qmark.png')}
                                 />
                             </View>
                         </TouchableOpacity>
@@ -905,7 +899,7 @@ export const Grid = (props) => {
                                 {/* <Text style={{ color: 'white', fontWeight: 'bold', fontSize: HeightRatio(20) }}>?</Text> */}
                                 <Image
                                     style={{ height: HeightRatio(50), width: HeightRatio(50) }}
-                                    source={require('./assets/qmark.png')}
+                                    source={require('../../assets/qmark.png')}
                                 />
                             </View>
                         </TouchableOpacity>
@@ -936,7 +930,7 @@ export const Grid = (props) => {
                                 >
                                     <Image
                                         style={{height: HeightRatio(25), width: WidthRatio(60), position: 'absolute', zIndex: 10, top: -12, left: -8}}
-                                        source={require('./assets/click.png')}
+                                        source={require('../../assets/click.png')}
                                     />
                                     <View
                                         style={{
@@ -1116,7 +1110,7 @@ export const Grid = (props) => {
                                     >
                                         <Image  
                                                 style={{height: 150, width: 150}}
-                                                source={require('./assets/hint.png')}
+                                                source={require('../../assets/hint.png')}
                                         />
                                     </TouchableOpacity>
                                     <View style={{ width: WidthRatio(280), alignSelf: 'center' }}>
@@ -1242,7 +1236,7 @@ export const Grid = (props) => {
                                     >
                                         <Image  
                                             style={{height: 150, width: 150}}
-                                            source={require('./assets/hint.png')}
+                                            source={require('../../assets/hint.png')}
                                         />
                                     </TouchableOpacity>
                                     <View style={{ width: WidthRatio(280), alignSelf: 'center' }}>

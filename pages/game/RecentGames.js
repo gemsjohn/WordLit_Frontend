@@ -1,15 +1,8 @@
-import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { LinearGradient } from 'expo-linear-gradient';
-import axios from 'axios';
-import { CommonActions } from '@react-navigation/native';
-// import { SettingsModal from './Settings';
-import { Picker } from '@react-native-picker/picker'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { UserDetails } from './User/UserDetails';
 import { useMutation, useQuery } from '@apollo/client';
-import { GET_USER_BY_ID } from './utils/queries';
+import { GET_USER_BY_ID } from '../../utils/queries';
 import {
     StyleSheet,
     Text,

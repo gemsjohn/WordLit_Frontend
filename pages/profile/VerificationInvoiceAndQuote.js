@@ -7,20 +7,11 @@ import { faSolid, faSackDollar, faCircleArrowLeft, faX, faUserShield, faStar, fa
 import {
     strikeIssueNewInvoiceForSpecifiedReceiver,
     lnInvoice,
-} from '../utils/API';
-import { UPDATE_USER, } from '../utils/mutations';
-import { GET_USER_BY_ID } from '../utils/queries';
+} from '../../utils/API';
+import { UPDATE_USER, } from '../../utils/mutations';
+import { GET_USER_BY_ID } from '../../utils/queries';
 import { useMutation, useQuery } from '@apollo/client';
-// import Auth from '../utils/auth';
-// import copy from 'copy-to-clipboard';
 import axios from 'axios';
-// import strikeIcon from '../../assets/stikeicon.png';
-// import Modal from './ModalV';
-// import { UserData } from '../../components/ApolloQueries/UsersData';
-// import bulletwalleticon from '../../assets/bluewalleticon.png';
-// import cashappicon from '../../assets/cashappicon.png';
-// import strikeicon from '../../assets/stikeicon.png';
-// import lnicon from '../../assets/lnicon.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SvgQRCode from 'react-native-qrcode-svg';
 import * as Clipboard from 'expo-clipboard';
@@ -241,7 +232,7 @@ export const DemoAppInvoiceAndQuote = (props) => {
                                         style={{ marginLeft: 20, marginRight: 20 }}
                                     >
                                         <View style={{ flexDirection: 'column' }}>
-                                            <Image source={require('../assets/bluewalleticon.png')} style={{ height: 63, width: 60, alignSelf: 'center', borderRadius: 10 }} />
+                                            <Image source={require('../../assets/bluewalleticon.png')} style={{ height: 63, width: 60, alignSelf: 'center', borderRadius: 10 }} />
                                             <Text style={{ color: 'white', alignSelf: 'center', marginTop: 4 }}>
                                                 Blue Wallet
                                             </Text>
@@ -253,7 +244,7 @@ export const DemoAppInvoiceAndQuote = (props) => {
                                         style={{ marginLeft: 20, marginRight: 20 }}
                                     >
                                         <View style={{ flexDirection: 'column' }}>
-                                            <Image source={require('../assets/stikeicon.png')} style={{ height: 63, width: 60, alignSelf: 'center', borderRadius: 10 }} />
+                                            <Image source={require('../../assets/stikeicon.png')} style={{ height: 63, width: 60, alignSelf: 'center', borderRadius: 10 }} />
                                             <Text style={{ color: 'white', alignSelf: 'center', marginTop: 4 }}>
                                                 Strike
                                             </Text>
@@ -265,7 +256,7 @@ export const DemoAppInvoiceAndQuote = (props) => {
                                         style={{ marginLeft: 20, marginRight: 20 }}
                                     >
                                         <View style={{ flexDirection: 'column' }}>
-                                            <Image source={require('../assets/cashappicon.png')} style={{ height: 63, width: 60, alignSelf: 'center', borderRadius: 10 }} />
+                                            <Image source={require('../../assets/cashappicon.png')} style={{ height: 63, width: 60, alignSelf: 'center', borderRadius: 10 }} />
                                             <Text style={{ color: 'white', alignSelf: 'center', marginTop: 4 }}>
                                                 Cash App
                                             </Text>
@@ -292,7 +283,7 @@ export const DemoAppInvoiceAndQuote = (props) => {
                         {stage1 &&
                             <>
                                 <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-                                    <Image source={require('../assets/lnicon.png')} style={{ height: 63, width: 60 }} />
+                                    <Image source={require('../../assets/lnicon.png')} style={{ height: 63, width: 60 }} />
                                     <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', alignSelf: 'center', margin: 10 }}>
                                         Lightning Network Invoice
                                     </Text>

@@ -4,10 +4,8 @@ import { Dimensions } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faSolid, faAddressCard, faEnvelope, faSackDollar, faStar, faX, faPenToSquare, faCopy } from '@fortawesome/free-solid-svg-icons'
 import { useMutation, useQuery } from '@apollo/client';
-import { UPDATE_USER, LOGIN_USER, UPDATE_USER_PASSWORD, DELETE_USER } from '../utils/mutations';
-import { GET_USER_BY_ID } from '../utils/queries';
-import axios from 'axios';
-import { Loading } from '../components/Loading';
+import { UPDATE_USER, LOGIN_USER, UPDATE_USER_PASSWORD, DELETE_USER } from '../../utils/mutations';
+import { GET_USER_BY_ID } from '../../utils/queries';
 import { DemoAppInvoiceAndQuote } from './VerificationInvoiceAndQuote';
 import * as Clipboard from 'expo-clipboard';
 import { CommonActions } from '@react-navigation/native';
@@ -315,7 +313,7 @@ export const UserDetails = (props) => {
                                                                 width: windowWidth - 160
                                                             }}
                                                         />
-                                                        {/* [[[SUMBIT BUTTON]]] */}
+                                                        {/* [[[SUBMIT BUTTON]]] */}
                                                         <TouchableOpacity
                                                             onPress={() => {
                                                                 handleFormSubmit();
@@ -341,7 +339,7 @@ export const UserDetails = (props) => {
                                                                 marginBottom: 4,
                                                             }}
                                                         >
-                                                            <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }} allowFontScaling={false}>SUMBIT</Text>
+                                                            <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }} allowFontScaling={false}>SUBMIT</Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                 </>
@@ -408,7 +406,7 @@ export const UserDetails = (props) => {
                                                                 width: windowWidth - 160
                                                             }}
                                                         />
-                                                        {/* [[[SUMBIT BUTTON]]] */}
+                                                        {/* [[[SUBMIT BUTTON]]] */}
                                                         <TouchableOpacity
                                                             onPress={() => {
                                                                 handleFormSubmit();
@@ -435,7 +433,7 @@ export const UserDetails = (props) => {
                                                             }}
 
                                                         >
-                                                            <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }} allowFontScaling={false}>SUMBIT</Text>
+                                                            <Text style={{ color: '#ccff33', marginTop: 15, marginRight: 15 }} allowFontScaling={false}>SUBMIT</Text>
                                                         </TouchableOpacity>
 
                                                     </View>

@@ -7,10 +7,10 @@ import { CommonActions } from '@react-navigation/native';
 // import { SettingsModal from './Settings';
 import { Picker } from '@react-native-picker/picker'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { UserDetails } from './User/UserDetails';
+import { UserDetails } from './UserDetails';
 import { useMutation, useQuery } from '@apollo/client';
-import { GET_USER_BY_ID } from './utils/queries';
-import { RecentGames } from './RecentGames'
+import { GET_USER_BY_ID } from '../../utils/queries';
+import { RecentGames } from '../game/RecentGames';
 import {
     StyleSheet,
     Text,
