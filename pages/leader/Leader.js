@@ -4,7 +4,8 @@ import { GET_USER_BY_ID, LEADERBOARD } from '../../utils/queries';
 import { Alert, StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, StatusBar, SafeAreaView, Dimensions, Button, Linking, ImageBackground, FlatList, PixelRatio, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { Navbar } from '../../components/Navbar';
+import { Styling } from '../../Styling';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -27,10 +28,10 @@ const HeightRatio = (size) => {
   return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
 }
 
-export const Leader = (props) => {
-    const [userID, setUserID] = useState('');
-    const [authState, setAuthState] = useState(false);
-    const [selectedColor, setSelectedColor] = useState(null);
+export const LeaderScreen = ({ navigation }) => {
+  const [userID, setUserID] = useState('');
+  const [authState, setAuthState] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(null);
   
     const CheckAuthState = async () => {
       let value = await AsyncStorage.getItem('@authState')
@@ -70,6 +71,7 @@ export const Leader = (props) => {
         </>
       )
     }
+    
   
     const { data: leaderboard, refetch } = useQuery(LEADERBOARD);
     // console.log(leaderboard)
@@ -170,6 +172,27 @@ export const Leader = (props) => {
   
     return (
       <>
+      <View style={Styling.container}>
+        <Navbar nav={navigation} auth={authState} position={'relative'} from={'leader'} />
+        {selectedColor && selectedColor.gradient && selectedColor.image ?
+          <DisplayGradient gradient={selectedColor.gradient} image={selectedColor.image} />
+          :
+          <>
+            <Image source={require('../../assets/dalle_7.png')} style={{ ...Styling.background, opacity: 0.4 }} />
+            <LinearGradient
+              colors={['#0b132b', '#3a506b']}
+              style={{ ...Styling.background, opacity: 0.5 }}
+            />
+          </>
+        }
+        
+        <View
+          style={{
+            alignSelf: 'center',
+            marginTop: WidthRatio(30)
+
+          }}
+        >
           <SafeAreaView style={styles.flatlistContainer}>
             <FlatList
               data={DATA}
@@ -177,7 +200,17 @@ export const Leader = (props) => {
               keyExtractor={item => item.id}
             />
           </SafeAreaView>
-      </>
+        </View>
+
+      </View>
+      <StatusBar
+        barStyle="default"
+        hidden={false}
+        backgroundColor="transparent"
+        translucent={true}
+        networkActivityIndicatorVisible={true}
+      />
+    </>
     );
   }
 
