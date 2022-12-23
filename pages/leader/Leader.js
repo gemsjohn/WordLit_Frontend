@@ -63,10 +63,10 @@ export const LeaderScreen = ({ navigation }) => {
     const DisplayGradient = (props) => {
       return (
         <>
-          <Image source={props.image} style={{ ...styles.background, opacity: 0.4 }} />
+          <Image source={props.image} style={{ ...Styling.background, opacity: 0.4 }} />
           <LinearGradient
             colors={props.gradient}
-            style={{ ...styles.background, opacity: 0.5 }}
+            style={{ ...Styling.background, opacity: 0.5 }}
           />
         </>
       )
@@ -81,6 +81,7 @@ export const LeaderScreen = ({ navigation }) => {
   
   
     const Item = ({ username, score, pos }) => (
+      <>
       <View>
         <View
           style={{
@@ -155,8 +156,10 @@ export const LeaderScreen = ({ navigation }) => {
             </View>
           </View>
         </View>
-        <View style={styles.modalDivisionLine}></View>
+        <View style={Styling.modalDivisionLine}></View>
       </View>
+      <View style={{marginBottom: 10}}></View>
+      </>
     );
   
     const renderItem = ({ item }) => (
@@ -189,16 +192,17 @@ export const LeaderScreen = ({ navigation }) => {
         <View
           style={{
             alignSelf: 'center',
-            marginTop: WidthRatio(30)
+            // marginTop: WidthRatio(30)
 
           }}
         >
-          <SafeAreaView style={styles.flatlistContainer}>
+          <SafeAreaView style={Styling.flatlistContainer}>
             <FlatList
               data={DATA}
               renderItem={renderItem}
               keyExtractor={item => item.id}
             />
+            <View style={{marginBottom: 70}}></View>
           </SafeAreaView>
         </View>
 
@@ -213,223 +217,3 @@ export const LeaderScreen = ({ navigation }) => {
     </>
     );
   }
-
-  const styles = StyleSheet.create({
-    loadingContainer: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    // container: {
-    //   flex: 1,
-    //   // justifyContent: "center",
-    //   // marginTop: 10,
-    //   // paddingHorizontal: 50,
-    //   // backgroundColor: '#001219',
-    // },
-    container: {
-      flex: 1,
-      backgroundColor: '#240046',
-      marginTop: 30
-      // alignItems: 'center',
-      // justifyContent: 'center',
-    },
-    scrollContainer: {
-      // paddingTop: StatusBar.currentHeight,
-    },
-    flatlistContainer: {
-      flex: 1,
-      marginTop: StatusBar.currentHeight + 30 || 0,
-    },
-    item: {
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-      border: 'solid',
-      borderColor: 'white',
-      borderWidth: 2,
-      borderRadius: 10,
-      borderBottomLeftRadius: 25,
-      padding: 10,
-      width: windowWidth - 20,
-      flexDirection: 'column',
-      margin: 10,
-    },
-    number: {
-      fontSize: 32,
-      fontWeight: 'bold',
-      color: 'blue',
-      marginLeft: 15,
-      marginTop: 2
-    },
-    title: {
-      fontSize: 32,
-    },
-    background: {
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      top: 0,
-      height: windowHeight,
-    },
-    label: {
-      marginBottom: 2,
-      fontSize: 12,
-      fontWeight: "bold",
-      textTransform: "uppercase",
-    },
-    section: {
-      marginVertical: 12,
-    },
-    tinyLogo: {
-      width: 50,
-      height: 50,
-      alignSelf: 'center',
-      borderRadius: 10,
-      marginBottom: 50
-    },
-    newcontainer: {
-      flex: 1,
-      paddingTop: StatusBar.currentHeight,
-    },
-    scrollView: {
-      marginHorizontal: 0,
-    },
-    circlecontainer: {
-      // flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-    },
-    circle: {
-      width: HeightRatio(40),
-      height: HeightRatio(40),
-      borderRadius: 20,
-      margin: 10,
-    },
-    difficultyButton: {
-      display: 'flex',
-      justifyContent: 'center',
-      padding: 20,
-      // borderRadius: 40,
-      alignSelf: 'center',
-      margin: 10,
-      width: windowWidth / 3 - 1,
-      height: windowHeight / 12,
-      flexDirection: 'row'
-    },
-    difficultyText: {
-      color: '#001219',
-      fontSize: 20,
-      fontWeight: 'bold',
-      alignSelf: 'center'
-    },
-    textInput: {
-      backgroundColor: 'rgba(255, 255, 255, 0.3)',
-      borderWidth: 4,
-      borderColor: 'white',
-      color: 'white',
-      width: windowWidth - 80,
-      alignSelf: 'center',
-      height: windowHeight / 3,
-      borderRadius: 10,
-      padding: 30
-    },
-    sendButton: {
-      display: 'flex',
-      justifyContent: 'center',
-      padding: 20,
-      borderRadius: 40,
-      alignSelf: 'center',
-      margin: 10,
-      width: windowWidth - 80,
-      flexDirection: 'row'
-    },
-    sendButtonText: {
-      color: '#001219',
-      fontSize: 20,
-      fontWeight: 'bold',
-      alignSelf: 'center'
-    },
-    gridBlock: {
-      height: windowWidth * 0.14,
-      width: windowWidth * 0.14,
-      margin: 2,
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    letters: {
-      alignSelf: 'center',
-      // fontSize: windowHeight / 30,
-      fontSize: HeightRatio(44),
-      fontWeight: 'bold',
-      color: 'rgba(0, 0, 0, 0.85)',
-    },
-    // letters: {
-    //   alignSelf: 'center',
-    //   justifyContent: 'center',
-    //   alignItems: 'center',
-    //   // margin: 10,
-    //   fontSize: windowWidth*0.11,
-    //   fontWeight: 'bold',
-    //   color: '#001219'
-    // },
-    modalDivisionLine: {
-      borderColor: '#4cc9f0',
-      borderBottomWidth: 1,
-      width: WidthRatio(320),
-      alignSelf: 'center',
-      marginTop: 10,
-      marginBottom: 10
-    },
-    centeredView: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 22
-    },
-    modalView: {
-      margin: 20,
-      backgroundColor: "#edf2f4",
-      borderRadius: 10,
-      borderWidth: 3,
-      padding: 35,
-      alignItems: "center",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
-      width: WidthRatio(300)
-    },
-    button: {
-      borderRadius: 20,
-      padding: 10,
-      elevation: 2,
-      backgroundColor: '#d90429'
-    },
-    buttonOpen: {
-      backgroundColor: "#F194FF",
-    },
-    buttonClose: {
-      backgroundColor: "#4361ee",
-      borderRadius: 10,
-      padding: 20
-    },
-    textStyle: {
-      color: "white",
-      fontSize: HeightRatio(25),
-      fontWeight: "bold",
-      textAlign: "center"
-    },
-    modalText: {
-      marginBottom: 15,
-      textAlign: "center",
-      color: 'black',
-      fontSize: HeightRatio(30),
-      fontWeight: 'bold'
-    }
-  });

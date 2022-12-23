@@ -1,20 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { ApolloProvider, ApolloClient, HttpLink, InMemoryCache, useMutation, useQuery } from "@apollo/client";
-import { setContext } from '@apollo/link-context';
+import React, { useEffect, useState } from 'react';
+import { useMutation } from "@apollo/client";
 import jwtDecode from "jwt-decode";
 import { LOGIN_USER, ADD_USER, REQUEST_RESET, RESET_PASSWORD } from '../../utils/mutations';
-import { GET_USER_BY_ID, LEADERBOARD } from '../../utils/queries';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Alert, StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, StatusBar, SafeAreaView, Dimensions, Button, Linking, ImageBackground, FlatList, PixelRatio, Modal } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSolid, faUser, faPlus, faUpLong, faMagnifyingGlass, faCheck, faLocationPin, faEnvelope, faLock, faGear, faX } from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from '../../components/Navbar';
-import { Profile } from '../profile/Profile';
 import { Loading } from '../../components/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Styling } from '../../Styling';
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 

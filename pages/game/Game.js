@@ -311,10 +311,35 @@ export const GameScreen = ({ navigation }) => {
         setDefinition5('')
     }
 
+    // // GEN VERSION 1
+    // const Generate = () => {
+    //     ResetAllVariables();
+    //     // Load the JSON file containing the words
+    //     const data = require('../../wordlist.json');
+
+    //     // Create an empty array to hold the chosen words
+    //     const chosenWords = [];
+
+    //     // Choose five random words from the list and add them to the array
+    //     for (let i = 0; i < 5; i++) {
+    //         // Generate a random index between 0 and the length of the words array
+    //         const index = Math.floor(Math.random() * data.words.length);
+
+    //         // Add the word at the chosen index to the array of chosen words
+    //         chosenWords.push(data.words[index]);
+    //     }
+
+    //     // Update the setWords state variable with the array of chosen words
+    //     setWords(chosenWords);
+    //     setDisplayGrid(true)
+    // }
+
+    // GEN VERSION 2
     const Generate = () => {
         ResetAllVariables();
         // Load the JSON file containing the words
-        const data = require('../../wordlist.json');
+        const data = require('../../output.json');
+        console.log(data[0].word);
 
         // Create an empty array to hold the chosen words
         const chosenWords = [];
@@ -322,11 +347,12 @@ export const GameScreen = ({ navigation }) => {
         // Choose five random words from the list and add them to the array
         for (let i = 0; i < 5; i++) {
             // Generate a random index between 0 and the length of the words array
-            const index = Math.floor(Math.random() * data.words.length);
+            const index = Math.floor(Math.random() * data.length);
 
             // Add the word at the chosen index to the array of chosen words
-            chosenWords.push(data.words[index]);
+            chosenWords.push(data[index].word);
         }
+        console.log(chosenWords)
 
         // Update the setWords state variable with the array of chosen words
         setWords(chosenWords);
@@ -456,12 +482,12 @@ export const GameScreen = ({ navigation }) => {
                                 <LinearGradient
                                     // Button Linear Gradient
                                     colors={['#f8f9fa', '#ced4da']}
-                                    style={styles.gridBlock}
+                                    style={Styling.gridBlock}
                                 >
                                     <TouchableOpacity
                                         onPress={() => console.log(i)}
                                     >
-                                        <Text style={styles.letters} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
+                                        <Text style={Styling.letters} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
                                     </TouchableOpacity>
                                 </LinearGradient>
                                 :
@@ -470,13 +496,13 @@ export const GameScreen = ({ navigation }) => {
                                         <LinearGradient
                                             // Button Linear Gradient
                                             colors={['#aacc00', '#80b918']}
-                                            style={styles.gridBlock}
+                                            style={Styling.gridBlock}
                                         >
                                             <TouchableOpacity
                                                 onPress={() => console.log(i)}
 
                                             >
-                                                <Text style={styles.letters} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
+                                                <Text style={Styling.letters} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
                                             </TouchableOpacity>
                                         </LinearGradient>
                                         :
@@ -484,14 +510,14 @@ export const GameScreen = ({ navigation }) => {
                                             <LinearGradient
                                                 // Button Linear Gradient
                                                 colors={['#ffba08', '#faa307']}
-                                                style={styles.gridBlock}
+                                                style={Styling.gridBlock}
                                             >
                                                 <TouchableOpacity
                                                     onPress={() => console.log(i)}
 
                                                 >
                                                     {i == (u0 + u1) ?
-                                                        <Text style={styles.letters} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
+                                                        <Text style={Styling.letters} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
                                                         :
                                                         null
                                                     }
@@ -506,7 +532,7 @@ export const GameScreen = ({ navigation }) => {
                         <LinearGradient
                             // Button Linear Gradient
                             colors={['#f8f9fa', '#ced4da']}
-                            style={styles.gridBlock}
+                            style={Styling.gridBlock}
                         >
                             <TouchableOpacity
                                 onPress={() => console.log(i)}
@@ -544,7 +570,7 @@ export const GameScreen = ({ navigation }) => {
                                 <View
                                     style={{
                                         backgroundColor: '#8ac926',
-                                        ...styles.guessBlocks
+                                        ...Styling.guessBlocks
                                     }}
                                 >
                                     <Text
@@ -562,7 +588,7 @@ export const GameScreen = ({ navigation }) => {
                                 <View
                                     style={{
                                         backgroundColor: 'rgba(0, 0, 0, 0.25)',
-                                        ...styles.guessBlocks
+                                        ...Styling.guessBlocks
                                     }}
                                 >
                                 </View>
@@ -573,7 +599,7 @@ export const GameScreen = ({ navigation }) => {
                         <View
                             style={{
                                 backgroundColor: '#ff595e',
-                                ...styles.guessBlocks
+                                ...Styling.guessBlocks
                             }}
                         >
                             <Text
@@ -728,24 +754,30 @@ export const GameScreen = ({ navigation }) => {
 
         // If the time taken is less than 60 seconds, add a bonus to the score
         if (localTimeTaken < 30 && awardExtraPoints) {
-            // setScore(score => score += 20);
-            // localScore = score + 20;
             localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 20;
-            setExtraPoints(20);
-            console.log("EXTRA 20")
+            setExtraPoints(100);
+
         } else if (localTimeTaken >= 30 && localTimeTaken < 60 && awardExtraPoints) {
-            // setScore(score => score += 10);
-            // localScore = score + 10;
             localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 10;
-            setExtraPoints(10);
-            console.log("EXTRA 10")
+            setExtraPoints(80);
+
         } else if (localTimeTaken >= 60 && localTimeTaken < 90 && awardExtraPoints) {
-            // setScore(score => score += 5);
-            // localScore = score + 5;
+            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 5;
+            setExtraPoints(40);
+
+        } else if (localTimeTaken >= 90 && localTimeTaken < 120 && awardExtraPoints) {
+            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 5;
+            setExtraPoints(20);
+
+        } else if (localTimeTaken >= 120 && localTimeTaken < 150 && awardExtraPoints) {
+            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 5;
+            setExtraPoints(10);
+
+        } else if (localTimeTaken >= 150 && awardExtraPoints) {
             localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 5;
             setExtraPoints(5);
-            console.log("EXTRA 5")
-        } else {
+
+        }else {
             localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100);
             console.log("NO EXTRA")
         }
@@ -1007,7 +1039,7 @@ export const GameScreen = ({ navigation }) => {
                                             <View
                                                 style={{
                                                     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                                                    ...styles.guessBlock
+                                                    ...Styling.guessBlock
                                                 }}
                                             >
                                                 <Text
@@ -1077,12 +1109,12 @@ export const GameScreen = ({ navigation }) => {
                                     {/* <LinearGradient
                                 // Button Linear Gradient
                                 colors={['#aacc00', '#80b918']}
-                                style={{ ...styles.modalWordButton, height: HeightRatio(400) }}
+                                style={{ ...Styling.modalWordButton, height: HeightRatio(400) }}
                             > */}
                                     <FontAwesomeIcon
                                         icon={faSolid, faGamepad}
                                         style={{
-                                            ...styles.modalFontAwesomeIcons,
+                                            ...Styling.modalFontAwesomeIcons,
                                             color: 'white',
                                             marginTop: WidthRatio(90),
                                         }}
@@ -1123,8 +1155,8 @@ export const GameScreen = ({ navigation }) => {
                             <LinearGradient
                                 // Button Linear Gradient
                                 colors={['#002855', '#001219']}
-                                // style={styles.modalWordButton}
-                                style={{ ...styles.modalView, alignSelf: 'center' }}
+                                // style={Styling.modalWordButton}
+                                style={{ ...Styling.modalView, alignSelf: 'center' }}
                             >
                                 <View
                                     style={{
@@ -1157,8 +1189,8 @@ export const GameScreen = ({ navigation }) => {
                                     </TouchableOpacity>
                                 </View>
                                 {/* [[[MIDDLE ROW]]] */}
-                                <SafeAreaView style={styles.container}>
-                                    <ScrollView style={styles.scrollView}>
+                                <SafeAreaView style={{}}>
+                                    <ScrollView style={Styling.gameScrollView}>
                                         <View
                                             style={{ flexDirection: 'column', marginTop: 10, marginBottom: 10 }}
                                         >
@@ -1177,7 +1209,7 @@ export const GameScreen = ({ navigation }) => {
 
                                             <TouchableOpacity
                                                 onPress={() => { searchWord2(word2); setDisplayTopBottomHint(true); }}
-                                                // style={styles.modalWordButton}
+                                                // style={Styling.modalWordButton}
                                                 disabled={!displayTopBottomHint ? false : true}
                                             >
                                                 <Image
@@ -1188,7 +1220,7 @@ export const GameScreen = ({ navigation }) => {
                                             <View style={{ width: WidthRatio(280), alignSelf: 'center' }}>
                                                 {definition3 != '' || definition4 != '' || definition5 != '' ?
                                                     <View>
-                                                        <Text style={styles.modalContentHeader}>
+                                                        <Text style={Styling.modalContentHeader}>
                                                             Definitions
                                                         </Text>
                                                     </View>
@@ -1200,7 +1232,7 @@ export const GameScreen = ({ navigation }) => {
                                                         style={{ flexDirection: 'row', marginBottom: 10 }}
                                                     >
 
-                                                        <Text style={styles.modalContent}>
+                                                        <Text style={Styling.modalContent}>
                                                             {definition3}
                                                         </Text>
                                                     </View>
@@ -1211,7 +1243,7 @@ export const GameScreen = ({ navigation }) => {
                                                     <View
                                                         style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
                                                     >
-                                                        <Text style={styles.modalContent}>
+                                                        <Text style={Styling.modalContent}>
                                                             {definition4}
                                                         </Text>
                                                     </View>
@@ -1222,7 +1254,7 @@ export const GameScreen = ({ navigation }) => {
                                                     <View
                                                         style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
                                                     >
-                                                        <Text style={styles.modalContent}>
+                                                        <Text style={Styling.modalContent}>
                                                             {definition5}
                                                         </Text>
                                                     </View>
@@ -1251,8 +1283,8 @@ export const GameScreen = ({ navigation }) => {
                             <LinearGradient
                                 // Button Linear Gradient
                                 colors={['#002855', '#001219']}
-                                // style={styles.modalWordButton}
-                                style={{ ...styles.modalView, alignSelf: 'center' }}
+                                // style={Styling.modalWordButton}
+                                style={{ ...Styling.modalView, alignSelf: 'center' }}
                             >
                                 <View
                                     style={{
@@ -1285,8 +1317,8 @@ export const GameScreen = ({ navigation }) => {
                                     </TouchableOpacity>
                                 </View>
                                 {/* [[[MIDDLE ROW]]] */}
-                                <SafeAreaView style={styles.container}>
-                                    <ScrollView style={styles.scrollView}>
+                                <SafeAreaView style={Styling.container}>
+                                    <ScrollView style={Styling.gameScrollView}>
                                         <View
                                             style={{ flexDirection: 'column', marginTop: 10, marginBottom: 10 }}
                                         >
@@ -1303,7 +1335,7 @@ export const GameScreen = ({ navigation }) => {
                                             </View>
                                             <TouchableOpacity
                                                 onPress={() => { searchWord1(word1); setDisplayLeftRightHint(true); }}
-                                                // style={styles.modalWordButton}
+                                                // style={Styling.modalWordButton}
                                                 disabled={!displayLeftRightHint ? false : true}
                                             >
                                                 <Image
@@ -1314,7 +1346,7 @@ export const GameScreen = ({ navigation }) => {
                                             <View style={{ width: WidthRatio(280), alignSelf: 'center' }}>
                                                 {definition0 != '' || definition1 != '' || definition2 != '' ?
                                                     <View>
-                                                        <Text style={styles.modalContentHeader}>
+                                                        <Text style={Styling.modalContentHeader}>
                                                             Definitions
                                                         </Text>
                                                     </View>
@@ -1326,7 +1358,7 @@ export const GameScreen = ({ navigation }) => {
                                                         style={{ flexDirection: 'row', marginBottom: 10 }}
                                                     >
 
-                                                        <Text style={styles.modalContent}>
+                                                        <Text style={Styling.modalContent}>
                                                             {definition0}
                                                         </Text>
                                                     </View>
@@ -1337,7 +1369,7 @@ export const GameScreen = ({ navigation }) => {
                                                     <View
                                                         style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
                                                     >
-                                                        <Text style={styles.modalContent}>
+                                                        <Text style={Styling.modalContent}>
                                                             {definition1}
                                                         </Text>
                                                     </View>
@@ -1348,7 +1380,7 @@ export const GameScreen = ({ navigation }) => {
                                                     <View
                                                         style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
                                                     >
-                                                        <Text style={styles.modalContent}>
+                                                        <Text style={Styling.modalContent}>
                                                             {definition2}
                                                         </Text>
                                                     </View>
@@ -1377,14 +1409,14 @@ export const GameScreen = ({ navigation }) => {
                             }}
                         >
 
-                            <View style={styles.centeredView}>
+                            <View style={Styling.gameCenteredView}>
                                 <View>
                                     {/* [[[TOP ROW]]] */}
                                     <LinearGradient
                                         // Button Linear Gradient
                                         colors={['#002855', '#001219']}
-                                        // style={styles.modalWordButton}
-                                        style={styles.modalView}
+                                        // style={Styling.modalWordButton}
+                                        style={Styling.modalView}
                                     >
                                         <View
                                             style={{
@@ -1418,8 +1450,8 @@ export const GameScreen = ({ navigation }) => {
                                         </View>
 
                                         {/* [[[MIDDLE ROW]]] */}
-                                        <SafeAreaView style={styles.container}>
-                                            <ScrollView style={styles.scrollView}>
+                                        <SafeAreaView style={Styling.container}>
+                                            <ScrollView style={Styling.gameScrollView}>
                                                 <View
                                                     style={{ flexDirection: 'column' }}
                                                 >
@@ -1431,23 +1463,23 @@ export const GameScreen = ({ navigation }) => {
 
                                                         <TouchableOpacity
                                                             onPress={() => { searchWord1(word1); searchWord2(word2); setDisplayDetails(true); }}
-                                                            // style={styles.modalWordButton}
+                                                            // style={Styling.modalWordButton}
                                                             disabled={!displayDetails ? false : true}
                                                         >
                                                             <LinearGradient
                                                                 // Button Linear Gradient
                                                                 colors={['#aacc00', '#80b918']}
-                                                                style={styles.modalWordButton}
+                                                                style={Styling.modalWordButton}
                                                             >
                                                                 <Text
-                                                                    style={styles.modalWordButtonText}
+                                                                    style={Styling.modalWordButtonText}
                                                                     allowFontScaling={false}
                                                                 >
                                                                     {word1}
                                                                 </Text>
                                                                 <FontAwesomeIcon
                                                                     icon={faSolid, faCaretDown}
-                                                                    style={{ ...styles.modalFontAwesomeIcons, color: '#001219', marginLeft: 10 }}
+                                                                    style={{ ...Styling.modalFontAwesomeIcons, color: '#001219', marginLeft: 10 }}
                                                                     size={20}
                                                                 />
                                                             </LinearGradient>
@@ -1460,12 +1492,12 @@ export const GameScreen = ({ navigation }) => {
                                                             <View>
                                                                 {phonetic1 != '' ?
                                                                     <>
-                                                                        <Text style={styles.modalContentHeader}>
+                                                                        <Text style={Styling.modalContentHeader}>
                                                                             Phonetic
                                                                         </Text>
                                                                         <View style={{ flexDirection: 'row', marginBottom: 10 }}>
 
-                                                                            <Text style={styles.modalContent}>
+                                                                            <Text style={Styling.modalContent}>
                                                                                 {phonetic1}
                                                                             </Text>
                                                                         </View>
@@ -1475,7 +1507,7 @@ export const GameScreen = ({ navigation }) => {
                                                                 }
                                                                 {definition0 != '' || definition1 != '' || definition2 != '' ?
                                                                     <View>
-                                                                        <Text style={styles.modalContentHeader}>
+                                                                        <Text style={Styling.modalContentHeader}>
                                                                             Definitions
                                                                         </Text>
                                                                     </View>
@@ -1487,7 +1519,7 @@ export const GameScreen = ({ navigation }) => {
                                                                         style={{ flexDirection: 'row', marginBottom: 10 }}
                                                                     >
 
-                                                                        <Text style={styles.modalContent}>
+                                                                        <Text style={Styling.modalContent}>
                                                                             {definition0}
                                                                         </Text>
                                                                     </View>
@@ -1498,7 +1530,7 @@ export const GameScreen = ({ navigation }) => {
                                                                     <View
                                                                         style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
                                                                     >
-                                                                        <Text style={styles.modalContent}>
+                                                                        <Text style={Styling.modalContent}>
                                                                             {definition1}
                                                                         </Text>
                                                                     </View>
@@ -1509,7 +1541,7 @@ export const GameScreen = ({ navigation }) => {
                                                                     <View
                                                                         style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
                                                                     >
-                                                                        <Text style={styles.modalContent}>
+                                                                        <Text style={Styling.modalContent}>
                                                                             {definition2}
                                                                         </Text>
                                                                     </View>
@@ -1528,23 +1560,23 @@ export const GameScreen = ({ navigation }) => {
                                                         >
                                                             <TouchableOpacity
                                                                 onPress={() => { searchWord1(word1); searchWord2(word2); setDisplayDetails(true); }}
-                                                                // style={styles.modalWordButton}
+                                                                // style={Styling.modalWordButton}
                                                                 disabled={!displayDetails ? false : true}
                                                             >
                                                                 <LinearGradient
                                                                     // Button Linear Gradient
                                                                     colors={['#aacc00', '#80b918']}
-                                                                    style={styles.modalWordButton}
+                                                                    style={Styling.modalWordButton}
                                                                 >
                                                                     <Text
-                                                                        style={styles.modalWordButtonText}
+                                                                        style={Styling.modalWordButtonText}
                                                                         allowFontScaling={false}
                                                                     >
                                                                         {word2}
                                                                     </Text>
                                                                     <FontAwesomeIcon
                                                                         icon={faSolid, faCaretDown}
-                                                                        style={{ ...styles.modalFontAwesomeIcons, color: '#001219', marginLeft: 10 }}
+                                                                        style={{ ...Styling.modalFontAwesomeIcons, color: '#001219', marginLeft: 10 }}
                                                                         size={20}
                                                                     />
                                                                 </LinearGradient>
@@ -1556,12 +1588,12 @@ export const GameScreen = ({ navigation }) => {
                                                             <>
                                                                 {phonetic2 != '' ?
                                                                     <>
-                                                                        <Text style={styles.modalContentHeader}>
+                                                                        <Text style={Styling.modalContentHeader}>
                                                                             Phonetic
                                                                         </Text>
                                                                         <View style={{ flexDirection: 'row', marginBottom: 10 }}>
 
-                                                                            <Text style={styles.modalContent}>
+                                                                            <Text style={Styling.modalContent}>
                                                                                 {phonetic2}
                                                                             </Text>
                                                                         </View>
@@ -1571,7 +1603,7 @@ export const GameScreen = ({ navigation }) => {
                                                                 }
                                                                 {definition3 != '' || definition4 != '' || definition5 != '' ?
                                                                     <View>
-                                                                        <Text style={styles.modalContentHeader}>
+                                                                        <Text style={Styling.modalContentHeader}>
                                                                             Definitions
                                                                         </Text>
                                                                     </View>
@@ -1583,7 +1615,7 @@ export const GameScreen = ({ navigation }) => {
                                                                         style={{ flexDirection: 'row', marginBottom: 10 }}
                                                                     >
 
-                                                                        <Text style={styles.modalContent}>
+                                                                        <Text style={Styling.modalContent}>
                                                                             {definition3}
                                                                         </Text>
                                                                     </View>
@@ -1594,7 +1626,7 @@ export const GameScreen = ({ navigation }) => {
                                                                     <View
                                                                         style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
                                                                     >
-                                                                        <Text style={styles.modalContent}>
+                                                                        <Text style={Styling.modalContent}>
                                                                             {definition4}
                                                                         </Text>
                                                                     </View>
@@ -1605,7 +1637,7 @@ export const GameScreen = ({ navigation }) => {
                                                                     <View
                                                                         style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
                                                                     >
-                                                                        <Text style={styles.modalContent}>
+                                                                        <Text style={Styling.modalContent}>
                                                                             {definition5}
                                                                         </Text>
                                                                     </View>
@@ -1616,18 +1648,18 @@ export const GameScreen = ({ navigation }) => {
                                                         }
                                                     </View>
 
-                                                    <View style={styles.modalDivisionLine}></View>
+                                                    <View style={Styling.modalDivisionLine}></View>
                                                     {/* TIME */}
                                                     <View
                                                         style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, marginLeft: 20 }}
                                                     >
                                                         <FontAwesomeIcon
                                                             icon={faSolid, faClock}
-                                                            style={{ ...styles.modalFontAwesomeIcons, color: 'white' }}
+                                                            style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
                                                             size={30}
                                                         />
                                                         <Text
-                                                            style={styles.modalScoringVarText}
+                                                            style={Styling.modalScoringVarText}
                                                             allowFontScaling={false}>
                                                             Time: {timeTaken} seconds
                                                         </Text>
@@ -1642,7 +1674,7 @@ export const GameScreen = ({ navigation }) => {
                                                     >
                                                         <FontAwesomeIcon
                                                             icon={faSolid, faGift}
-                                                            style={{ ...styles.modalFontAwesomeIcons, color: '#f9c74f' }}
+                                                            style={{ ...Styling.modalFontAwesomeIcons, color: '#f9c74f' }}
                                                             size={30}
                                                         />
                                                         <Text
@@ -1666,7 +1698,7 @@ export const GameScreen = ({ navigation }) => {
                                                             }}
                                                             allowFontScaling={false}
                                                         >
-                                                            Correct and fast!
+                                                            Bonus points!
                                                         </Text>
                                                     }
                                                     <View
@@ -1679,7 +1711,7 @@ export const GameScreen = ({ navigation }) => {
                                                     >
                                                         <FontAwesomeIcon
                                                             icon={faSolid, faSquareMinus}
-                                                            style={{ ...styles.modalFontAwesomeIcons, color: '#f9c74f' }}
+                                                            style={{ ...Styling.modalFontAwesomeIcons, color: '#f9c74f' }}
                                                             size={30}
                                                         />
                                                         <Text
@@ -1714,7 +1746,7 @@ export const GameScreen = ({ navigation }) => {
                                                     >
                                                         <FontAwesomeIcon
                                                             icon={faSolid, faSquareMinus}
-                                                            style={{ ...styles.modalFontAwesomeIcons, color: '#f9c74f' }}
+                                                            style={{ ...Styling.modalFontAwesomeIcons, color: '#f9c74f' }}
                                                             size={30}
                                                         />
                                                         <Text
@@ -1740,18 +1772,18 @@ export const GameScreen = ({ navigation }) => {
                                                         Top to Bottom hint reduction.
                                                     </Text>
 
-                                                    <View style={styles.modalDivisionLine}></View>
+                                                    <View style={Styling.modalDivisionLine}></View>
                                                     {/* CORRECT */}
                                                     <View
                                                         style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, marginLeft: 20 }}
                                                     >
                                                         <FontAwesomeIcon
                                                             icon={faSolid, faCheck}
-                                                            style={{ ...styles.modalFontAwesomeIcons, color: '#90be6d' }}
+                                                            style={{ ...Styling.modalFontAwesomeIcons, color: '#90be6d' }}
                                                             size={30}
                                                         />
                                                         <Text
-                                                            style={styles.modalScoringVarText}
+                                                            style={Styling.modalScoringVarText}
                                                             allowFontScaling={false}
                                                         >
                                                             Correct: {storeCorrectAnswers}
@@ -1764,17 +1796,17 @@ export const GameScreen = ({ navigation }) => {
                                                     >
                                                         <FontAwesomeIcon
                                                             icon={faSolid, faX}
-                                                            style={{ ...styles.modalFontAwesomeIcons, color: '#f94144' }}
+                                                            style={{ ...Styling.modalFontAwesomeIcons, color: '#f94144' }}
                                                             size={30}
                                                         />
                                                         <Text
-                                                            style={styles.modalScoringVarText}
+                                                            style={Styling.modalScoringVarText}
                                                         >
                                                             Incorrect: {storeIncorrectAnswers}
                                                         </Text>
                                                     </View>
 
-                                                    <View style={styles.modalDivisionLine}></View>
+                                                    <View style={Styling.modalDivisionLine}></View>
                                                     {/* SCORE */}
                                                     <View
                                                         style={{
@@ -1786,11 +1818,11 @@ export const GameScreen = ({ navigation }) => {
                                                     >
                                                         <FontAwesomeIcon
                                                             icon={faSolid, faFlagCheckered}
-                                                            style={{ ...styles.modalFontAwesomeIcons, color: '#277da1' }}
+                                                            style={{ ...Styling.modalFontAwesomeIcons, color: '#277da1' }}
                                                             size={30}
                                                         />
                                                         <Text
-                                                            style={styles.modalScoringVarText}
+                                                            style={Styling.modalScoringVarText}
                                                         >
                                                             Score: {score}
                                                         </Text>
@@ -1820,219 +1852,3 @@ export const GameScreen = ({ navigation }) => {
     )
 
 }
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: StatusBar.currentHeight,
-    },
-    background: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        height: 300,
-    },
-    scrollView: {
-        backgroundColor: 'transparent',
-        // borderRadius: 10,
-        marginHorizontal: -20,
-    },
-    text: {
-        fontSize: 42,
-    },
-    centeredView: {
-        flex: 1,
-        // justifyContent: "center",
-        alignItems: "center",
-        marginTop: 0
-    },
-    guessBlock: {
-        height: WidthRatio(60),
-        width: WidthRatio(60),
-        // margin: 2,
-        marginLeft: WidthRatio(4),
-        marginRight: WidthRatio(4),
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderColor: '#00b4d8',
-        borderWidth: WidthRatio(4),
-        borderRadius: WidthRatio(5)
-    },
-    guessBlocks: {
-        height: WidthRatio(30),
-        width: WidthRatio(30),
-        margin: 2,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    gridBlock: {
-        height: windowWidth * 0.14,
-        width: windowWidth * 0.14,
-        margin: 2,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: WidthRatio(3)
-    },
-    letters: {
-        alignSelf: 'center',
-        // fontSize: windowHeight / 30,
-        fontSize: HeightRatio(44),
-        fontWeight: 'bold',
-        color: 'rgba(0, 0, 0, 0.85)',
-    },
-    modalView: {
-        margin: 20,
-        // backgroundColor: '#001219',
-        borderRadius: 10,
-        // borderWidth: 1,
-        // borderColor: 'white',
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-        width: windowWidth - 20,
-        height: windowHeight - 80
-    },
-    settingsModalView: {
-        margin: 20,
-        // backgroundColor: '#001219',
-        borderRadius: 10,
-        // borderWidth: 1,
-        // borderColor: 'white',
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-        width: windowWidth - 20,
-        height: windowHeight / 3
-    },
-    profileModalView: {
-        margin: 20,
-        // backgroundColor: '#001219',
-        borderRadius: 10,
-        // borderWidth: 1,
-        // borderColor: 'white',
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-        width: windowWidth - 20,
-        height: windowHeight - 80
-    },
-    button: {
-        borderRadius: 10,
-        padding: 10,
-        elevation: 2,
-        marginLeft: 10,
-        marginRight: 10
-    },
-    buttonOpen: {
-        backgroundColor: "#F194FF",
-    },
-    buttonClose: {
-        backgroundColor: "#2196F3",
-    },
-    textStyle: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center",
-        fontSize: 20,
-        fontWeight: 'bold'
-    },
-    modalText: {
-        // marginBottom: 15,
-        // textAlign: "center",
-        color: 'white',
-        fontSize: 30,
-        fontWeight: 'bold',
-        // alignSelf: 'center'
-    },
-    modalWordButton: {
-        // backgroundColor: '#70e000',
-        display: 'flex',
-        justifyContent: 'center',
-        padding: 20,
-        borderRadius: 40,
-        alignSelf: 'center',
-        margin: 10,
-        width: windowWidth - 80,
-        flexDirection: 'row'
-    },
-    modalWordButtonText: {
-        color: '#001219',
-        fontSize: 30,
-        fontWeight: 'bold',
-        alignSelf: 'center'
-    },
-    modalContentHeader: {
-        color: '#4cc9f0',
-        fontSize: 30,
-        fontWeight: 'bold',
-    },
-    modalContent: {
-        color: 'white',
-        fontSize: 25,
-        fontWeight: 'bold',
-        alignSelf: 'center'
-    },
-    modalFontAwesomeIcons: {
-        justifyContent: 'center',
-        alignSelf: 'center',
-        // marginRight: 10
-    },
-    modalScoringVarText: {
-        color: 'white',
-        fontSize: 40,
-        fontWeight: 'bold',
-    },
-    modalDivisionLine: {
-        borderColor: '#4cc9f0',
-        borderBottomWidth: 1,
-        width: windowWidth - 80,
-        alignSelf: 'center',
-        marginTop: 10,
-        marginBottom: 10
-    },
-    section: {
-        display: 'flex',
-        justifyContent: 'center',
-        padding: 20,
-        borderRadius: 40,
-        alignSelf: 'center',
-        margin: 10,
-        width: windowWidth - 80,
-        flexDirection: 'row'
-    },
-    box: {
-        width: '100%',
-        height: 200,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 1,
-        borderColor: '#ccc',
-    },
-
-});

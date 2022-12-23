@@ -129,23 +129,6 @@ export const Styling = StyleSheet.create({
       alignItems: "center",
       marginTop: 22
     },
-    modalView: {
-      margin: 20,
-      backgroundColor: "#edf2f4",
-      borderRadius: 10,
-      borderWidth: 3,
-      padding: 35,
-      alignItems: "center",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
-      width: WidthRatio(300)
-    },
     button: {
       borderRadius: 20,
       padding: 10,
@@ -180,7 +163,7 @@ export const Styling = StyleSheet.create({
       },
       container: {
         flex: 1,
-        backgroundColor: '#240046',
+        // backgroundColor: '#240046',
         marginTop: 30
       },
       scrollContainer: {
@@ -188,7 +171,7 @@ export const Styling = StyleSheet.create({
       },
       flatlistContainer: {
         flex: 1,
-        marginTop: StatusBar.currentHeight + 30 || 0,
+        marginTop: StatusBar.currentHeight - 20 || 0,
       },
       item: {
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -277,6 +260,69 @@ export const Styling = StyleSheet.create({
         alignSelf: 'center',
         marginTop: 10,
         marginBottom: 10
+    },
+    gameScrollView: {
+        backgroundColor: 'transparent',
+        marginHorizontal: -20,
+    },
+    gameCenteredView: {
+        flex: 1,
+        // justifyContent: "center",
+        alignItems: "center",
+        marginTop: 0
+    },
+    guessBlock: {
+        height: WidthRatio(60),
+        width: WidthRatio(60),
+        // margin: 2,
+        marginLeft: WidthRatio(4),
+        marginRight: WidthRatio(4),
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: '#00b4d8',
+        borderWidth: WidthRatio(4),
+        borderRadius: WidthRatio(5)
+    },
+    guessBlocks: {
+        height: WidthRatio(30),
+        width: WidthRatio(30),
+        margin: 2,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalView: {
+        margin: 20,
+        borderRadius: 10,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        width: windowWidth - 20,
+        height: windowHeight - 80
+    },
+    modalContentHeader: {
+        color: '#4cc9f0',
+        fontSize: 30,
+        fontWeight: 'bold',
+    },
+    modalContent: {
+        color: 'white',
+        fontSize: 25,
+        fontWeight: 'bold',
+        alignSelf: 'center'
+    },
+    modalScoringVarText: {
+        color: 'white',
+        fontSize: 40,
+        fontWeight: 'bold',
     },
   });
   
