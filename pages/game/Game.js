@@ -6,7 +6,7 @@ import axios from 'axios';
 import { ADD_GAME } from '../../utils/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_USER_BY_ID } from '../../utils/queries';
-import { CommonActions } from '@react-navigation/native';
+import { CommonActions, useTheme } from '@react-navigation/native';
 import { Styling } from '../../Styling';
 import { Navbar } from '../../components/Navbar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -339,7 +339,6 @@ export const GameScreen = ({ navigation }) => {
         ResetAllVariables();
         // Load the JSON file containing the words
         const data = require('../../output.json');
-        console.log(data[0].word);
 
         // Create an empty array to hold the chosen words
         const chosenWords = [];
@@ -352,7 +351,6 @@ export const GameScreen = ({ navigation }) => {
             // Add the word at the chosen index to the array of chosen words
             chosenWords.push(data[index].word);
         }
-        console.log(chosenWords)
 
         // Update the setWords state variable with the array of chosen words
         setWords(chosenWords);
@@ -777,7 +775,7 @@ export const GameScreen = ({ navigation }) => {
             localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 5;
             setExtraPoints(5);
 
-        }else {
+        } else {
             localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100);
             console.log("NO EXTRA")
         }
@@ -802,50 +800,75 @@ export const GameScreen = ({ navigation }) => {
 
 
     function searchWord1(word) {
-        const API_ENDPOINT = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
+        const data = require('../../output.json');
+        // console.log(word.toLowerCase())
+        const wordObject = data.find(obj => obj.word === word.toLowerCase());
 
-        // Use Axios to fetch the word from the dictionary API
-        axios.get(API_ENDPOINT)
-            .then(response => {
-                if (response && response.data &&
-                    response.data[0] && response.data[0].phonetic) {
-                    // console.log("Phonetic")
-                    // console.log(response.data[0].phonetic)
-                    setPhonetic1(response.data[0].phonetic)
-                }
-                if (response && response.data &&
-                    response.data[0] && response.data[0].meanings &&
-                    response.data[0].meanings[0] &&
-                    response.data[0].meanings[0].definitions &&
-                    response.data[0].meanings[0].definitions[0]) {
-                    // console.log("Definition 1")
-                    // console.log(response.data[0].meanings[0].definitions[0].definition)
-                    setDefinition0(response.data[0].meanings[0].definitions[0].definition)
-                }
-                if (response && response.data &&
-                    response.data[0] && response.data[0].meanings &&
-                    response.data[0].meanings[0] &&
-                    response.data[0].meanings[0].definitions &&
-                    response.data[0].meanings[0].definitions[1]) {
-                    // console.log("Definition 2")
-                    // console.log(response.data[0].meanings[0].definitions[1].definition)
-                    setDefinition1(response.data[0].meanings[0].definitions[1].definition)
-                }
-                if (response && response.data &&
-                    response.data[0] && response.data[0].meanings &&
-                    response.data[0].meanings[0] &&
-                    response.data[0].meanings[0].definitions &&
-                    response.data[0].meanings[0].definitions[2]) {
-                    // console.log("Definition 3")
-                    // console.log(response.data[0].meanings[0].definitions[2].definition)
-                    setDefinition2(response.data[0].meanings[0].definitions[2].definition)
-                }
-                // console.log("_________1__________")
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
+        console.log(wordObject)
+
+        setPhonetic1(wordObject.phonetic)
+
+        const updateDefState = (i, value) => {
+            switch (i) {
+                case 0: setDefinition0(value); break;
+                case 1: setDefinition1(value); break;
+                case 2: setDefinition2(value); break;
+                default: break;
+            }
+        }
+
+        for (let i = 0; i < 3; i++) {
+            console.log(wordObject.definition[i])
+            updateDefState(i, wordObject.definition[i] || "");
+
+        }
+
+        // 
+
+        // const API_ENDPOINT = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
+
+        // // Use Axios to fetch the word from the dictionary API
+        // axios.get(API_ENDPOINT)
+        //     .then(response => {
+        //         if (response && response.data &&
+        //             response.data[0] && response.data[0].phonetic) {
+        //             // console.log("Phonetic")
+        //             // console.log(response.data[0].phonetic)
+        //             setPhonetic1(response.data[0].phonetic)
+        //         }
+        //         if (response && response.data &&
+        //             response.data[0] && response.data[0].meanings &&
+        //             response.data[0].meanings[0] &&
+        //             response.data[0].meanings[0].definitions &&
+        //             response.data[0].meanings[0].definitions[0]) {
+        //             // console.log("Definition 1")
+        //             // console.log(response.data[0].meanings[0].definitions[0].definition)
+        //             setDefinition0(response.data[0].meanings[0].definitions[0].definition)
+        //         }
+        //         if (response && response.data &&
+        //             response.data[0] && response.data[0].meanings &&
+        //             response.data[0].meanings[0] &&
+        //             response.data[0].meanings[0].definitions &&
+        //             response.data[0].meanings[0].definitions[1]) {
+        //             // console.log("Definition 2")
+        //             // console.log(response.data[0].meanings[0].definitions[1].definition)
+        //             setDefinition1(response.data[0].meanings[0].definitions[1].definition)
+        //         }
+        //         if (response && response.data &&
+        //             response.data[0] && response.data[0].meanings &&
+        //             response.data[0].meanings[0] &&
+        //             response.data[0].meanings[0].definitions &&
+        //             response.data[0].meanings[0].definitions[2]) {
+        //             // console.log("Definition 3")
+        //             // console.log(response.data[0].meanings[0].definitions[2].definition)
+        //             setDefinition2(response.data[0].meanings[0].definitions[2].definition)
+        //         }
+        //         // console.log("_________1__________")
+        //     })
+        //     .catch(error => {
+        //         // Handle any errors
+        //         console.error(error);
+        //     });
 
     }
     function searchWord2(word) {
@@ -930,7 +953,7 @@ export const GameScreen = ({ navigation }) => {
                         />
                     </>
                 }
-                
+
                 <View
                     style={{
                         alignSelf: 'center',
