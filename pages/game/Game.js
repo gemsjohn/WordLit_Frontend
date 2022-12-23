@@ -752,23 +752,23 @@ export const GameScreen = ({ navigation }) => {
 
         // If the time taken is less than 60 seconds, add a bonus to the score
         if (localTimeTaken < 30 && awardExtraPoints) {
-            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 20;
+            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 100;
             setExtraPoints(100);
 
         } else if (localTimeTaken >= 30 && localTimeTaken < 60 && awardExtraPoints) {
-            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 10;
+            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 80;
             setExtraPoints(80);
 
         } else if (localTimeTaken >= 60 && localTimeTaken < 90 && awardExtraPoints) {
-            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 5;
+            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 40;
             setExtraPoints(40);
 
         } else if (localTimeTaken >= 90 && localTimeTaken < 120 && awardExtraPoints) {
-            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 5;
+            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 20;
             setExtraPoints(20);
 
         } else if (localTimeTaken >= 120 && localTimeTaken < 150 && awardExtraPoints) {
-            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 5;
+            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 10;
             setExtraPoints(10);
 
         } else if (localTimeTaken >= 150 && awardExtraPoints) {
@@ -823,102 +823,30 @@ export const GameScreen = ({ navigation }) => {
 
         }
 
-        // 
-
-        // const API_ENDPOINT = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
-
-        // // Use Axios to fetch the word from the dictionary API
-        // axios.get(API_ENDPOINT)
-        //     .then(response => {
-        //         if (response && response.data &&
-        //             response.data[0] && response.data[0].phonetic) {
-        //             // console.log("Phonetic")
-        //             // console.log(response.data[0].phonetic)
-        //             setPhonetic1(response.data[0].phonetic)
-        //         }
-        //         if (response && response.data &&
-        //             response.data[0] && response.data[0].meanings &&
-        //             response.data[0].meanings[0] &&
-        //             response.data[0].meanings[0].definitions &&
-        //             response.data[0].meanings[0].definitions[0]) {
-        //             // console.log("Definition 1")
-        //             // console.log(response.data[0].meanings[0].definitions[0].definition)
-        //             setDefinition0(response.data[0].meanings[0].definitions[0].definition)
-        //         }
-        //         if (response && response.data &&
-        //             response.data[0] && response.data[0].meanings &&
-        //             response.data[0].meanings[0] &&
-        //             response.data[0].meanings[0].definitions &&
-        //             response.data[0].meanings[0].definitions[1]) {
-        //             // console.log("Definition 2")
-        //             // console.log(response.data[0].meanings[0].definitions[1].definition)
-        //             setDefinition1(response.data[0].meanings[0].definitions[1].definition)
-        //         }
-        //         if (response && response.data &&
-        //             response.data[0] && response.data[0].meanings &&
-        //             response.data[0].meanings[0] &&
-        //             response.data[0].meanings[0].definitions &&
-        //             response.data[0].meanings[0].definitions[2]) {
-        //             // console.log("Definition 3")
-        //             // console.log(response.data[0].meanings[0].definitions[2].definition)
-        //             setDefinition2(response.data[0].meanings[0].definitions[2].definition)
-        //         }
-        //         // console.log("_________1__________")
-        //     })
-        //     .catch(error => {
-        //         // Handle any errors
-        //         console.error(error);
-        //     });
-
     }
     function searchWord2(word) {
-        const API_ENDPOINT = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
+        const data = require('../../output.json');
+        // console.log(word.toLowerCase())
+        const wordObject = data.find(obj => obj.word === word.toLowerCase());
 
+        console.log(wordObject)
 
-        // Use Axios to fetch the word from the dictionary API
-        axios.get(API_ENDPOINT)
-            .then(response => {
-                // Do something with the data, such as display the definition
-                // console.log("__________2_________")
-                if (response && response.data &&
-                    response.data[0] && response.data[0].phonetic) {
-                    // console.log("Phonetic")
-                    // console.log(response.data[0].phonetic)
-                    setPhonetic2(response.data[0].phonetic)
-                }
-                if (response && response.data &&
-                    response.data[0] && response.data[0].meanings &&
-                    response.data[0].meanings[0] &&
-                    response.data[0].meanings[0].definitions &&
-                    response.data[0].meanings[0].definitions[0]) {
-                    // console.log("Definition 1")
-                    // console.log(response.data[0].meanings[0].definitions[0].definition)
-                    setDefinition3(response.data[0].meanings[0].definitions[0].definition)
-                }
-                if (response && response.data &&
-                    response.data[0] && response.data[0].meanings &&
-                    response.data[0].meanings[0] &&
-                    response.data[0].meanings[0].definitions &&
-                    response.data[0].meanings[0].definitions[1]) {
-                    // console.log("Definition 2")
-                    // console.log(response.data[0].meanings[0].definitions[1].definition)
-                    setDefinition4(response.data[0].meanings[0].definitions[1].definition)
-                }
-                if (response && response.data &&
-                    response.data[0] && response.data[0].meanings &&
-                    response.data[0].meanings[0] &&
-                    response.data[0].meanings[0].definitions &&
-                    response.data[0].meanings[0].definitions[2]) {
-                    // console.log("Definition 3")
-                    // console.log(response.data[0].meanings[0].definitions[2].definition)
-                    setDefinition5(response.data[0].meanings[0].definitions[2].definition)
-                }
-                // console.log("_________2__________")
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
+        setPhonetic2(wordObject.phonetic)
+
+        const updateDefState = (i, value) => {
+            switch (i) {
+                case 0: setDefinition3(value); break;
+                case 1: setDefinition4(value); break;
+                case 2: setDefinition5(value); break;
+                default: break;
+            }
+        }
+
+        for (let i = 0; i < 3; i++) {
+            console.log(wordObject.definition[i])
+            updateDefState(i, wordObject.definition[i] || "");
+
+        }
 
     }
 
