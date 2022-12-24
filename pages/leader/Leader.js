@@ -196,6 +196,10 @@ export const LeaderScreen = ({ navigation }) => {
 
           }}
         >
+          <View style={{alignSelf: 'center', flexDirection: 'column', backgroundColor: '(rgba(255, 255, 255, 0.1)', padding: 10, borderRadius: 50, width: WidthRatio(340), marginTop: HeightRatio(10)}}>
+            <Text style={{color: 'white', fontSize: HeightRatio(40), fontWeight: 'bold', alignSelf: 'center'}}>Leader Board</Text>
+            <Text style={{color: 'white', fontSize: HeightRatio(20), alignSelf: 'center'}}>Last 30 Days</Text>
+          </View>
           <SafeAreaView style={Styling.flatlistContainer}>
             <FlatList
               data={DATA}

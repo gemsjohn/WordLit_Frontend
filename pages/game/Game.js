@@ -286,10 +286,81 @@ export const GameScreen = ({ navigation }) => {
         )
     }
 
+    const [selected, setSelected] = useState(null);
+    const [count, setCount] = useState(0);
+    const [letter, setLetter] = useState('');
+
+    const TelephonePad = () => {
+        const buttons = [
+            ['1', '2', '3'],
+            ['4', '5', '6'],
+            ['7', '8', '9'],
+            // ['*', '0', '#']
+        ];
+        const letters = {
+            '2': ['A', 'B', 'C'],
+            '3': ['D', 'E', 'F'],
+            '4': ['G', 'H', 'I'],
+            '5': ['J', 'K', 'L'],
+            '6': ['M', 'N', 'O'],
+            '7': ['P', 'Q', 'R', 'S'],
+            '8': ['T', 'U', 'V'],
+            '9': ['W', 'X', 'Y', 'Z']
+        };
+
+        const handlePress = (button) => {
+            if (button == '1' || button == '*' || button == '0' || button ==='#') {
+                console.log("#1")
+            } else {
+                if (selected !== button) {
+                    setSelected(button);
+                    let test = letters[button]
+                    setLetter(test[(0) % letters[button].length])
+                    setCount(1)
+                } else {
+                    let test = letters[button]
+                    setLetter(test[(count) % letters[button].length])
+                    setCount(count + 1)
+                }
+            }
+        }
+
+        return (
+            <View style={{ flexDirection: 'column', alignSelf: 'center', marginTop: windowHeight / 50, marginBottom: windowHeight / 10 }}>
+                {buttons.map((row, index) => (
+                    <View key={index} style={styles.row}>
+                        {row.map((button) => (
+                            <TouchableOpacity
+                                key={button}
+                                style={selected === button ? styles.telePadButton : styles.telePadButtonSelected}
+                                onPress={() => handlePress(button)}
+                            >
+                                <View style={styles.row}>
+                                    <Text style={{ ...styles.telePadButtonText, margin: 4 }}>
+                                        {/* {selected === button ? letters[button][count]: button} */}
+                                        {button}
+                                    </Text>
+                                    <Text style={{ ...styles.telePadButtonText, margin: 4 }}>
+                                        {letters[button]}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                ))}
+            </View>
+        );
+    }
 
     useEffect(() => {
-        setPromptGuessInput(promptGuessInput)
-    }, [promptGuessInput])
+        console.log(letter)
+        setPromptGuessInput(letter)
+    }, [count && letter])
+
+
+    // useEffect(() => {
+    //     setPromptGuessInput(promptGuessInput)
+    // }, [promptGuessInput])
 
 
     const ResetAllVariables = () => {
@@ -981,7 +1052,7 @@ export const GameScreen = ({ navigation }) => {
 
                                         <TouchableOpacity
                                             disabled={promptGuessInput == '' ? true : false}
-                                            onPress={() => { CheckArray(promptGuessInput); setPromptGuessInput([]) }}
+                                            onPress={() => { CheckArray(promptGuessInput); setPromptGuessInput([]); setCount(0) }}
                                         >
                                             <Image
                                                 style={{ height: HeightRatio(25), width: WidthRatio(60), position: 'absolute', zIndex: 10, top: -12, left: -8 }}
@@ -1029,7 +1100,8 @@ export const GameScreen = ({ navigation }) => {
                                         paddingRight: 10,
                                     }}
                                 >
-                                    <Keyboard />
+                                    {/* <Keyboard /> */}
+                                    <TelephonePad />
                                 </View>
                             </>
                             :
@@ -1803,3 +1875,35 @@ export const GameScreen = ({ navigation }) => {
     )
 
 }
+
+const styles = {
+    // container: {
+    //   flex: 1,
+    //   alignItems: 'center',
+    //   justifyContent: 'center'
+    // },
+    row: {
+        flexDirection: 'row'
+    },
+    telePadButton: {
+        padding: 6,
+        margin: 2,
+        borderWidth: 2,
+        borderColor: '#aaf683',
+        width: WidthRatio(100),
+        borderRadius: 10,
+        backgroundColor: 'rgba(255, 255, 255, 0.25)'
+    },
+    telePadButtonSelected: {
+        padding: 6,
+        margin: 2,
+        borderWidth: 2,
+        borderColor: 'white',
+        width: WidthRatio(100),
+        borderRadius: 10
+    },
+    telePadButtonText: {
+        fontSize: 20,
+        color: 'white'
+    }
+};
