@@ -260,6 +260,7 @@ export const GameScreen = ({ navigation }) => {
                             onPress={() => { setPromptGuessInput(keyContainer[i]); }}
                             style={{}} //backgroundColor: 'rgba(0, 0, 0, 0.25)', width: WidthRatio(37), height: HeightRatio(50), borderColor: 'white', borderWidth: 0.5, borderRadius: 6, margin: 0.5
                             key={`${layer_0}` + i}
+                            accessible={true} accessibilityLabel={`Keyboard letter ${keyContainer[i]}.`}
                         >
                             <Text
                                 style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', alignSelf: 'center' }}
@@ -416,6 +417,7 @@ export const GameScreen = ({ navigation }) => {
         ResetAllVariables();
         // Load the JSON file containing the words
         const data = require('../../output.json');
+        console.log(data.length)
 
         // Create an empty array to hold the chosen words
         const chosenWords = [];
@@ -563,7 +565,7 @@ export const GameScreen = ({ navigation }) => {
                                     <TouchableOpacity
                                         onPress={() => console.log(i)}
                                     >
-                                        <Text style={Styling.letters} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
+                                        <Text style={Styling.letters} allowFontScaling={false} accessible={true} accessibilityLabel="Blank block.">{tempGridArray_0[i]}</Text>
                                     </TouchableOpacity>
                                 </LinearGradient>
                                 :
@@ -576,7 +578,7 @@ export const GameScreen = ({ navigation }) => {
                                         >
                                             <TouchableOpacity
                                                 onPress={() => console.log(i)}
-
+                                                accessible={true} accessibilityLabel="Correct block."
                                             >
                                                 <Text style={Styling.letters} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
                                             </TouchableOpacity>
@@ -591,7 +593,7 @@ export const GameScreen = ({ navigation }) => {
                                             >
                                                 <TouchableOpacity
                                                     onPress={() => console.log(i)}
-
+                                                    accessible={true} accessibilityLabel="Block."
                                                 >
                                                     {i == (u0 + u1) ?
                                                         <Text style={Styling.letters} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
@@ -614,6 +616,7 @@ export const GameScreen = ({ navigation }) => {
                         >
                             <TouchableOpacity
                                 onPress={() => console.log(i)}
+                                accessible={true} accessibilityLabel="Block."
                             ></TouchableOpacity>
                         </LinearGradient>
                     }
@@ -1002,6 +1005,8 @@ export const GameScreen = ({ navigation }) => {
                                         top: HeightRatio(8) - HeightRatio(35),
                                         left: ((windowWidth * 0.145) * (u1 + 1)) + (u1 * 2) + ((windowWidth * 0.07) - HeightRatio(20))
                                     }}
+                                    accessible={true}
+                                    accessibilityLabel="Top down hint."
                                 >
                                     <View
 
@@ -1027,6 +1032,8 @@ export const GameScreen = ({ navigation }) => {
                                         top: HeightRatio(2) + ((windowWidth * 0.14) * ((u0) / 5)) + ((u0 / 5) * 2) + HeightRatio(20),
                                         left: WidthRatio(22)
                                     }}
+                                    accessible={true}
+                                    accessibilityLabel="Left right hint."
                                 >
                                     <View
 

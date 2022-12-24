@@ -104,6 +104,8 @@ export const Navbar = (props) => {
                         width: windowWidth / 5,
                         flexDirection: 'column'
                     }}
+                    accessible={true}
+                    accessibilityLabel="Home"
                 >
                     <FontAwesomeIcon
                         icon={faSolid, faHouse}
@@ -131,6 +133,8 @@ export const Navbar = (props) => {
                         width: windowWidth / 5,
                         flexDirection: 'column'
                     }}
+                    accessible={true}
+                    accessibilityLabel="Game"
                 >
                     <FontAwesomeIcon
                         icon={faSolid, faFlagCheckered}
@@ -158,6 +162,8 @@ export const Navbar = (props) => {
                         flexDirection: 'column',
                         alignSelf: 'center'
                     }}
+                    accessible={true}
+                    accessibilityLabel="Leader board"
                 >
                     <FontAwesomeIcon
                         icon={faSolid, faTrophy}
@@ -186,6 +192,8 @@ export const Navbar = (props) => {
                         width: windowWidth / 5,
                         flexDirection: 'column'
                     }}
+                    accessible={true}
+                    accessibilityLabel="User profile"
                 >
                     <FontAwesomeIcon
                         icon={faSolid, faUser}

@@ -108,16 +108,19 @@ export const HomeScreen = ({ navigation }) => {
               colors={['#ffba08', '#faa307']}
               style={Styling.gridBlock}
             >
-              <TouchableOpacity
-                onPress={() => console.log(i)}
+              <View
+                accessible={true}
+                accessibilityLabel="Example grid."
               >
                 <Text
                   style={Styling.letters}
                   allowFontScaling={false}
+                  accessible={true}
+                  accessibilityLabel="Revealed letter."
                 >
                   {demoText[i]}
                 </Text>
-              </TouchableOpacity>
+              </View>
             </LinearGradient>
             :
             <LinearGradient
@@ -125,16 +128,19 @@ export const HomeScreen = ({ navigation }) => {
               colors={['#f8f9fa', '#ced4da']}
               style={Styling.gridBlock}
             >
-              <TouchableOpacity
-                onPress={() => console.log(i)}
+              <View
+                accessible={true}
+                accessibilityLabel="Example grid."
               >
                 <Text
                   style={Styling.letters}
                   allowFontScaling={false}
+                  accessible={true}
+                  accessibilityLabel="Example block."
                 >
                   {demoText[i]}
                 </Text>
-              </TouchableOpacity>
+              </View>
             </LinearGradient>
           }
         </View>
@@ -199,6 +205,8 @@ export const HomeScreen = ({ navigation }) => {
                       key={color.id}
                       style={[Styling.circle, { backgroundColor: color.value }]}
                       onPress={() => selectColor(color)}
+                      accessible={true}
+                      accessibilityLabel={`${color} background.`}
                     />
                   ))}
                 </View>
