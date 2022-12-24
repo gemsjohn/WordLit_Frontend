@@ -113,7 +113,8 @@ export const Styling = StyleSheet.create({
       margin: 2,
       flexDirection: 'row',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      borderRadius: 6
     },
     modalDivisionLine: {
       borderColor: '#4cc9f0',
@@ -324,6 +325,31 @@ export const Styling = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold',
     },
+    row: {
+      flexDirection: 'row'
+    },
+    telePadButtonSelected: {
+        padding: 6,
+        margin: 2,
+        borderWidth: 0.5,
+        borderColor: '#aaf683',
+        width: WidthRatio(100),
+        borderRadius: 10,
+        backgroundColor: 'rgba(255, 255, 255, 0.25)'
+    },
+    telePadButton: {
+        padding: 6,
+        margin: 2,
+        borderWidth: 0.5,
+        borderColor: 'white',
+        width: WidthRatio(100),
+        borderRadius: 10,
+        backgroundColor: 'rgba(0, 0, 0, 0.25)'
+    },
+    telePadButtonText: {
+        fontSize: HeightRatio(20),
+        color: 'white'
+    }
   });
   
   

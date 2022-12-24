@@ -12,7 +12,7 @@ import { Navbar } from '../../components/Navbar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
-    StyleSheet,
+    Stylingheet,
     Text,
     TouchableOpacity,
     View,
@@ -243,26 +243,32 @@ export const GameScreen = ({ navigation }) => {
                 localLayer[i] =
                     <LinearGradient
                         // Button Linear Gradient
-                        colors={['#f8f9fa', '#ced4da']}
+                        // colors={['#f8f9fa', '#ced4da']}
+                        colors={['rgba(0, 0, 0, 0.25)', 'rgba(0, 0, 0, 0.75)']}
                         style={{
                             borderRadius: 6,
                             borderWidth: 1,
+                            borderColor: 'rgba(255, 255, 255, 0.25)',
                             height: HeightRatio(50),
-                            width: WidthRatio(35),
+                            width: WidthRatio(37),
+                            margin: 0.5
                         }}
                         key={i}
                     >
+                    {/* <View key={i} style={{}}> */}
                         <TouchableOpacity
                             onPress={() => { setPromptGuessInput(keyContainer[i]); }}
+                            style={{}} //backgroundColor: 'rgba(0, 0, 0, 0.25)', width: WidthRatio(37), height: HeightRatio(50), borderColor: 'white', borderWidth: 0.5, borderRadius: 6, margin: 0.5
                             key={`${layer_0}` + i}
                         >
                             <Text
-                                style={{ color: '#001219', fontSize: HeightRatio(30), fontWeight: 'bold', marginLeft: WidthRatio(6) }}
+                                style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', alignSelf: 'center' }}
                                 allowFontScaling={false}
                             >
                                 {keyContainer[i]}
                             </Text>
                         </TouchableOpacity>
+                    {/* </View> */}
                     </LinearGradient>
             }
         }
@@ -328,19 +334,19 @@ export const GameScreen = ({ navigation }) => {
         return (
             <View style={{ flexDirection: 'column', alignSelf: 'center', marginTop: windowHeight / 50, marginBottom: windowHeight / 10 }}>
                 {buttons.map((row, index) => (
-                    <View key={index} style={styles.row}>
+                    <View key={index} style={Styling.row}>
                         {row.map((button) => (
                             <TouchableOpacity
                                 key={button}
-                                style={selected === button ? styles.telePadButton : styles.telePadButtonSelected}
+                                style={selected === button ? Styling.telePadButtonSelected : Styling.telePadButton}
                                 onPress={() => handlePress(button)}
                             >
-                                <View style={styles.row}>
-                                    <Text style={{ ...styles.telePadButtonText, margin: 4 }}>
+                                <View style={Styling.row}>
+                                    <Text style={{ ...Styling.telePadButtonText, margin: 4 }}>
                                         {/* {selected === button ? letters[button][count]: button} */}
                                         {button}
                                     </Text>
-                                    <Text style={{ ...styles.telePadButtonText, margin: 4 }}>
+                                    <Text style={{ ...Styling.telePadButtonText, margin: 4 }}>
                                         {letters[button]}
                                     </Text>
                                 </View>
@@ -550,7 +556,8 @@ export const GameScreen = ({ navigation }) => {
                             {tempGridArray_0[i] == undefined ?
                                 <LinearGradient
                                     // Button Linear Gradient
-                                    colors={['#f8f9fa', '#ced4da']}
+                                    // colors={['#f8f9fa', '#ced4da']}
+                                    colors={['rgba(248, 249, 250, 0.75)', 'rgba(206, 212, 218, 0.75)']}
                                     style={Styling.gridBlock}
                                 >
                                     <TouchableOpacity
@@ -578,7 +585,8 @@ export const GameScreen = ({ navigation }) => {
                                         <>
                                             <LinearGradient
                                                 // Button Linear Gradient
-                                                colors={['#ffba08', '#faa307']}
+                                                // colors={['#ffba08', '#faa307']}
+                                                colors={['rgba(255, 186, 8, 0.75)', 'rgba(250, 163, 7, 0.75)']}
                                                 style={Styling.gridBlock}
                                             >
                                                 <TouchableOpacity
@@ -600,7 +608,8 @@ export const GameScreen = ({ navigation }) => {
                         :
                         <LinearGradient
                             // Button Linear Gradient
-                            colors={['#f8f9fa', '#ced4da']}
+                            // colors={['#f8f9fa', '#ced4da']}
+                            colors={['rgba(248, 249, 250, 0.75)', 'rgba(206, 212, 218, 0.75)']}
                             style={Styling.gridBlock}
                         >
                             <TouchableOpacity
@@ -991,7 +1000,7 @@ export const GameScreen = ({ navigation }) => {
                                         alignItems: 'center',
                                         padding: 5,
                                         top: HeightRatio(8) - HeightRatio(35),
-                                        left: ((windowWidth * 0.14) * (u1 + 1)) + (u1 * 2) + ((windowWidth * 0.07) - HeightRatio(20))
+                                        left: ((windowWidth * 0.145) * (u1 + 1)) + (u1 * 2) + ((windowWidth * 0.07) - HeightRatio(20))
                                     }}
                                 >
                                     <View
@@ -1015,8 +1024,8 @@ export const GameScreen = ({ navigation }) => {
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         padding: 5,
-                                        top: HeightRatio(8) + ((windowWidth * 0.14) * ((u0) / 5)) + ((u0 / 5) * 2) + HeightRatio(20),
-                                        left: WidthRatio(13)
+                                        top: HeightRatio(2) + ((windowWidth * 0.14) * ((u0) / 5)) + ((u0 / 5) * 2) + HeightRatio(20),
+                                        left: WidthRatio(22)
                                     }}
                                 >
                                     <View
@@ -1100,8 +1109,8 @@ export const GameScreen = ({ navigation }) => {
                                         paddingRight: 10,
                                     }}
                                 >
-                                    {/* <Keyboard /> */}
-                                    <TelephonePad />
+                                    <Keyboard />
+                                    {/* <TelephonePad /> */}
                                 </View>
                             </>
                             :
@@ -1876,34 +1885,3 @@ export const GameScreen = ({ navigation }) => {
 
 }
 
-const styles = {
-    // container: {
-    //   flex: 1,
-    //   alignItems: 'center',
-    //   justifyContent: 'center'
-    // },
-    row: {
-        flexDirection: 'row'
-    },
-    telePadButton: {
-        padding: 6,
-        margin: 2,
-        borderWidth: 2,
-        borderColor: '#aaf683',
-        width: WidthRatio(100),
-        borderRadius: 10,
-        backgroundColor: 'rgba(255, 255, 255, 0.25)'
-    },
-    telePadButtonSelected: {
-        padding: 6,
-        margin: 2,
-        borderWidth: 2,
-        borderColor: 'white',
-        width: WidthRatio(100),
-        borderRadius: 10
-    },
-    telePadButtonText: {
-        fontSize: 20,
-        color: 'white'
-    }
-};

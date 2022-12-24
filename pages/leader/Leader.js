@@ -85,7 +85,7 @@ export const LeaderScreen = ({ navigation }) => {
       <View>
         <View
           style={{
-            backgroundColor: '#001219',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
             height: HeightRatio(100),
             width: WidthRatio(340),
             alignSelf: 'center',
