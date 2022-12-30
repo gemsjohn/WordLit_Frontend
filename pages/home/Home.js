@@ -56,7 +56,7 @@ export const HomeScreen = ({ navigation }) => {
   }
 
   const selectColor = async (color) => {
-    console.log(color)
+    // console.log(color)
     // setSelectedColor(color);
     try {
       const jsonValue = JSON.stringify(color)

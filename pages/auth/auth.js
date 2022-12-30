@@ -9,6 +9,7 @@ import { Navbar } from '../../components/Navbar';
 import { Loading } from '../../components/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Styling } from '../../Styling';
+import { CommonActions } from '@react-navigation/native';
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 // [GLOBAL] - [[[Variables: Dimensions]]] - - - - 
@@ -77,14 +78,50 @@ export const Auth = ({ navigation }) => {
     const [addUser] = useMutation(ADD_USER);
     const [requestReset] = useMutation(REQUEST_RESET);
     const [resetPassword] = useMutation(RESET_PASSWORD);
+
+    // Server
+    const [isTokenValid, setIsTokenValid] = useState(null);
+
+    const resetActionProfile = CommonActions.reset({
+      index: 1,
+      routes: [{ name: 'Profile', params: {} }]
+    });
+
+    const checkToken = async (value) => {
+      try {
+        const response = await fetch('https://wordlit-backend.herokuapp.com/protected-route', {
+          method: 'GET',
+          headers: {
+            'Authorization': `${value}`
+          }
+        });
+        if (response.ok) {
+          // Token is still valid
+          setIsTokenValid(true)
+          navigation.dispatch(resetActionProfile)
+          return true;
+        } else {
+          // Token is no longer valid
+          setIsTokenValid(false)
+          return false;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+  }
   
   
     const storeBearerToken = async (value) => {
       try {
         await AsyncStorage.setItem('@storage_Key', value)
+        checkToken(value)
       } catch (e) {
         console.error(e)
       }
+    }
+    const getBearerToken = async () => {
+      let value = await AsyncStorage.getItem('@storage_Key', value)
+      checkToken(value)
     }
     const storeUserID = async (value) => {
       try {
@@ -103,10 +140,8 @@ export const Auth = ({ navigation }) => {
     }
     const CheckAuthState = async () => {
       let value = await AsyncStorage.getItem('@authState')
-  
       if (value === 'true') {
         setAuthState(true)
-        navigation.navigate('Profile')
       } else if (value === 'false') {
         setAuthState(false)
       }
@@ -125,6 +160,7 @@ export const Auth = ({ navigation }) => {
     useEffect(() => {
       CheckAuthState();
       CurrentUser();
+      getBearerToken();
     }, [])
   
     const handleLogin = async () => {
@@ -235,6 +271,7 @@ export const Auth = ({ navigation }) => {
         }
       }
     }
+
   
     return (
       <>
@@ -242,8 +279,8 @@ export const Auth = ({ navigation }) => {
         <SafeAreaView style={{ height: windowHeight, marginBottom: 100, marginTop: 32 }}>
   
           <ScrollView style={{}} keyboardShouldPersistTaps={'always'} keyboardDismissMode="on-drag">
-            <Navbar nav={navigation} auth={authState} position={'relative'} from={'auth'} />
-            {!authState &&
+            <Navbar nav={navigation} auth={isTokenValid} position={'relative'} from={'auth'} />
+            {!isTokenValid &&
               <>
                 {newUser ?
                   <>

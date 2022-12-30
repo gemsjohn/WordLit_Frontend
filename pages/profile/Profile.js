@@ -56,6 +56,11 @@ export const ProfileScreen = ({ navigation }) => {
     const [leaderBoardsOpen, setLeaderBoardsOpen] = useState(false);
     const [premiumOpen, setPremiumOpen] = useState(false);
 
+    const resetActionAuth = CommonActions.reset({
+        index: 1,
+        routes: [{ name: 'Auth', params: {} }]
+    });
+
     const CheckAuthState = async () => {
         let value = await AsyncStorage.getItem('@authState')
         if (value === 'true') {
@@ -123,10 +128,7 @@ export const ProfileScreen = ({ navigation }) => {
         }
     }
 
-    const resetActionAuth = CommonActions.reset({
-        index: 1,
-        routes: [{ name: 'Auth', params: {} }]
-    });
+    
 
     useEffect(() => {
         CheckAuthState();

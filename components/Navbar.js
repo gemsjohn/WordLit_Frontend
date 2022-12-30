@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useInsertionEffect, useState } from 'react';
 import { View, Text, Button, Dimensions, Image, TouchableOpacity, PixelRatio } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSolid, faUser, faPlus, faUpLong, faMagnifyingGlass, faComment, faPen, faW, faF, faFlagCheckered, faGear, faTrophy, faHouse } from '@fortawesome/free-solid-svg-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/native';
+import { useQuery } from '@apollo/client';
+import { GET_USER_BY_ID, GET_ME } from '../utils/queries';
+
 
 const {
     width: SCREEN_WIDTH,
@@ -33,9 +36,46 @@ export const Navbar = (props) => {
     const [leaderBg, setLeaderBg] = useState('rgba(255, 255, 255, 0.1)');
     // const [settingsBg, setSettingsBg] = useState('rgba(255, 255, 255, 0.1)');
     const [profileBg, setProfileBg] = useState('rgba(255, 255, 255, 0.1)');
+    const [userID, setUserID] = useState('');
+    const [bearerToken, storeBearerToken] = useState(false);
+    const [isTokenValid, setIsTokenValid] = useState(null);
+
+    const checkToken = async (value) => {
+        try {
+          const response = await fetch('https://wordlit-backend.herokuapp.com/protected-route', {
+            method: 'GET',
+            headers: {
+              'Authorization': `${value}`
+            }
+          });
+          if (response.ok) {
+            // Token is still valid
+            setIsTokenValid(true)
+            return true;
+          } else {
+            // Token is no longer valid
+            setIsTokenValid(false)
+            return false;
+          }
+        } catch (error) {
+          console.error(error);
+        }
+    }
+
+    const CurrentUser = async () => {
+        let value = await AsyncStorage.getItem('@userID', value);
+        setUserID(value);
+    }
+
+    const getBearerToken = async () => {
+          let value = await AsyncStorage.getItem('@storage_Key', value)
+          checkToken(value)
+    }
+
 
     const CheckAuthState = async () => {
         let value = await AsyncStorage.getItem('@authState')
+        // console.log(value)
         if (value === 'true') {
             setAuthState(true)
         } else if (value === 'false') {
@@ -43,6 +83,7 @@ export const Navbar = (props) => {
         }
     }
     CheckAuthState()
+
 
     const resetActionHome = CommonActions.reset({
         index: 1,
@@ -69,13 +110,20 @@ export const Navbar = (props) => {
         routes: [{ name: 'Leader', params: {} }]
     });
 
+    
+
+    
+
     useEffect(() => {
         if (props.from == 'home') {setHomeBg('rgba(255, 255, 255, 0.1)')} else {setHomeBg('transparent')}
         if (props.from == 'game') {setGameBg('rgba(255, 255, 255, 0.1)')} else {setGameBg('transparent')}
         if (props.from == 'leader') {setLeaderBg('rgba(255, 255, 255, 0.1)')} else {setLeaderBg('transparent')}
         // if (props.from == 'settings') {setSettingsBg('rgba(255, 255, 255, 0.1)')} else {setSettingsBg('transparent')}
         if (props.from == 'profile') {setProfileBg('rgba(255, 255, 255, 0.1)')} else {setProfileBg('transparent')}
+        CurrentUser()
+        getBearerToken()
     }, [])
+
 
     return (
         <View
@@ -180,60 +228,60 @@ export const Navbar = (props) => {
             </TouchableOpacity>
             
             {/* [[[PROFILE]]] */}
-            {props.auth ?
-            <TouchableOpacity
-                onPress={() => { props.nav.dispatch(resetActionProfile); }}
-            >
-                <View
-                    style={{
-                        backgroundColor: `${profileBg}`,
-                        padding: 8,
-                        borderRadius: 30,
-                        width: windowWidth / 5,
-                        flexDirection: 'column'
-                    }}
-                    accessible={true}
-                    accessibilityLabel="User profile"
+            {isTokenValid ?
+                <TouchableOpacity
+                    onPress={() => { props.nav.dispatch(resetActionProfile); }}
                 >
-                    <FontAwesomeIcon
-                        icon={faSolid, faUser}
-                        style={{ color: '#00b2ca', alignSelf: 'center' }}
-                        size={25}
-                    />
-                    <Text 
-                        style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}
-                        allowFontScaling={false}
+                    <View
+                        style={{
+                            backgroundColor: `${profileBg}`,
+                            padding: 8,
+                            borderRadius: 30,
+                            width: windowWidth / 5,
+                            flexDirection: 'column'
+                        }}
+                        accessible={true}
+                        accessibilityLabel="User profile"
                     >
-                        Profile
-                    </Text>
-                </View>
-            </TouchableOpacity>
+                        <FontAwesomeIcon
+                            icon={faSolid, faUser}
+                            style={{ color: '#00b2ca', alignSelf: 'center' }}
+                            size={25}
+                        />
+                        <Text 
+                            style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}
+                            allowFontScaling={false}
+                        >
+                            Profile
+                        </Text>
+                    </View>
+                </TouchableOpacity>
             :
-            <TouchableOpacity
-                onPress={() => { props.nav.dispatch(resetActionAuth); }}
-            >
-                <View
-                    style={{
-                        backgroundColor: `${profileBg}`,
-                        padding: 8,
-                        borderRadius: 30,
-                        width: windowWidth / 5,
-                        flexDirection: 'column'
-                    }}
+                <TouchableOpacity
+                    onPress={() => { props.nav.dispatch(resetActionAuth); }}
                 >
-                    <FontAwesomeIcon
-                        icon={faSolid, faUser}
-                        style={{ color: '#00b2ca', alignSelf: 'center' }}
-                        size={25}
-                    />
-                    <Text 
-                        style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}
-                        allowFontScaling={false}
+                    <View
+                        style={{
+                            backgroundColor: `${profileBg}`,
+                            padding: 8,
+                            borderRadius: 30,
+                            width: windowWidth / 5,
+                            flexDirection: 'column'
+                        }}
                     >
-                        Profile
-                    </Text>
-                </View>
-            </TouchableOpacity>
+                        <FontAwesomeIcon
+                            icon={faSolid, faUser}
+                            style={{ color: '#00b2ca', alignSelf: 'center' }}
+                            size={25}
+                        />
+                        <Text 
+                            style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}
+                            allowFontScaling={false}
+                        >
+                            Profile
+                        </Text>
+                    </View>
+                </TouchableOpacity>
 
             }
         </View>
