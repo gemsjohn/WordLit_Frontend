@@ -10,6 +10,7 @@ import { LeaderScreen } from './pages/leader/Leader';
 import { ProfileScreen } from './pages/profile/Profile';
 import { Auth } from './pages/auth/auth';
 
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {

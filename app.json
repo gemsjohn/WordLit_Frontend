@@ -2,7 +2,7 @@
   "expo": {
     "name": "WordLit",
     "slug": "WordLit",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/WL_Logo.png",
     "userInterfaceStyle": "light",
@@ -22,7 +22,7 @@
     },
     "android": {
       "package": "com.WordLit",
-      "versionCode": 1,
+      "versionCode": 2,
       "permissions": ["com.google.android.gms.permission.AD_ID"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/WL_Logo.png",

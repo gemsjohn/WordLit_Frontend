@@ -161,7 +161,7 @@ export const Navbar = (props) => {
                         size={25}
                     />
                     <Text 
-                        style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}
+                        style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
                         allowFontScaling={false}
                     >
                         Home
@@ -190,7 +190,7 @@ export const Navbar = (props) => {
                         size={25}
                     />
                     <Text 
-                        style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}
+                        style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
                         allowFontScaling={false}
                     >
                         Game
@@ -219,7 +219,7 @@ export const Navbar = (props) => {
                         size={25}
                     />
                     <Text 
-                        style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}
+                        style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
                         allowFontScaling={false}
                     >
                         Leader
@@ -249,7 +249,7 @@ export const Navbar = (props) => {
                             size={25}
                         />
                         <Text 
-                            style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}
+                            style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
                             allowFontScaling={false}
                         >
                             Profile
@@ -275,7 +275,7 @@ export const Navbar = (props) => {
                             size={25}
                         />
                         <Text 
-                            style={{ color: 'white', marginTop: 6, alignSelf: 'center', fontSize: HeightRatio(18) }}
+                            style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
                             allowFontScaling={false}
                         >
                             Profile
