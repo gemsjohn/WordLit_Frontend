@@ -11,12 +11,12 @@ const {
 const scaleWidth = SCREEN_WIDTH / 360;
 const scaleHeight = SCREEN_HEIGHT / 800;
 
-const WidthRatio = (size) => {
+export const WidthRatio = (size) => {
   const newSize = size * scaleWidth;
   return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
 }
 
-const HeightRatio = (size) => {
+export const HeightRatio = (size) => {
   const newSize = size * scaleHeight;
   return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
 }
@@ -165,14 +165,14 @@ export const Styling = StyleSheet.create({
       container: {
         flex: 1,
         // backgroundColor: '#240046',
-        marginTop: 30
+        // marginTop: 30
       },
       scrollContainer: {
         // paddingTop: StatusBar.currentHeight,
       },
       flatlistContainer: {
         flex: 1,
-        marginTop: StatusBar.currentHeight - 20 || 0,
+        // marginTop: StatusBar.currentHeight - 20 || 0,
       },
       item: {
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -349,7 +349,30 @@ export const Styling = StyleSheet.create({
     telePadButtonText: {
         fontSize: HeightRatio(20),
         color: 'white'
-    }
+    },
+    modal_centered_view: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      // marginTop: HeightRatio(-30)
+      // marginTop: 22,
+    },
+    modal_view: {
+      margin: HeightRatio(20),
+      width: '100%',
+      backgroundColor: "rgba(0, 0, 0, 1.0)",
+      // borderRadius: 20,
+      padding: HeightRatio(35),
+      alignItems: "center",
+      shadowColor: "#c5ffff",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 1.0,
+      shadowRadius: 4,
+      elevation: 20
+    },
   });
   
   

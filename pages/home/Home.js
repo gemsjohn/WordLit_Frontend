@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Navbar } from '../../components/Navbar';
 import { Styling } from '../../Styling';
+import * as SecureStore from 'expo-secure-store';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -27,6 +28,7 @@ const HeightRatio = (size) => {
   const newSize = size * scaleHeight;
   return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
 }
+
 
 export const HomeScreen = ({ navigation }) => {
   const [userID, setUserID] = useState('');
@@ -163,7 +165,14 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <>
-      <View style={Styling.container}>
+      <View style={{...Styling.container, backgroundColor: 'black',}}>
+        <StatusBar
+          barStyle="default"
+          hidden={false}
+          backgroundColor="transparent"
+          translucent={true}
+          networkActivityIndicatorVisible={true}
+        />
         <Navbar nav={navigation} auth={authState} position={'relative'} from={'home'} />
         <View>
           {selectedColor && selectedColor.gradient && selectedColor.image ?
@@ -182,7 +191,7 @@ export const HomeScreen = ({ navigation }) => {
 
               <View
                 style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
                   marginTop: windowHeight / 24,
                   padding: 20,
                   marginLeft: 5,
@@ -192,6 +201,17 @@ export const HomeScreen = ({ navigation }) => {
 
                 }}
               >
+                <LinearGradient
+                  colors={['#0b132b', '#181d21']}
+                  style={{
+                    ...Styling.background,
+                    height: HeightRatio(130),
+                    borderTopLeftRadius: 10,
+                    borderBottomLeftRadius: 50,
+                    borderColor: 'rgba(255, 255, 255, 0.25)',
+                    opacity: 0.5
+                  }}
+                />
                 <Text
                   style={{ color: 'white', fontSize: HeightRatio(24), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}
                   allowFontScaling={false}
@@ -213,7 +233,7 @@ export const HomeScreen = ({ navigation }) => {
               </View>
               <View
                 style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
                   marginTop: 20,
                   padding: 20,
                   marginLeft: 5,
@@ -222,6 +242,17 @@ export const HomeScreen = ({ navigation }) => {
                   borderBottomLeftRadius: 50,
                 }}
               >
+                <LinearGradient
+                  colors={['#0b132b', '#181d21']}
+                  style={{
+                    ...Styling.background,
+                    height: HeightRatio(1110),
+                    borderTopLeftRadius: 10,
+                    borderBottomLeftRadius: 50,
+                    borderColor: 'rgba(255, 255, 255, 0.25)',
+                    opacity: 0.5
+                  }}
+                />
                 <Text
                   style={{ color: 'white', fontSize: HeightRatio(24), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}
                   allowFontScaling={false}
@@ -418,13 +449,7 @@ export const HomeScreen = ({ navigation }) => {
         </View>
 
       </View>
-      <StatusBar
-        barStyle="default"
-        hidden={false}
-        backgroundColor="transparent"
-        translucent={true}
-        networkActivityIndicatorVisible={true}
-      />
+
     </>
   );
 }

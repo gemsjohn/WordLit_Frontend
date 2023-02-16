@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useMutation } from "@apollo/client";
 import jwtDecode from "jwt-decode";
 import { LOGIN_USER, ADD_USER, REQUEST_RESET, RESET_PASSWORD } from '../../utils/mutations';
@@ -8,562 +9,438 @@ import { faSolid, faUser, faPlus, faUpLong, faMagnifyingGlass, faCheck, faLocati
 import { Navbar } from '../../components/Navbar';
 import { Loading } from '../../components/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Styling } from '../../Styling';
 import { CommonActions } from '@react-navigation/native';
+import { MainStateContext } from '../../App';
+import { Styling, windowWidth, windowHeight, HeightRatio, WidthRatio } from '../../Styling';
+import * as SecureStore from 'expo-secure-store';
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-// [GLOBAL] - [[[Variables: Dimensions]]] - - - - 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const resetActionProfile = CommonActions.reset({
+  index: 1,
+  routes: [{ name: 'Profile', params: {} }]
+});
 
-const {
-  width: SCREEN_WIDTH,
-  height: SCREEN_HEIGHT,
-} = Dimensions.get('window');
-
-const scaleWidth = SCREEN_WIDTH / 360;
-const scaleHeight = SCREEN_HEIGHT / 800;
-
-const WidthRatio = (size) => {
-  const newSize = size * scaleWidth;
-  return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
-  //   if (Platform.OS === 'ios') {
-  //     return Math.round(PixelRatio.roundToNearestPixel(newSize))
-  //   } else {
-  //     return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
-  //   }
+async function save(key, value) {
+  console.log(key)
+  console.log(value)
+  await SecureStore.setItemAsync(key, value);
 }
 
-const HeightRatio = (size) => {
-  const newSize = size * scaleHeight;
-  return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+async function deleteKey(key) {
+  // console.log("** DELETE **")
+  // console.log(key)
+  await SecureStore.deleteItemAsync(key);
 }
 
 export const Auth = ({ navigation }) => {
-    const [authState, setAuthState] = useState(false);
-    const [displayLoading, setDisplayLoading] = useState(false);
-    const [newUser, setNewUser] = useState(false);
-    const [displayLoginFailureAlert, setDisplayLoginFailureAlert] = useState(false)
-  
-  
-    // Sign Up: Email
-    const [promptEmailInput, setPromptEmailInput] = useState("");
-  
-    // Sign Up: Username
-    const [promptUsernameInput, setPromptUsernameInput] = useState("");
-  
-    // Sign Up: Password
-    const [promptPasswordInput, setPromptPasswordInput] = useState("");
-  
-    // Username and Password
-    const [promptInput_0, setPromptInput_0] = useState("");
-    const [promptInput_1, setPromptInput_1] = useState("");
-    const [userID, setUserID] = useState("")
-  
-    // Forgot Password
-    const [displayForgotPasswordContent, setDisplayForgotPasswordContent] = useState(false);
-    const [promptResetEmail, setPromptResetEmail] = useState('');
-    const [resetRequestStatus, setResetRequestStatus] = useState('');
-    const [displayForgotPasswordForm, setDisplayForgotPasswordForm] = useState(false);
-    const [promptResetUsername, setPromptResetUsername] = useState('');
-    const [promptResetPassword_0, setPromptResetPassword_0] = useState('');
-    const [promptResetPassword_1, setPromptResetPassword_1] = useState('');
-    const [promptResetToken, setPromptResetToken] = useState('');
-    const [displayResetSuccessModal, setDisplayResetSuccessModal] = useState(false);
-  
-  
-    // Apollo 
-    const [login, { error }] = useMutation(LOGIN_USER);
-    const [addUser] = useMutation(ADD_USER);
-    const [requestReset] = useMutation(REQUEST_RESET);
-    const [resetPassword] = useMutation(RESET_PASSWORD);
+  const { mainState, setMainState } = useContext(MainStateContext);
+  const [displayLoading, setDisplayLoading] = useState(false);
+  const [newUser, setNewUser] = useState(true);
+  const [displayLoginFailureAlert, setDisplayLoginFailureAlert] = useState(false)
 
-    // Server
-    const [isTokenValid, setIsTokenValid] = useState(null);
 
-    const resetActionProfile = CommonActions.reset({
-      index: 1,
-      routes: [{ name: 'Profile', params: {} }]
-    });
+  // Sign Up: Email
+  const [promptEmailInput, setPromptEmailInput] = useState("");
 
-    const checkToken = async (value) => {
-      try {
-        const response = await fetch('https://wordlit-backend.herokuapp.com/protected-route', {
-          method: 'GET',
-          headers: {
-            'Authorization': `${value}`
-          }
-        });
-        if (response.ok) {
-          // Token is still valid
-          setIsTokenValid(true)
-          navigation.dispatch(resetActionProfile)
-          return true;
-        } else {
-          // Token is no longer valid
-          setIsTokenValid(false)
-          return false;
+  // Sign Up: Username
+  const [promptUsernameInput, setPromptUsernameInput] = useState("");
+
+  // Sign Up: Password
+  const [promptPasswordInput, setPromptPasswordInput] = useState("");
+
+  // Username and Password
+  const [promptInput_0, setPromptInput_0] = useState("");
+  const [promptInput_1, setPromptInput_1] = useState("");
+
+
+  // Forgot Password
+  const [displayForgotPasswordContent, setDisplayForgotPasswordContent] = useState(false);
+  const [promptResetEmail, setPromptResetEmail] = useState('');
+  const [resetRequestStatus, setResetRequestStatus] = useState('');
+  const [displayForgotPasswordForm, setDisplayForgotPasswordForm] = useState(false);
+  const [promptResetUsername, setPromptResetUsername] = useState('');
+  const [promptResetPassword_0, setPromptResetPassword_0] = useState('');
+  const [promptResetPassword_1, setPromptResetPassword_1] = useState('');
+  const [promptResetToken, setPromptResetToken] = useState('');
+  const [displayResetSuccessModal, setDisplayResetSuccessModal] = useState(false);
+
+
+  // Apollo 
+  const [login, { error }] = useMutation(LOGIN_USER);
+  const [addUser] = useMutation(ADD_USER);
+  const [requestReset] = useMutation(REQUEST_RESET);
+  const [resetPassword] = useMutation(RESET_PASSWORD);
+
+  // Server
+  const [isTokenValid, setIsTokenValid] = useState(null);
+
+  const checkToken = async (value) => {
+    try {
+      const response = await fetch('https://wordlit-backend.herokuapp.com/protected-route', {
+        method: 'GET',
+        headers: {
+          'Authorization': `${value}`
         }
-      } catch (error) {
-        console.error(error);
-      }
-  }
-  
-  
-    const storeBearerToken = async (value) => {
-      try {
-        await AsyncStorage.setItem('@storage_Key', value)
-        checkToken(value)
-      } catch (e) {
-        console.error(e)
-      }
-    }
-    const getBearerToken = async () => {
-      let value = await AsyncStorage.getItem('@storage_Key', value)
-      checkToken(value)
-    }
-    const storeUserID = async (value) => {
-      try {
-        await AsyncStorage.setItem('@userID', value)
-      } catch (e) {
-        console.error(e)
-      }
-    }
-  
-    const storeAuthState = async (value) => {
-      try {
-        await AsyncStorage.setItem('@authState', value)
-      } catch (e) {
-        console.error(e)
-      }
-    }
-    const CheckAuthState = async () => {
-      let value = await AsyncStorage.getItem('@authState')
-      if (value === 'true') {
-        setAuthState(true)
-      } else if (value === 'false') {
-        setAuthState(false)
-      }
-    }
-  
-  
-    const CurrentUser = async () => {
-      let value = await AsyncStorage.getItem('@userID', value);
-      if (value == '') {
-        setUserID('')
+      });
+      if (response.ok) {
+        // Token is still valid
+        console.log("AUTH - Token is still valid")
+
+        setIsTokenValid(true)
+        navigation.dispatch(resetActionProfile)
+        return true;
       } else {
-        setUserID(value)
+        // Token is no longer valid
+        console.log("AUTH - Token is no longer valid")
+        setIsTokenValid(false)
+        return false;
       }
+    } catch (error) {
+      console.error(error);
     }
-  
-    useEffect(() => {
-      CheckAuthState();
-      CurrentUser();
-      getBearerToken();
-    }, [])
-  
-    const handleLogin = async () => {
-  
-      try {
-        const { data } = await login({
-          variables: {
-            username: promptInput_0,
-            password: promptInput_1
-          },
-        });
-  
-        if (data.login.token) {
-          const decoded = jwtDecode(data.login.token)
-          storeBearerToken(`Bearer ${data.login.token}`)
-          setUserID(decoded?.data._id);
-          storeUserID(`${decoded?.data._id}`)
-          setDisplayLoading(false);
-          setAuthState(true);
-          storeAuthState('true')
-        }
-      } catch (e) {
+  }
+
+  const handleLogin = async () => {
+
+    try {
+      const { data } = await login({
+        variables: {
+          username: promptInput_0,
+          password: promptInput_1
+        },
+      });
+
+      if (data.login.token) {
+        console.log("Auth - Successful Login")
+        deleteKey('cosmicKey');
+
+        const decoded = jwtDecode(data.login.token)
         setDisplayLoading(false);
-        setAuthState(false);
-        console.error(e);
-        setDisplayLoginFailureAlert(true)
+
+        setMainState({
+          bearerToken: `Bearer ${data.login.token}`,
+          userID: `${decoded?.data._id}`,
+          authState: true
+        })
+
+        console.log("Auth - Adding bearerToken, userID, and authState to SecureStore")
+
+        save('bearerToken', `Bearer ${data.login.token}`);
+        save('userID', `${decoded?.data._id}`);
+        save('authState', 'true');
+
+        checkToken(`Bearer ${data.login.token}`)
       }
+    } catch (e) {
+      console.log("Auth - Login Error")
+      setDisplayLoading(false);
+      console.error(e);
+      setDisplayLoginFailureAlert(true)
+
+      setMainState({
+        bearerToken: null,
+        userID: null,
+        authState: false
+      })
+
+      save('bearerToken', null);
+      save('userID', null);
+      save('authState', 'false');
     }
-  
-  
-    const handleFormSubmit = async () => {
-      try {
-        const { data } = await addUser({
-          variables: {
-            username: promptUsernameInput,
-            email: promptEmailInput,
-            password: promptPasswordInput,
-            role: 'User',
-            profilepicture: '',
-          }
-        });
-        // console.log(data.addUser.token)
-        if (data.addUser.token) {
-          const decoded = jwtDecode(data.addUser.token)
-          storeBearerToken(`Bearer ${data.addUser.token}`)
-          setUserID(decoded?.data._id);
-          storeUserID(`${decoded?.data._id}`)
-          setDisplayLoading(false);
-          setAuthState(true);
-          storeAuthState('true')
-          setPromptEmailInput("")
-          setPromptUsernameInput("")
-          setPromptPasswordInput("")
-  
+  }
+
+
+  const handleFormSubmit = async () => {
+    try {
+      const { data } = await addUser({
+        variables: {
+          username: promptUsernameInput,
+          email: promptEmailInput,
+          password: promptPasswordInput,
+          role: 'User',
+          profilepicture: '',
         }
-      } catch (e) {
+      });
+
+      if (data.addUser.token) {
+        const decoded = jwtDecode(data.addUser.token)
+
         setDisplayLoading(false);
-        setAuthState(false);
-        console.error(e);
-        Alert.alert(
-          "Sign Up Failed",
-          `${e}`,
-          [
-            { text: "OK", onPress: () => console.log("OK Pressed") }
-          ]
-        );
+        setPromptEmailInput("")
+        setPromptUsernameInput("")
+        setPromptPasswordInput("")
+
+        setMainState({
+          bearerToken: `Bearer ${data.addUser.token}`,
+          userID: `${decoded?.data._id}`,
+          authState: true
+        })
+
+        console.log("Auth - Adding bearerToken, userID, and authState to SecureStore")
+
+        save('bearerToken', `Bearer ${data.addUser.token}`);
+        save('userID', `${decoded?.data._id}`);
+        save('authState', 'true');
+
+        checkToken(`Bearer ${data.addUser.token}`)
       }
-    };
-  
-    const handleRequestReset = async () => {
-      console.log(promptResetEmail)
-      try {
-        await requestReset({
-          variables: {
-            email: promptResetEmail
-          },
-        });
-        setResetRequestStatus("Check your email for a Reset Token!")
-      } catch (e) {
-        console.error(e);
-        setResetRequestStatus("No user found with that email.")
-      }
-  
-    };
-  
-    const handleResetPassword = async () => {
-      if (promptResetEmail != '' && promptResetPassword_0 != '' && promptResetPassword_1 != '' && promptResetToken != '' && promptResetPassword_0 == promptResetPassword_1) {
-        console.log("handleResetPassword")
-        try {
-          await resetPassword({
-            variables: {
-              email: promptResetEmail,
-              password: promptResetPassword_0,
-              confirmPassword: promptResetPassword_1,
-              resetToken: promptResetToken
-            }
-          })
-          console.log("Ok all set, try to log in.")
-          setDisplayResetSuccessModal(true);
-          setPromptResetEmail('');
-          setResetRequestStatus('');
-          setDisplayForgotPasswordForm(false);
-          setPromptResetPassword_0('');
-          setPromptResetPassword_1('');
-        } catch (e) {
-          console.error(e)
-          console.log("Token expired or incorrect");
-        }
-      }
+    } catch (e) {
+      setDisplayLoading(false);
+      setPromptEmailInput("")
+      setPromptUsernameInput("")
+      setPromptPasswordInput("")
+
+      Alert.alert(
+        "Sign Up Failed",
+        `${e}`,
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ]
+      );
+
+      setMainState({
+        bearerToken: null,
+        userID: null,
+        authState: false
+      })
+
+      save('bearerToken', null);
+      save('userID', null);
+      save('authState', 'false');
+
+    }
+  };
+
+  const handleRequestReset = async () => {
+    try {
+      await requestReset({
+        variables: {
+          email: promptResetEmail
+        },
+      });
+      setResetRequestStatus("Check your email for a Reset Token!")
+    } catch (e) {
+      console.error(e);
+      setResetRequestStatus("No user found with that email.")
     }
 
-  
-    return (
-      <>
-  
-        <SafeAreaView style={{ height: windowHeight, marginBottom: 100, marginTop: 32 }}>
-  
-          <ScrollView style={{}} keyboardShouldPersistTaps={'always'} keyboardDismissMode="on-drag">
-            <Navbar nav={navigation} auth={isTokenValid} position={'relative'} from={'auth'} />
-            {!isTokenValid &&
-              <>
-                {newUser ?
-                  <>
-                    <Text
-                      style={{ color: 'white', alignSelf: 'center', fontSize: 50, marginTop: 20, fontWeight: 'bold' }}
-                      allowFontScaling={false}
-                    >
-                      Sign Up
-                    </Text>
+  };
+
+  const handleResetPassword = async () => {
+    if (promptResetEmail != '' && promptResetPassword_0 != '' && promptResetPassword_1 != '' && promptResetToken != '' && promptResetPassword_0 == promptResetPassword_1) {
+      try {
+        await resetPassword({
+          variables: {
+            email: promptResetEmail,
+            password: promptResetPassword_0,
+            confirmPassword: promptResetPassword_1,
+            resetToken: promptResetToken
+          }
+        })
+        setDisplayResetSuccessModal(true);
+        setPromptResetEmail('');
+        setResetRequestStatus('');
+        setDisplayForgotPasswordForm(false);
+        setPromptResetPassword_0('');
+        setPromptResetPassword_1('');
+      } catch (e) {
+        console.error(e)
+        console.log("Token expired or incorrect");
+      }
+    }
+  }
+
+
+  return (
+    <>
+      <View style={{ ...Styling.container, backgroundColor: 'black' }}>
+          <SafeAreaView style={{ height: '90%', marginBottom: 32, marginTop: 32 }}>
+            <ScrollView style={{}} keyboardShouldPersistTaps={'always'} keyboardDismissMode="on-drag">
+
+              {!isTokenValid &&
+                <>
+                  {newUser ?
                     <>
-                      {/* [[[CHECK BOXES]]] */}
-                      <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 20 }}>
-                        {promptEmailInput ?
-                          <View
-                            style={{
-                              flexDirection: 'column',
-                              marginLeft: 10,
-                              marginRight: 10
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faSolid, faCheck}
-                              style={{ color: '#70e000', margin: 7, alignSelf: 'center' }}
-                            />
-                            <Text style={{ color: 'white', alignSelf: 'center' }}>Email</Text>
-                          </View>
-                          :
-                          <View
-                            style={{
-                              flexDirection: 'column',
-                              marginLeft: 10,
-                              marginRight: 10
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faSolid, faEnvelope}
-                              style={{ color: 'white', margin: 7, alignSelf: 'center' }}
-                            />
-                            <Text style={{ color: 'white', alignSelf: 'center' }}>Email</Text>
-                          </View>
-                        }
-                        {promptUsernameInput ?
-                          <View
-                            style={{
-                              flexDirection: 'column',
-                              marginLeft: 10,
-                              marginRight: 10
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faSolid, faCheck}
-                              style={{ color: '#70e000', margin: 7, alignSelf: 'center' }}
-                            />
-                            <Text style={{ color: 'white', alignSelf: 'center' }}>Username</Text>
-                          </View>
-                          :
-                          <View
-                            style={{
-                              flexDirection: 'column',
-                              marginLeft: 10,
-                              marginRight: 10
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faSolid, faUser}
-                              style={{ color: 'white', margin: 7, alignSelf: 'center' }}
-                            />
-                            <Text style={{ color: 'white', alignSelf: 'center' }}>Username</Text>
-                          </View>
-                        }
-                        {promptPasswordInput ?
-                          <View
-                            style={{
-                              flexDirection: 'column',
-                              marginLeft: 10,
-                              marginRight: 10
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faSolid, faCheck}
-                              style={{ color: '#70e000', margin: 7, alignSelf: 'center' }}
-                            />
-                            <Text style={{ color: 'white', alignSelf: 'center' }}>Password</Text>
-                          </View>
-                          :
-                          <View
-                            style={{
-                              flexDirection: 'column',
-                              marginLeft: 10,
-                              marginRight: 10
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faSolid, faLock}
-                              style={{ color: 'white', margin: 7, alignSelf: 'center' }}
-                            />
-                            <Text style={{ color: 'white', alignSelf: 'center' }}>Password</Text>
-                          </View>
-                        }
-                      </View>
-                    </>
-  
-                    <TextInput
-                      type="text"
-                      name="email"
-                      placeholder="Email"
-                      placeholderTextColor="white"
-                      value={promptEmailInput}
-                      onChangeText={setPromptEmailInput}
-                      style={Styling.textInputStyle}
-                    />
-                    <TextInput
-                      type="text"
-                      name="username"
-                      placeholder="Username"
-                      placeholderTextColor="white"
-                      value={promptUsernameInput}
-                      onChangeText={setPromptUsernameInput}
-                      style={Styling.textInputStyle}
-                    />
-                    <TextInput
-                      type="password"
-                      name="password"
-                      placeholder="Password"
-                      placeholderTextColor="white"
-                      value={promptPasswordInput}
-                      onChangeText={setPromptPasswordInput}
-                      secureTextEntry={true}
-                      style={Styling.textInputStyle}
-                    />
-  
-                    {
-                      promptEmailInput != "" &&
-                        promptUsernameInput != "" &&
-                        promptPasswordInput != "" ?
-                        <TouchableOpacity
-                          onPress={() => {
-                            handleFormSubmit()
-                            setDisplayLoading(true);
-                          }}
-                        >
-                          <View
-                            style={{
-                              backgroundColor: '#70e000',
-                              display: 'flex',
-                              justifyContent: 'flex-start',
-                              padding: 20,
-                              borderRadius: 40,
-                              alignSelf: 'center',
-                              margin: 10,
-                              width: windowWidth - 80
-                            }}
-  
-                          >
-                            <Text
-                              style={{ color: '#001219', fontSize: 30, fontWeight: 'bold', alignSelf: 'center' }}
-                              allowFontScaling={false}
-                            >
-                              SIGN UP
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
-                        :
-                        <TouchableOpacity
-                          onPress={() => { }}
-                          disabled={true}
-                        >
-                          <View
-                            style={{
-                              backgroundColor: '#70e000',
-                              display: 'flex',
-                              justifyContent: 'flex-start',
-                              padding: 20,
-                              borderRadius: 40,
-                              alignSelf: 'center',
-                              margin: 10,
-                              width: windowWidth - 80
-                            }}
-                          >
-                            <Text
-                              style={{ color: '#001219', fontSize: 30, fontWeight: 'bold', alignSelf: 'center' }}
-                              allowFontScaling={false}
-                            >
-                              SIGN UP
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
-                    }
-                    <Text
-                      style={{ color: 'white', alignSelf: 'center', fontSize: 30, margin: 20, fontWeight: 'bold' }}
-                      allowFontScaling={false}
-                    >
-                      Have an account?
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => {
-                        setPromptEmailInput("")
-                        setPromptUsernameInput("")
-                        setPromptPasswordInput("")
-                        setNewUser(false)
-                      }}
-                    >
-                      <View
-                        style={{
-                          backgroundColor: 'blue',
-                          display: 'flex',
-                          justifyContent: 'flex-start',
-                          padding: 20,
-                          borderRadius: 40,
-                          alignSelf: 'center',
-                          margin: 10,
-                          width: windowWidth - 200
-                        }}
+                      <Text
+                        style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(50), marginTop: HeightRatio(10), fontWeight: 'bold' }}
+                        allowFontScaling={false}
                       >
-                        <Text
-                          style={{ color: 'white', fontSize: 25, fontWeight: 'bold', alignSelf: 'center' }}
-                          allowFontScaling={false}
-                        >
-                          Login</Text>
-                      </View>
-                    </TouchableOpacity>
-                  </>
-                  :
-                  <>
-                    {displayLoading ?
-                      <Loading />
-                      :
+                        Sign Up
+                      </Text>
                       <>
-                        <Text
-                          style={{ color: 'white', alignSelf: 'center', fontSize: 50, margin: 20, fontWeight: 'bold' }}
-                          allowFontScaling={false}
-                        >
-                          Login
-                        </Text>
-                        <TextInput
-                          type="text"
-                          name="username"
-                          placeholder="Username"
-                          placeholderTextColor="white"
-                          value={promptInput_0}
-                          onChangeText={setPromptInput_0}
-                          style={Styling.textInputStyle}
-                        />
-                        <TextInput
-                          type="password"
-                          name="password"
-                          placeholder="Password"
-                          placeholderTextColor="white"
-                          value={promptInput_1}
-                          onChangeText={setPromptInput_1}
-                          secureTextEntry={true}
-                          style={Styling.textInputStyle}
-                        />
-                        {displayLoginFailureAlert &&
-                          <View style={{ alignSelf: 'center' }}>
-                            <Text
-                              style={{ fontSize: 30, fontWeight: 'bold', color: 'red' }}
-                              allowFontScaling={false}
+                        {/* [[[CHECK BOXES]]] */}
+                        <View style={{ flexDirection: 'row', alignSelf: 'center', margin: HeightRatio(20) }}>
+                          {promptEmailInput ?
+                            <View
+                              style={{
+                                flexDirection: 'column',
+                                marginLeft: HeightRatio(20),
+                                marginRight: HeightRatio(20)
+                              }}
                             >
-                              Incorrect Credentials
-                            </Text>
-                          </View>
-                        }
-                        {promptInput_0 != "" &&
-                          promptInput_1 != "" ?
-                          <TouchableOpacity onPress={() => { handleLogin(); setDisplayLoading(true); }}>
+                              <FontAwesomeIcon
+                                icon={faSolid, faCheck}
+                                style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
+                              />
+                              <Text
+                                style={{ color: 'white', fontSize: HeightRatio(15), textAlign: 'center' }}
+                                allowFontScaling={false}
+                              >Email</Text>
+                            </View>
+                            :
+                            <View
+                              style={{
+                                flexDirection: 'column',
+                                marginLeft: HeightRatio(20),
+                                marginRight: HeightRatio(20)
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faSolid, faEnvelope}
+                                style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
+                              />
+                              <Text
+                                style={{ color: 'white', fontSize: HeightRatio(15), textAlign: 'center' }}
+                                allowFontScaling={false}
+                              >Email</Text>
+                            </View>
+                          }
+                          {promptUsernameInput ?
+                            <View
+                              style={{
+                                flexDirection: 'column',
+                                marginLeft: HeightRatio(20),
+                                marginRight: HeightRatio(20)
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faSolid, faCheck}
+                                style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
+                              />
+                              <Text
+                                style={{ color: 'white', fontSize: HeightRatio(15), textAlign: 'center' }}
+                                allowFontScaling={false}
+                              >Username </Text>
+                            </View>
+                            :
+                            <View
+                              style={{
+                                flexDirection: 'column',
+                                marginLeft: HeightRatio(20),
+                                marginRight: HeightRatio(20)
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faSolid, faUser}
+                                style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
+                              />
+                              <Text
+                                style={{ color: 'white', fontSize: HeightRatio(15), textAlign: 'center' }}
+                                allowFontScaling={false}
+                              >Username </Text>
+                            </View>
+                          }
+                          {promptPasswordInput ?
+                            <View
+                              style={{
+                                flexDirection: 'column',
+                                marginLeft: HeightRatio(20),
+                                marginRight: HeightRatio(20)
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faSolid, faCheck}
+                                style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
+                              />
+                              <Text
+                                style={{ color: 'white', fontSize: HeightRatio(15), textAlign: 'center' }}
+                                allowFontScaling={false}
+                              >Password</Text>
+                            </View>
+                            :
+                            <View
+                              style={{
+                                flexDirection: 'column',
+                                marginLeft: HeightRatio(20),
+                                marginRight: HeightRatio(20)
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faSolid, faLock}
+                                style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
+                              />
+                              <Text
+                                style={{ color: 'white', fontSize: HeightRatio(15), textAlign: 'center' }}
+                                allowFontScaling={false}
+                              >Password</Text>
+                            </View>
+                          }
+                        </View>
+                      </>
+
+                      <TextInput
+                        type="text"
+                        name="email"
+                        placeholder="Email"
+                        placeholderTextColor="white"
+                        value={promptEmailInput}
+                        onChangeText={setPromptEmailInput}
+                        style={Styling.textInputStyle}
+                        disableFullscreenUI={true}
+                        allowFontScaling={false}
+                      />
+                      <TextInput
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        placeholderTextColor="white"
+                        value={promptUsernameInput}
+                        onChangeText={setPromptUsernameInput}
+                        style={Styling.textInputStyle}
+                        disableFullscreenUI={true}
+                        allowFontScaling={false}
+                      />
+                      <TextInput
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        placeholderTextColor="white"
+                        value={promptPasswordInput}
+                        onChangeText={setPromptPasswordInput}
+                        secureTextEntry={true}
+                        style={Styling.textInputStyle}
+                        disableFullscreenUI={true}
+                        allowFontScaling={false}
+                      />
+
+                      {
+                        promptEmailInput != "" &&
+                          promptUsernameInput != "" &&
+                          promptPasswordInput != "" ?
+                          <TouchableOpacity
+                            onPress={() => {
+                              handleFormSubmit()
+                              setDisplayLoading(true);
+                            }}
+
+                          >
                             <View
                               style={{
                                 backgroundColor: '#70e000',
                                 display: 'flex',
                                 justifyContent: 'flex-start',
-                                padding: 20,
-                                borderRadius: 40,
+                                padding: HeightRatio(20),
+                                borderRadius: HeightRatio(80),
                                 alignSelf: 'center',
-                                margin: 10,
-                                width: windowWidth - 80
+                                margin: HeightRatio(20),
+                                width: WidthRatio(160)
                               }}
+
                             >
                               <Text
-                                style={{ color: '#001219', fontSize: 30, fontWeight: 'bold', alignSelf: 'center' }}
+                                style={{ color: '#001219', fontSize: HeightRatio(15), fontWeight: 'bold', alignSelf: 'center' }}
                                 allowFontScaling={false}
                               >
-                                LOGIN
+                                SIGN UP
                               </Text>
                             </View>
                           </TouchableOpacity>
@@ -573,294 +450,470 @@ export const Auth = ({ navigation }) => {
                             disabled={true}
                           >
                             <View
-  
                               style={{
                                 backgroundColor: '#70e000',
                                 display: 'flex',
                                 justifyContent: 'flex-start',
-                                padding: 20,
-                                borderRadius: 40,
+                                padding: HeightRatio(20),
+                                borderRadius: HeightRatio(80),
                                 alignSelf: 'center',
-                                margin: 10,
-                                width: windowWidth - 80
+                                margin: HeightRatio(20),
+                                width: WidthRatio(160)
                               }}
                             >
                               <Text
-                                style={{ color: '#001219', fontSize: 30, fontWeight: 'bold', alignSelf: 'center' }}
+                                style={{ color: '#001219', fontSize: HeightRatio(15), fontWeight: 'bold', alignSelf: 'center' }}
                                 allowFontScaling={false}
                               >
-                                LOGIN
+                                SIGN UP
                               </Text>
                             </View>
                           </TouchableOpacity>
-                        }
-  
-                        <View style={Styling.modalDivisionLine}></View>
-  
-                        <TouchableOpacity onPress={() => setDisplayForgotPasswordContent(true)}>
-                          <View>
-                            <Text
-                              style={{ color: '#80ffdb', alignSelf: 'center', fontSize: 30, margin: 10, fontWeight: 'bold' }}
-                              allowFontScaling={false}
-                            >
-                              Forgot Password?
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
-                        {displayForgotPasswordContent &&
-                          <View
-                            style={{
-                              alignSelf: 'center',
-                              margin: 10,
-                              width: windowWidth - 80
-                            }}
+                      }
+                      <Text
+                        style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(20), margin: 20, fontWeight: 'bold' }}
+                        allowFontScaling={false}
+                      >
+                        Already have an account?
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setPromptEmailInput("")
+                          setPromptUsernameInput("")
+                          setPromptPasswordInput("")
+                          setNewUser(false)
+                        }}
+                      >
+                        <View
+                          style={{
+                            backgroundColor: 'blue',
+                            display: 'flex',
+                            justifyContent: 'flex-start',
+                            padding: HeightRatio(20),
+                            borderRadius: HeightRatio(80),
+                            alignSelf: 'center',
+                            margin: HeightRatio(20),
+                            width: WidthRatio(160)
+                          }}
+                        >
+                          <Text
+                            style={{ color: 'white', fontSize: HeightRatio(15), fontWeight: 'bold', alignSelf: 'center' }}
+                            allowFontScaling={false}
                           >
-                            <View style={{ flexDirection: 'column', alignSelf: 'center', margin: 10, marginTop: -5 }}>
-  
-                              <TextInput
-                                type="text"
-                                name="resetemail"
-                                placeholder="Email"
-                                placeholderTextColor='white'
-                                value={promptResetEmail}
-                                onChangeText={setPromptResetEmail}
+                            LOGIN</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </>
+                    :
+                    <>
+                      {displayLoading ?
+                        <Loading />
+                        :
+                        <View>
+                          <Text
+                            style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(50), margin: HeightRatio(15), marginTop: HeightRatio(10), fontWeight: 'bold' }}
+                            allowFontScaling={false}
+                          >
+                            Login
+                          </Text>
+                          <TextInput
+                            type="text"
+                            name="username"
+                            placeholder="Username"
+                            placeholderTextColor="white"
+                            value={promptInput_0}
+                            onChangeText={setPromptInput_0}
+                            style={Styling.textInputStyle}
+                            disableFullscreenUI={true}
+                            allowFontScaling={false}
+                          />
+                          <TextInput
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            placeholderTextColor="white"
+                            value={promptInput_1}
+                            onChangeText={setPromptInput_1}
+                            secureTextEntry={true}
+                            style={Styling.textInputStyle}
+                            disableFullscreenUI={true}
+                            allowFontScaling={false}
+                          />
+                          {displayLoginFailureAlert &&
+                            <View style={{ alignSelf: 'center' }}>
+                              <Text
+                                style={{ fontSize: HeightRatio(60), fontWeight: 'bold', color: 'red' }}
                                 allowFontScaling={false}
-                                style={Styling.textInputStyle}
-                              />
-                              {/* [[[SUBMIT BUTTON]]] */}
-                              
-                              <TouchableOpacity onPress={() => handleRequestReset()}>
+                              >
+                                Incorrect Credentials
+                              </Text>
+                            </View>
+                          }
+                          {promptInput_0 != "" &&
+                            promptInput_1 != "" ?
+                            <TouchableOpacity onPress={() => { handleLogin(); setDisplayLoading(true); }}>
+                              <View
+                                style={{
+                                  backgroundColor: '#70e000',
+                                  display: 'flex',
+                                  justifyContent: 'flex-start',
+                                  padding: HeightRatio(20),
+                                  borderRadius: HeightRatio(80),
+                                  alignSelf: 'center',
+                                  margin: HeightRatio(20),
+                                  width: WidthRatio(160)
+                                }}
+                              >
+                                <Text
+                                  style={{ color: '#001219', fontSize: HeightRatio(15), fontWeight: 'bold', alignSelf: 'center' }}
+                                  allowFontScaling={false}
+                                >
+                                  LOGIN
+                                </Text>
+                              </View>
+                            </TouchableOpacity>
+                            :
+                            <TouchableOpacity
+                              onPress={() => { }}
+                              disabled={true}
+                            >
+                              <View
+
+                                style={{
+                                  backgroundColor: '#70e000',
+                                  display: 'flex',
+                                  justifyContent: 'flex-start',
+                                  padding: HeightRatio(20),
+                                  borderRadius: HeightRatio(80),
+                                  alignSelf: 'center',
+                                  margin: HeightRatio(20),
+                                  width: WidthRatio(160)
+                                }}
+                              >
+                                <Text
+                                  style={{ color: '#001219', fontSize: HeightRatio(15), fontWeight: 'bold', alignSelf: 'center' }}
+                                  allowFontScaling={false}
+                                >
+                                  LOGIN
+                                </Text>
+                              </View>
+                            </TouchableOpacity>
+                          }
+
+                          {/* <View style={Styling.profileDivisionLine}></View> */}
+                          <View style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                            margin: HeightRatio(10),
+                            borderRadius: HeightRatio(30)
+                          }}>
+
+                          <TouchableOpacity
+                            onPress={() => setDisplayForgotPasswordContent(current => !current)}>
+                            <View>
+                              <Text
+                                style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(20), fontWeight: 'bold' }}
+                                allowFontScaling={false}
+                              >
+                                Forgot Password?
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                          {displayForgotPasswordContent ?
+                            <View
+                              style={{
+                                alignSelf: 'center',
+                                margin: HeightRatio(20),
+                                width: WidthRatio(160)
+                              }}
+                            >
+                              <View style={{ flexDirection: 'column', alignSelf: 'center' }}>
+
+                                <TextInput
+                                  type="text"
+                                  name="resetemail"
+                                  placeholder="Enter Email"
+                                  placeholderTextColor='white'
+                                  value={promptResetEmail}
+                                  onChangeText={setPromptResetEmail}
+                                  allowFontScaling={false}
+                                  style={Styling.textInputStyle}
+                                  disableFullscreenUI={true}
+                                  allowFontScaling={false}
+                                />
+                                {/* [[[SUBMIT BUTTON]]] */}
+
+                                <TouchableOpacity onPress={() => handleRequestReset()}>
+                                  <View
+                                    style={{
+                                      backgroundColor: '#70e000',
+                                      display: 'flex',
+                                      justifyContent: 'flex-start',
+                                      padding: HeightRatio(20),
+                                      borderRadius: HeightRatio(80),
+                                      alignSelf: 'center',
+                                      margin: HeightRatio(20),
+                                      width: WidthRatio(160)
+                                    }}
+                                  >
+                                    <Text
+                                      style={{ color: 'black', alignSelf: 'center', fontSize: HeightRatio(15), fontWeight: 'bold' }}
+                                      allowFontScaling={false}
+                                    >SUBMIT</Text>
+                                  </View>
+                                </TouchableOpacity>
+                              </View>
+                              {resetRequestStatus != '' &&
+                                <View style={{}}>
+                                  <Text
+                                    style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(60), margin: HeightRatio(20), fontWeight: 'bold' }}
+                                    allowFontScaling={false}
+                                  >{resetRequestStatus}</Text>
+                                </View>
+                              }
+
+                              <TouchableOpacity onPress={() => setDisplayForgotPasswordForm(true)}>
                                 <View
                                   style={{
-                                    backgroundColor: '#70e000',
+                                    backgroundColor: '#ffbe0b',
                                     display: 'flex',
                                     justifyContent: 'flex-start',
-                                    padding: 10,
-                                    borderRadius: 40,
+                                    padding: HeightRatio(20),
+                                    borderRadius: HeightRatio(80),
                                     alignSelf: 'center',
-                                    margin: 10,
-                                    width: windowWidth - 80
+                                    margin: HeightRatio(20),
+                                    width: WidthRatio(160)
                                   }}
                                 >
                                   <Text
-                                    style={{ color: 'black', alignSelf: 'center', fontSize: 30, margin: 10, fontWeight: 'bold' }}
+                                    style={{ color: 'black', alignSelf: 'center', fontSize: HeightRatio(15), fontWeight: 'bold' }}
                                     allowFontScaling={false}
-                                  >Submit</Text>
+                                  >Have a reset token?</Text>
                                 </View>
                               </TouchableOpacity>
-                            </View>
-                            {resetRequestStatus != '' &&
-                              <View style={{}}>
-                                <Text
-                                  style={{ color: 'white', alignSelf: 'center', fontSize: 30, margin: 10, fontWeight: 'bold' }}
-                                  allowFontScaling={false}
-                                >{resetRequestStatus}</Text>
-                              </View>
-                            }
-  
-                            <TouchableOpacity onPress={() => setDisplayForgotPasswordForm(true)}>
-                              <View
-                                style={{
-                                  backgroundColor: '#ffbe0b',
-                                  display: 'flex',
-                                  justifyContent: 'flex-start',
-                                  padding: 5,
-                                  borderRadius: 40,
-                                  alignSelf: 'center',
-                                  margin: 10,
-                                  width: windowWidth - 130
-                                }}
-                              >
-                                <Text
-                                  style={{ color: 'black', alignSelf: 'center', fontSize: 30, margin: 10, fontWeight: 'bold' }}
-                                  allowFontScaling={false}
-                                >Have a reset token?</Text>
-                              </View>
-                            </TouchableOpacity>
-                            {displayForgotPasswordForm &&
-                              <>
-                                <TextInput
-                                  type="text"
-                                  name="resetoken"
-                                  placeholder="Reset Token"
-                                  placeholderTextColor="white"
-                                  value={promptResetToken}
-                                  onChangeText={setPromptResetToken}
-                                  style={Styling.textInputStyle}
-                                />
-                                <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10 }}>
+                              {displayForgotPasswordForm &&
+                                <>
                                   <TextInput
-                                    type="password"
-                                    name="resetpassword_0"
-                                    placeholder="New Password"
-                                    placeholderTextColor='white'
-                                    value={promptResetPassword_0}
-                                    onChangeText={setPromptResetPassword_0}
-                                    secureTextEntry={true}
-                                    allowFontScaling={false}
+                                    type="text"
+                                    name="resetoken"
+                                    placeholder="Enter Reset Token"
+                                    placeholderTextColor="white"
+                                    value={promptResetToken}
+                                    onChangeText={setPromptResetToken}
                                     style={Styling.textInputStyle}
-                                  />
-                                </View>
-  
-                                <View style={{ flexDirection: 'column', alignSelf: 'center', margin: 10 }}>
-                                  <TextInput
-                                    type="password"
-                                    name="resetpassword_1"
-                                    placeholder='Confirm Password'
-                                    placeholderTextColor='white'
-                                    value={promptResetPassword_1}
-                                    onChangeText={setPromptResetPassword_1}
-                                    secureTextEntry={true}
+                                    disableFullscreenUI={true}
                                     allowFontScaling={false}
-                                    style={Styling.textInputStyle}
                                   />
-                                  {promptResetPassword_0 == promptResetPassword_1 && promptResetPassword_0 != '' && promptResetPassword_1 != '' &&
-                                    <View style={{alignSelf: 'center'}}>
-                                      <Text style={{color: 'white', fontSize: HeightRatio(25)}}
-                                      allowFontScaling={false}>
-                                        Passwords match!
-                                      </Text>
-                                    </View>
-                                  }
-                                  {promptResetPassword_0 != promptResetPassword_1 && promptResetPassword_0 != '' && promptResetPassword_1 != '' &&
-                                    <View style={{alignSelf: 'center'}}>
-                                      <Text style={{color: 'white', fontSize: HeightRatio(25) }}
-                                      allowFontScaling={false}>
-                                        Passwords do not match!
-                                      </Text>
-                                    </View>
-                                  }
-                                  {/* [[[SUBMIT BUTTON]]] */}
-                                  <TouchableOpacity onPress={() => handleResetPassword()}>
-                                    <View
-                                      style={{
-                                        backgroundColor: '#70e000',
-                                        display: 'flex',
-                                        justifyContent: 'flex-start',
-                                        padding: 10,
-                                        borderRadius: 40,
-                                        alignSelf: 'center',
-                                        margin: 10,
-                                        width: windowWidth - 80
-                                      }}
-                                    >
-                                      <Text
-                                        style={{ color: 'black', alignSelf: 'center', fontSize: 30, margin: 10, fontWeight: 'bold' }}
-                                        allowFontScaling={false}
-                                      >Submit</Text>
-                                    </View>
-                                  </TouchableOpacity>
-  
-                                </View>
-                              </>
-  
-                            }
-  
-                            <View>
-                              <Modal
-                                animationType="slide"
-                                transparent={true}
-                                visible={displayResetSuccessModal}
-                                onRequestClose={() => {
-                                  Alert.alert("Modal has been closed.");
-                                  setDisplayResetSuccessModal(!displayResetSuccessModal);
-                                }}
-                              >
-                                <View style={Styling.centeredView}>
-                                  <View style={Styling.modalView}>
-                                    {/* TOP ROW */}
-                                    <View
-                                      style={{
-                                        backgroundColor: 'rgba(255, 0, 0, 1)',
-                                        alignSelf: 'center',
-                                        borderRadius: 8,
-                                        position: 'absolute',
-                                        zIndex: 10,
-                                        top: 0,
-                                        right: 0
-                                      }}
-                                    >
-                                      <TouchableOpacity
-                                        onPress={() => { setDisplayResetSuccessModal(!displayResetSuccessModal); setDisplayForgotPasswordContent(false); }}
+                                  <View style={{ flexDirection: 'row', alignSelf: 'center', margin: 10 }}>
+                                    <TextInput
+                                      type="password"
+                                      name="resetpassword_0"
+                                      placeholder="New Password"
+                                      placeholderTextColor='white'
+                                      value={promptResetPassword_0}
+                                      onChangeText={setPromptResetPassword_0}
+                                      secureTextEntry={true}
+                                      allowFontScaling={false}
+                                      style={Styling.textInputStyle}
+                                      disableFullscreenUI={true}
+                                      allowFontScaling={false}
+                                    />
+                                  </View>
+
+                                  <View style={{ flexDirection: 'column', alignSelf: 'center', margin: 10 }}>
+                                    <TextInput
+                                      type="password"
+                                      name="resetpassword_1"
+                                      placeholder='Confirm Password'
+                                      placeholderTextColor='white'
+                                      value={promptResetPassword_1}
+                                      onChangeText={setPromptResetPassword_1}
+                                      secureTextEntry={true}
+                                      allowFontScaling={false}
+                                      style={Styling.textInputStyle}
+                                      disableFullscreenUI={true}
+                                      allowFontScaling={false}
+                                    />
+                                    {promptResetPassword_0 == promptResetPassword_1 && promptResetPassword_0 != '' && promptResetPassword_1 != '' &&
+                                      <View style={{ alignSelf: 'center' }}>
+                                        <Text style={{ color: 'white', fontSize: HeightRatio(15) }}
+                                          allowFontScaling={false}>
+                                          Passwords match!
+                                        </Text>
+                                      </View>
+                                    }
+                                    {promptResetPassword_0 != promptResetPassword_1 && promptResetPassword_0 != '' && promptResetPassword_1 != '' &&
+                                      <View style={{ alignSelf: 'center' }}>
+                                        <Text style={{ color: 'white', fontSize: HeightRatio(15) }}
+                                          allowFontScaling={false}>
+                                          Passwords do not match!
+                                        </Text>
+                                      </View>
+                                    }
+                                    {/* [[[SUBMIT BUTTON]]] */}
+                                    <TouchableOpacity onPress={() => handleResetPassword()}>
+                                      <View
                                         style={{
-                                          borderRadius: 10,
-                                          height: 50,
-                                          width: 50
+                                          backgroundColor: '#70e000',
+                                          display: 'flex',
+                                          justifyContent: 'flex-start',
+                                          padding: HeightRatio(20),
+                                          borderRadius: HeightRatio(80),
+                                          alignSelf: 'center',
+                                          margin: HeightRatio(20),
+                                          width: WidthRatio(160)
                                         }}
                                       >
-                                        <FontAwesomeIcon
-                                          icon={faSolid, faX}
+                                        <Text
+                                          style={{ color: 'black', alignSelf: 'center', fontSize: HeightRatio(15), fontWeight: 'bold' }}
+                                          allowFontScaling={false}
+                                        >SUBMIT</Text>
+                                      </View>
+                                    </TouchableOpacity>
+
+                                  </View>
+                                </>
+                              }
+
+                              <View>
+                                <Modal
+                                  animationType="slide"
+                                  transparent={true}
+                                  visible={displayResetSuccessModal}
+                                  onRequestClose={() => {
+                                    Alert.alert("Modal has been closed.");
+                                    setDisplayResetSuccessModal(!displayResetSuccessModal);
+                                  }}
+                                >
+                                  <View style={styles.centeredView}>
+                                    <View style={styles.modalView}>
+                                      {/* TOP ROW */}
+                                      <View
+                                        style={{
+                                          backgroundColor: 'rgba(255, 0, 0, 1)',
+                                          alignSelf: 'center',
+                                          borderRadius: HeightRatio(16),
+                                          position: 'absolute',
+                                          zIndex: 10,
+                                          top: 0,
+                                          right: 0
+                                        }}
+                                      >
+                                        <TouchableOpacity
+                                          onPress={() => { setDisplayResetSuccessModal(!displayResetSuccessModal); setDisplayForgotPasswordContent(false); }}
                                           style={{
-                                            color: 'black',
-                                            justifyContent: 'center',
-                                            alignSelf: 'center',
-                                            marginTop: 17
+                                            borderRadius: HeightRatio(20),
+                                            height: HeightRatio(100),
+                                            width: HeightRatio(100)
                                           }}
-                                        />
+                                        >
+                                          <FontAwesomeIcon
+                                            icon={faSolid, faX}
+                                            style={{
+                                              color: 'black',
+                                              justifyContent: 'center',
+                                              alignSelf: 'center',
+                                              marginTop: HeightRatio(30)
+                                            }}
+                                          />
+                                        </TouchableOpacity>
+                                      </View>
+                                      {/* MIDDLE ROW */}
+                                      <Text style={Styling.modalText}>Reset successful, try to Login!</Text>
+                                      <TouchableOpacity
+                                        style={[Styling.button, Styling.buttonClose]}
+                                        onPress={() => { setDisplayResetSuccessModal(!displayResetSuccessModal); setDisplayForgotPasswordContent(false); }}
+                                      >
+                                        <Text style={Styling.textStyle} allowFontScaling={false}>Cool</Text>
                                       </TouchableOpacity>
                                     </View>
-                                    {/* MIDDLE ROW */}
-                                    <Text style={Styling.modalText}>Reset successful, try to Login!</Text>
-                                    <TouchableOpacity
-                                      style={[Styling.button, Styling.buttonClose]}
-                                      onPress={() => { setDisplayResetSuccessModal(!displayResetSuccessModal); setDisplayForgotPasswordContent(false); }}
-                                    >
-                                      <Text style={Styling.textStyle}>Cool</Text>
-                                    </TouchableOpacity>
                                   </View>
-                                </View>
-                              </Modal>
+                                </Modal>
+                              </View>
                             </View>
-                          </View>
-                        }
-  
-                        <View style={Styling.modalDivisionLine}></View>
-  
-                        <Text
-                          style={{ color: 'white', alignSelf: 'center', fontSize: 30, margin: 20, fontWeight: 'bold' }}
-                          allowFontScaling={false}
-                        >
-                          Don't have an account?
-                        </Text>
-                        <TouchableOpacity onPress={() => { setNewUser(true) }}>
-                          <View
-                            style={{
-                              backgroundColor: 'blue',
-                              display: 'flex',
-                              justifyContent: 'flex-start',
-                              padding: 20,
-                              borderRadius: 40,
-                              alignSelf: 'center',
-                              margin: 10,
-                              width: windowWidth - 200
-                            }}
-                          >
+                            :
+                            <>
                             <Text
-                              style={{ color: 'white', fontSize: 25, fontWeight: 'bold', alignSelf: 'center' }}
+                              style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(20), marginTop: HeightRatio(50), fontWeight: 'bold' }}
                               allowFontScaling={false}
                             >
-                              Sign Up
+                              Don't have an account?
                             </Text>
+                            <TouchableOpacity onPress={() => { setNewUser(true) }}>
+                              <View
+                                style={{
+                                  backgroundColor: 'blue',
+                                  display: 'flex',
+                                  justifyContent: 'flex-start',
+                                  padding: HeightRatio(20),
+                                  borderRadius: HeightRatio(80),
+                                  alignSelf: 'center',
+                                  margin: HeightRatio(20),
+                                  width: WidthRatio(160)
+                                }}
+                              >
+                                <Text
+                                  style={{ color: 'white', fontSize: HeightRatio(15), fontWeight: 'bold', alignSelf: 'center' }}
+                                  allowFontScaling={false}
+                                >
+                                  SIGN UP
+                                </Text>
+                              </View>
+                            </TouchableOpacity>
+                          </>
+                          }
                           </View>
-                        </TouchableOpacity>
-  
-                      </>
-                    }
-                  </>
-                }
-  
-              </>
-            }
-            <View style={{ marginBottom: 400 }}></View>
-          </ScrollView>
-        </SafeAreaView>
-        <StatusBar
-          barStyle="default"
-          hidden={false}
-          backgroundColor="transparent"
-          translucent={true}
-          networkActivityIndicatorVisible={true}
-        />
-      </>
-    )
+
+                          {/* <View style={Styling.profileDivisionLine}></View> */}
+
+
+                          
+
+                        </View>
+                      }
+                    </>
+                  }
+
+                </>
+              }
+              <View style={{ marginBottom: HeightRatio(400) }}></View>
+            </ScrollView>
+          </SafeAreaView>
+        <Navbar nav={navigation} auth={isTokenValid} position={'absolute'} from={'auth'} />
+      </View>
+
+      <StatusBar
+        barStyle="default"
+        hidden={false}
+        backgroundColor="transparent"
+        translucent={true}
+        networkActivityIndicatorVisible={true}
+      />
+    </>
+  )
+}
+
+const styles = StyleSheet.create({
+  centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22
+  },
+  modalView: {
+      margin: 20,
+      backgroundColor: "#edf2f4",
+      borderRadius: 10,
+      borderWidth: 3,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+          width: 0,
+          height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+      width: WidthRatio(300)
   }
+});

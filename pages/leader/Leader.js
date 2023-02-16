@@ -32,74 +32,87 @@ export const LeaderScreen = ({ navigation }) => {
   const [userID, setUserID] = useState('');
   const [authState, setAuthState] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
-  
-    const CheckAuthState = async () => {
-      let value = await AsyncStorage.getItem('@authState')
-      if (value === 'true') {
-        setAuthState(true)
-      } else if (value === 'false') {
-        setAuthState(false)
+
+  const CheckAuthState = async () => {
+    let value = await AsyncStorage.getItem('@authState')
+    if (value === 'true') {
+      setAuthState(true)
+    } else if (value === 'false') {
+      setAuthState(false)
+    }
+  }
+
+  const CurrentUser = async () => {
+    let value = await AsyncStorage.getItem('@userID', value);
+    setUserID(value)
+  }
+
+
+  const getSelectedColor = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('selectedColor')
+      if (jsonValue != null) {
+        let color = JSON.parse(jsonValue)
+        setSelectedColor(color)
       }
+    } catch (e) {
+      // error reading value
     }
-  
-    const CurrentUser = async () => {
-      let value = await AsyncStorage.getItem('@userID', value);
-      setUserID(value)
-    }
-  
-  
-    const getSelectedColor = async () => {
-      try {
-        const jsonValue = await AsyncStorage.getItem('selectedColor')
-        if (jsonValue != null) {
-          let color = JSON.parse(jsonValue)
-          setSelectedColor(color)
-        }
-      } catch (e) {
-        // error reading value
-      }
-    }
-  
-    const DisplayGradient = (props) => {
-      return (
-        <>
-          <Image source={props.image} style={{ ...Styling.background, opacity: 0.4 }} />
-          <LinearGradient
-            colors={props.gradient}
-            style={{ ...Styling.background, opacity: 0.5 }}
-          />
-        </>
-      )
-    }
-    
-  
-    const { data: leaderboard, refetch } = useQuery(LEADERBOARD);
-    // console.log(leaderboard)
-  
-    const DATA = leaderboard?.leaderBoard;
-    // console.log(DATA)
-  
-  
-    const Item = ({ username, score, pos }) => (
+  }
+
+  const DisplayGradient = (props) => {
+    return (
       <>
+        <Image source={props.image} style={{ ...Styling.background, opacity: 0.4 }} />
+        <LinearGradient
+          colors={props.gradient}
+          style={{ ...Styling.background, opacity: 0.5 }}
+        />
+      </>
+    )
+  }
+
+
+  const { data: leaderboard, refetch } = useQuery(LEADERBOARD);
+  // console.log(leaderboard)
+
+  const DATA = leaderboard?.leaderBoard;
+  // console.log(DATA)
+
+
+  const Item = ({ username, score, pos }) => (
+    <>
       <View>
         <View
           style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            height: HeightRatio(100),
+            // backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            // height: HeightRatio(100),
             width: WidthRatio(340),
+            height: HeightRatio(50),
             alignSelf: 'center',
-            borderRadius: 50,
-            flexDirection: 'row'
+            // borderRadius: 50,
+            flexDirection: 'row',
+            marginTop: HeightRatio(20)
           }}
         >
+          <LinearGradient
+            colors={['#0b132b', '#181d21']}
+            style={{
+              ...Styling.background,
+              height: HeightRatio(50),
+              borderRadius: HeightRatio(20),
+              borderWidth: 2,
+              borderColor: 'rgba(255, 255, 255, 0.25)',
+              opacity: 0.5
+            }}
+          />
           <View style={{ flexDirection: 'column' }}>
             <Text
               style={{
                 color: 'white',
-                fontSize: HeightRatio(30),
+                fontSize: HeightRatio(20),
                 fontWeight: 'bold',
-                marginTop: HeightRatio(30),
+                marginTop: HeightRatio(10),
                 marginLeft: WidthRatio(20)
               }}
               allowFontScaling={false}
@@ -107,14 +120,15 @@ export const LeaderScreen = ({ navigation }) => {
               {pos}
             </Text>
           </View>
-          <View style={{ flexDirection: 'column', alignSelf: 'center', marginLeft: WidthRatio(20) }}>
-            <View style={{ flexDirection: 'column', width: WidthRatio(240) }}>
-              <View style={{ flexDirection: 'row', alignSelf: 'flex-start', margin: windowWidth * 0.01 }}>
+          <View style={{ flexDirection: 'row', marginLeft: WidthRatio(20), marginTop: HeightRatio(10), }}>
+            <View style={{ flexDirection: 'column' }}>
+              <View style={{ alignSelf: 'flex-start' }}>
                 <Text
                   style={{
-                    fontSize: windowWidth * 0.08,
+                    fontSize: HeightRatio(20),
                     fontWeight: 'bold',
-                    color: '#efea5a'
+                    color: '#efea5a',
+                    width: WidthRatio(100)
                   }}
                   numberOfLines={1}
                   ellipsizeMode='tail'
@@ -128,13 +142,14 @@ export const LeaderScreen = ({ navigation }) => {
               style={{
                 flexDirection: 'column',
                 width: WidthRatio(240),
+                
               }}
-  
+
             >
-              <View style={{ flexDirection: 'row', margin: windowWidth * 0.01 }}>
+              <View style={{ flexDirection: 'row' }}>
                 <Text
                   style={{
-                    fontSize: windowWidth * 0.05,
+                    fontSize: HeightRatio(20),
                     fontWeight: 'bold',
                     color: 'white',
                     alignSelf: 'flex-end',
@@ -147,7 +162,7 @@ export const LeaderScreen = ({ navigation }) => {
                   {score}
                 </Text>
                 <Text
-                  style={{ fontSize: windowWidth * 0.05, fontWeight: 'bold', color: '#83e377', alignSelf: 'flex-end', marginLeft: 4 }}
+                  style={{ fontSize: HeightRatio(20), fontWeight: 'bold', color: '#83e377', alignSelf: 'flex-end', marginLeft: 4 }}
                   allowFontScaling={false}
                 >
                   points
@@ -156,26 +171,26 @@ export const LeaderScreen = ({ navigation }) => {
             </View>
           </View>
         </View>
-        <View style={Styling.modalDivisionLine}></View>
+        {/* <View style={Styling.modalDivisionLine}></View> */}
       </View>
-      <View style={{marginBottom: 10}}></View>
-      </>
-    );
-  
-    const renderItem = ({ item }) => (
-      <Item username={item.username} score={item.score} pos={item.position} />
-    );
-  
-    useEffect(() => {
-      CheckAuthState();
-      CurrentUser();
-      getSelectedColor();
-      refetch();
-    }, [])
-  
-    return (
-      <>
-      <View style={Styling.container}>
+      
+    </>
+  );
+
+  const renderItem = ({ item }) => (
+    <Item username={item.username} score={item.score} pos={item.position} />
+  );
+
+  useEffect(() => {
+    CheckAuthState();
+    CurrentUser();
+    getSelectedColor();
+    refetch();
+  }, [])
+
+  return (
+    <>
+      <View style={{ ...Styling.container, backgroundColor: 'black', }}>
         <Navbar nav={navigation} auth={authState} position={'relative'} from={'leader'} />
         {selectedColor && selectedColor.gradient && selectedColor.image ?
           <DisplayGradient gradient={selectedColor.gradient} image={selectedColor.image} />
@@ -188,26 +203,34 @@ export const LeaderScreen = ({ navigation }) => {
             />
           </>
         }
-        
+
         <View
           style={{
             alignSelf: 'center',
-            // marginTop: WidthRatio(30)
 
           }}
         >
-          <View style={{alignSelf: 'center', flexDirection: 'column', backgroundColor: '(rgba(255, 255, 255, 0.1)', padding: 10, borderRadius: 50, width: WidthRatio(340), marginTop: HeightRatio(10)}}>
-            <Text style={{color: 'white', fontSize: HeightRatio(40), fontWeight: 'bold', alignSelf: 'center'}}>Leaderboard</Text>
-            <Text style={{color: 'white', fontSize: HeightRatio(20), alignSelf: 'center'}}>Last 30 Days</Text>
+
+          <View style={{ 
+            alignSelf: 'center', 
+            flexDirection: 'column', 
+            backgroundColor: '(rgba(255, 255, 255, 0.1)', 
+            padding: 10, 
+            borderRadius: 50, 
+            width: WidthRatio(340), 
+            marginTop: HeightRatio(30) 
+          }}>
+            <Text style={{ color: 'white', fontSize: HeightRatio(40), fontWeight: 'bold', alignSelf: 'center' }}>Leaderboard</Text>
+            <Text style={{ color: 'white', fontSize: HeightRatio(20), alignSelf: 'center' }}>Last 30 Days</Text>
           </View>
-          <SafeAreaView style={Styling.flatlistContainer}>
+          <SafeAreaView style={{...Styling.flatlistContainer}}>
             <FlatList
               data={DATA}
               renderItem={renderItem}
               keyExtractor={item => item.id}
             />
-            <View style={{marginBottom: 70}}></View>
           </SafeAreaView>
+          
         </View>
 
       </View>
@@ -219,5 +242,5 @@ export const LeaderScreen = ({ navigation }) => {
         networkActivityIndicatorVisible={true}
       />
     </>
-    );
-  }
+  );
+}

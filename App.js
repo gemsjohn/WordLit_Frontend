@@ -1,4 +1,4 @@
-import React, {  } from 'react';
+import React, { createContext, useEffect, useRef, useState } from 'react';
 import { ApolloProvider, ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from '@apollo/link-context';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
@@ -6,19 +6,43 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GameScreen } from './pages/game/Game';
 import { HomeScreen } from './pages/home/Home';
+import { KeyScreen } from './pages/home/Key';
 import { LeaderScreen } from './pages/leader/Leader';
 import { ProfileScreen } from './pages/profile/Profile';
 import { Auth } from './pages/auth/auth';
+import * as SecureStore from 'expo-secure-store';
 
+export const MainStateContext = createContext();
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const mainStateRef = useRef({});
+  const setMainState = (newState) => {
+    mainStateRef.current = { ...mainStateRef.current, ...newState };
+  };
+
+  const [initRoute, setInitRoute] = useState("Key");
+
+  async function getValueFor(key) {
+    let result = await SecureStore.getItemAsync(key);
+    if (result) {
+      setInitRoute("Key")
+      
+    } else {
+      setInitRoute("Home")
+    }
+  }
+
+  useEffect(() => {
+    getValueFor('cosmicKey')
+  }, [])
+
   const GRAPHQL_API_URL = 'https://wordlit-backend.herokuapp.com/graphql';
   const asyncAuthLink = setContext(async () => {
     return {
       headers: {
-        Authorization: await AsyncStorage.getItem('@storage_Key'),
+        Authorization: mainStateRef.current.bearerToken,
       },
     };
   });
@@ -33,14 +57,6 @@ export default function App() {
     link: asyncAuthLink.concat(httpLink),
   });
 
-  const MyTheme = {
-    dark: true,
-    colors: {
-      primary: 'rgb(255, 45, 85)',
-      background: '#001219',
-      notification: 'rgb(255, 69, 58)',
-    },
-  };
 
 
   const forFade = ({ current }) => ({
@@ -52,11 +68,12 @@ export default function App() {
   return (
     <>
       <ApolloProvider client={apolloClient}>
-        <NavigationContainer theme={MyTheme} onStateChange={(state) => console.log('New state is', state.routes)}>
+      <MainStateContext.Provider
+          value={{ mainState: mainStateRef, setMainState }}>
+        <NavigationContainer onStateChange={(state) => console.log('New state is', state.routes)}>
           <Stack.Navigator
-            initialRouteName="Home"
+            initialRouteName={initRoute}
             screenOptions={{
-              orientation: 'portrait_up',
               cardStyleInterpolator: forFade,
               animationEnabled: false,
             }}
@@ -67,6 +84,8 @@ export default function App() {
               options={{
                 animationEnabled: false,
                 headerShown: false,
+                orientation: 'portrait_up',
+
               }}
             />
             <Stack.Screen
@@ -74,8 +93,19 @@ export default function App() {
               component={HomeScreen}
               options={{
                 animationEnabled: false,
-                headerShown: false
+                headerShown: false,
+                orientation: 'portrait_up',
+
               }}
+            />
+            <Stack.Screen
+              name="Key"
+              component={KeyScreen}
+              options={{
+              animationEnabled: false,
+              headerShown: false,
+              orientation: 'portrait_up'
+            }}
             />
             <Stack.Screen
               name="Game"
@@ -104,6 +134,7 @@ export default function App() {
 
           </Stack.Navigator>
         </NavigationContainer>
+        </MainStateContext.Provider>
       </ApolloProvider>
     </>
   );

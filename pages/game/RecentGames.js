@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_USER_BY_ID } from '../../utils/queries';
+import { MainStateContext } from '../../App';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Styling } from '../../Styling';
 import {
     StyleSheet,
     Text,
@@ -71,58 +74,48 @@ const COLORS = [
 ];
 
 export const RecentGames = (props) => {
+    const { mainState, setMainState } = useContext(MainStateContext);
+
     const [currentColor, setCurrentColor] = useState('white');
     let gameCards = [];
 
     const { data: userByID, refetch } = useQuery(GET_USER_BY_ID, {
-        variables: { id: props.currentuser }
+        variables: { id: mainState.current.userID }
     });
-    // console.log("!!!!")
-    // console.log(userByID?.user.games)
-
-    const storeAuthState = async (value) => {
-        try {
-            await AsyncStorage.setItem('@authState', value)
-        } catch (e) {
-            console.error(e)
-        }
-    }
-    const storeBearerToken = async (value) => {
-        try {
-            await AsyncStorage.setItem('@storage_Key', value)
-        } catch (e) {
-            console.error(e)
-        }
-    }
-
-    const storeUserID = async (value) => {
-        try {
-            await AsyncStorage.setItem('@userID', value)
-        } catch (e) {
-            console.error(e)
-        }
-    }
 
     for (let i = 0; i < userByID?.user.games.length; i++) {
         const index = Math.floor(Math.random() * COLORS.length);
         gameCards[i] =
-            <View 
-                style={{ 
-                    backgroundColor: `${COLORS[index]}`, 
-                    padding: 10, 
-                    borderRadius: 10, 
-                    borderTopLeftRadius: 10, 
-                    borderBottomLeftRadius: 40, 
-                    marginRight: 20, 
-                    flexDirection: 'row', 
-                    borderLeftWidth: 2, 
-                    borderBottomWidth: 2, 
-                    marginTop: 5, 
+            <View
+                style={{
+                    // backgroundColor: `${COLORS[index]}`,
+                    padding: HeightRatio(10),
+                    // borderRadius: 10,
+                    // borderTopLeftRadius: 10,
+                    // borderBottomLeftRadius: 40,
+                    // marginRight: 20, 
+                    flexDirection: 'row',
+                    // borderLeftWidth: 2,
+                    // borderBottomWidth: 2,
+                    marginTop: 5,
                     marginBottom: 5,
-                    width: windowWidth*0.9,
+                    width: windowWidth * 0.9,
                 }}
                 key={i}
             >
+                <LinearGradient
+                    colors={[`${COLORS[index]}`, '#424242']}
+                    style={{
+                        ...Styling.background,
+                        height: HeightRatio(74),
+                        borderRadius: 10,
+                        borderTopLeftRadius: 10,
+                        borderBottomLeftRadius: 40,
+                        borderWidth: 4,
+                        borderColor: `${COLORS[index]}`,
+                        opacity: 0.5
+                    }}
+                />
                 <View style={{ flexDirection: 'column', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: 100, width: WidthRatio(50), height: WidthRatio(50), marginRight: 10, borderLeftWidth: 2, borderBottomWidth: 2 }}>
                     <FontAwesomeIcon
                         icon={faSolid, faFlagCheckered}
@@ -132,10 +125,10 @@ export const RecentGames = (props) => {
                 </View>
                 <View style={{ flexDirection: 'column' }}>
                     <View style={{ flexDirection: 'row' }}>
-                        
 
-                        <Text 
-                            style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: '#efea5a', marginRight: 10 }}
+
+                        <Text
+                            style={{ fontSize: windowWidth * 0.05, fontWeight: 'bold', color: '#efea5a', marginRight: 10 }}
                             allowFontScaling={false}
                         >{userByID?.user.games[i].score} points</Text>
                         <FontAwesomeIcon
@@ -143,22 +136,22 @@ export const RecentGames = (props) => {
                             style={{ color: 'white', alignSelf: 'center', marginRight: 10 }}
                             size={20}
                         />
-                        <Text 
-                            style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: 'white', marginRight: 10 }}
+                        <Text
+                            style={{ fontSize: windowWidth * 0.05, fontWeight: 'bold', color: 'white', marginRight: 10 }}
                             allowFontScaling={false}
-                            >{userByID?.user.games[i].time} seconds</Text>
+                        >{userByID?.user.games[i].time} seconds</Text>
                     </View>
                     <View style={{ flexDirection: 'row', marginLeft: 30 }}>
-                        <Text 
-                            style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: '#aaf683', marginRight: 10 }}
+                        <Text
+                            style={{ fontSize: windowWidth * 0.05, fontWeight: 'bold', color: '#aaf683', marginRight: 10 }}
                             allowFontScaling={false}
                         >Words:</Text>
-                        <Text 
-                            style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: 'white', marginRight: 10 }}
+                        <Text
+                            style={{ fontSize: windowWidth * 0.05, fontWeight: 'bold', color: 'white', marginRight: 10 }}
                             allowFontScaling={false}
                         >{userByID?.user.games[i].w1},</Text>
-                        <Text 
-                            style={{ fontSize: windowWidth*0.05, fontWeight: 'bold', color: 'white', marginRight: 10 }}
+                        <Text
+                            style={{ fontSize: windowWidth * 0.05, fontWeight: 'bold', color: 'white', marginRight: 10 }}
                             allowFontScaling={false}
                         >{userByID?.user.games[i].w2}</Text>
                     </View>
@@ -172,7 +165,7 @@ export const RecentGames = (props) => {
 
     return (
         <>
-            <View>
+            <View style={{ alignSelf: 'center' }}>
                 {gameCards.reverse()}
             </View>
         </>

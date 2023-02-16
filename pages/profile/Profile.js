@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext, useCallback, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { LinearGradient } from 'expo-linear-gradient';
+import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import { CommonActions } from '@react-navigation/native';
 // import { SettingsModal from './Settings';
@@ -11,7 +12,7 @@ import { UserDetails } from './UserDetails';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_USER_BY_ID } from '../../utils/queries';
 import { RecentGames } from '../game/RecentGames';
-import { Styling } from '../../Styling';
+import { Styling, HeightRatio, WidthRatio } from '../../Styling';
 import { Navbar } from '../../components/Navbar';
 import {
     StyleSheet,
@@ -26,7 +27,7 @@ import {
     SafeAreaView,
     ScrollView,
     Button,
-    Image
+    Image, RefreshControl
 } from 'react-native';
 import {
     faSolid,
@@ -42,38 +43,28 @@ import {
     faStar,
     faTrophy
 } from '@fortawesome/free-solid-svg-icons'
+import { MainStateContext } from '../../App';
+
+import { SecureStorage } from './SecureStorage';
+
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+async function deleteKey(key) {
+    await SecureStore.deleteItemAsync(key);
+}
+
 export const ProfileScreen = ({ navigation }) => {
-    const [userID, setUserID] = useState('');
-    const [authState, setAuthState] = useState(false);
+
+    // const [userID, setUserID] = useState('');
+    // const [authState, setAuthState] = useState(false);
     const [selectedColor, setSelectedColor] = useState(null);
 
-    const [userDetailsOpen, setUserDetailsOpen] = useState(false);
+    const [userDetailsOpen, setUserDetailsOpen] = useState(true);
     const [recentGamesOpen, setRecentGamesOpen] = useState(false);
     const [leaderBoardsOpen, setLeaderBoardsOpen] = useState(false);
     const [premiumOpen, setPremiumOpen] = useState(false);
-
-    const resetActionAuth = CommonActions.reset({
-        index: 1,
-        routes: [{ name: 'Auth', params: {} }]
-    });
-
-    const CheckAuthState = async () => {
-        let value = await AsyncStorage.getItem('@authState')
-        if (value === 'true') {
-            setAuthState(true);
-        } else if (value === 'false') {
-            setAuthState(false);
-        }
-    }
-
-    const CurrentUser = async () => {
-        let value = await AsyncStorage.getItem('@userID', value);
-        setUserID(value);
-    }
 
 
     const getSelectedColor = async () => {
@@ -81,6 +72,7 @@ export const ProfileScreen = ({ navigation }) => {
             const jsonValue = await AsyncStorage.getItem('selectedColor')
             if (jsonValue != null) {
                 let color = JSON.parse(jsonValue)
+                console.log(color)
                 setSelectedColor(color);
             }
         } catch (e) {
@@ -100,47 +92,69 @@ export const ProfileScreen = ({ navigation }) => {
         )
     }
 
-    const { data: userByID } = useQuery(GET_USER_BY_ID, {
-        variables: { id: userID }
+
+
+    const { mainState, setMainState } = useContext(MainStateContext);
+    const [displaySetUpCosmicKeyModal, setDisplaySetUpCosmicKeyModal] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
+    const [expand_0, setExpand_0] = useState(false)
+
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        refetch();
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    }, []);
+
+
+    const authState = useRef(false);
+    const userID = useRef(null);
+
+    const { data: userByID, refetch } = useQuery(GET_USER_BY_ID, {
+        variables: { id: mainState.current.userID }
     });
 
 
-    const storeAuthState = async (value) => {
-        try {
-            await AsyncStorage.setItem('@authState', value)
-        } catch (e) {
-            console.error(e)
-        }
-    }
-    const storeBearerToken = async (value) => {
-        try {
-            await AsyncStorage.setItem('@storage_Key', value)
-        } catch (e) {
-            console.error(e)
+
+    const resetActionAuth = CommonActions.reset({
+        index: 1,
+        routes: [{ name: 'Auth', params: {} }]
+    });
+
+    async function getValueFor(key) {
+        let result = await SecureStore.getItemAsync(key);
+        if (result && authState) {
+            return;
+        } else if (!result && authState.current) {
+            setDisplaySetUpCosmicKeyModal(true)
         }
     }
 
-    const storeUserID = async (value) => {
-        try {
-            await AsyncStorage.setItem('@userID', value)
-        } catch (e) {
-            console.error(e)
-        }
-    }
-
-    
 
     useEffect(() => {
-        CheckAuthState();
-        CurrentUser();
         getSelectedColor();
+        setLoading(true)
+
+        refetch();
+        setTimeout(() => {
+            authState.current = mainState.current.authState
+            userID.current = mainState.current.userID;
+            getValueFor('cosmicKey')
+            setTimeout(() => {
+                setLoading(false)
+                console.log(userByID)
+            }, 500)
+        }, 500)
+
     }, [])
 
     return (
         <>
-            <View style={Styling.container}>
+            <View style={{...Styling.container, backgroundColor: 'black',}}>
                 <Navbar nav={navigation} auth={authState} position={'relative'} from={'profile'} />
-                <View>
                 {selectedColor && selectedColor.gradient && selectedColor.image ?
                     <DisplayGradient gradient={selectedColor.gradient} image={selectedColor.image} />
                     :
@@ -152,108 +166,182 @@ export const ProfileScreen = ({ navigation }) => {
                         />
                     </>
                 }
-                
-                <SafeAreaView style={Styling.profileContainer}>
-                    <ScrollView style={Styling.profileScrollView}>
-                        <View style={{}}>
-                            {/* Buttons */}
-                            {authState &&
-                                <>
-                                    <View style={{}}>
-                                        <View style={{ marginTop: windowHeight / 24 }}></View>
-                                        {/* [[[USER DETAILS]]] */}
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                setUserDetailsOpen(!userDetailsOpen);
-                                                setRecentGamesOpen(false)
-                                                setLeaderBoardsOpen(false)
-                                                setPremiumOpen(false)
-                                            }}
-                                        >
-                                            <View
-                                                style={{ flexDirection: 'row', margin: 10 }}
-                                            >
-                                                <FontAwesomeIcon
-                                                    icon={faSolid, faSliders}
-                                                    style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
-                                                    size={30}
-                                                />
-                                                <Text style={Styling.modalScoringVarText} allowFontScaling={false}>
-                                                    User Details
-                                                </Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                        {userDetailsOpen ?
-                                            <View style={{ alignSelf: 'center' }}>
-                                                <UserDetails currentuser={userByID?.user} nav={navigation} />
-                                            </View>
-                                            :
-                                            null
-                                        }
-                                        <View style={Styling.profileDivisionLine}></View>
-                                        {/* [[[RECENT GAMES]]] */}
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                setUserDetailsOpen(false);
-                                                setRecentGamesOpen(!recentGamesOpen)
-                                                setLeaderBoardsOpen(false)
-                                                setPremiumOpen(false)
-                                            }}
-                                        >
-                                            <View
-                                                style={{ flexDirection: 'row', margin: 10 }}
-                                            >
-                                                <FontAwesomeIcon
-                                                    icon={faSolid, faFlagCheckered}
-                                                    style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
-                                                    size={30}
-                                                />
-                                                <Text style={Styling.modalScoringVarText} allowFontScaling={false}>
-                                                    Recent Games
-                                                </Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                        {recentGamesOpen ?
-                                            <View style={{ marginLeft: 10 }}>
-                                                <RecentGames currentuser={userByID?.user._id} />
-                                            </View>
-                                            :
-                                            null
-                                        }
-                                        <View style={Styling.profileDivisionLine}></View>
+                {!loading ?
+                    <View>
 
 
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                storeAuthState('false')
-                                                storeBearerToken('')
-                                                storeUserID('')
-                                                navigation.dispatch(resetActionAuth)
-                                            }}
-                                            style={{ ...Styling.modalWordButton, marginTop: 60 }}
-                                        >
-                                            <LinearGradient
-                                                // Button Linear Gradient
-                                                colors={['#aacc00', '#80b918']}
-                                                style={Styling.modalWordButton}
-                                            >
-                                                <Text
-                                                    style={{ ...Styling.modalWordButtonText, fontSize: windowWidth * 0.08, }}
-                                                    allowFontScaling={false}
+                        <SafeAreaView style={Styling.profileContainer}>
+                            <ScrollView
+                                style={Styling.profileScrollView}
+                                refreshControl={
+                                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                                }
+                            >
+                                <View style={{}}>
+                                    {/* Buttons */}
+                                    {mainState.current.authState &&
+                                        <>
+                                            <View style={{}}>
+                                                <View style={{ marginTop: windowHeight / 24 }}></View>
+                                                {/* [[[USER DETAILS]]] */}
+                                                <TouchableOpacity
+                                                    onPress={() => {
+                                                        setUserDetailsOpen(!userDetailsOpen);
+                                                        setRecentGamesOpen(false)
+                                                        setLeaderBoardsOpen(false)
+                                                        setPremiumOpen(false)
+                                                    }}
                                                 >
-                                                    Logout
-                                                </Text>
-                                            </LinearGradient>
-                                        </TouchableOpacity>
-                                    </View>
-                                    <View style={{ marginBottom: 200 }}></View>
-                                </>
-                            }
-                        </View >
-                    </ScrollView>
-                </SafeAreaView>
-                </View>
+                                                    <View
+                                                        style={{ flexDirection: 'row', alignSelf: 'center' }}
+                                                    >
+                                                        
+                                                        <Text style={Styling.modalScoringVarText} allowFontScaling={false}>
+                                                            User Details
+                                                        </Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                                {userDetailsOpen ?
+                                                    <View style={{ alignSelf: 'center' }}>
+                                                        <UserDetails nav={navigation} />
+                                                    </View>
+                                                    :
+                                                    null
+                                                }
+                                                <View style={Styling.profileDivisionLine}></View>
+                                                {/* [[[RECENT GAMES]]] */}
+                                                <TouchableOpacity
+                                                    onPress={() => {
+                                                        setUserDetailsOpen(false);
+                                                        setRecentGamesOpen(!recentGamesOpen)
+                                                        setLeaderBoardsOpen(false)
+                                                        setPremiumOpen(false)
+                                                    }}
+                                                >
+                                                    <View
+                                                        style={{ flexDirection: 'row', alignSelf: 'center' }}
+                                                    >
+                                                       
+                                                        <Text style={Styling.modalScoringVarText} allowFontScaling={false}>
+                                                            Recent Games
+                                                        </Text>
+                                                    </View>
+                                                </TouchableOpacity>
+
+
+                                                {recentGamesOpen ?
+                                                    <View style={{ marginLeft: 10 }}>
+                                                        <RecentGames />
+                                                    </View>
+                                                    :
+                                                    null
+                                                }
+                                                <View style={Styling.profileDivisionLine}></View>
+
+                                                <View>
+                                                    <TouchableOpacity
+                                                        onPress={() => {
+                                                            deleteKey('cosmicKey');
+                                                            setTimeout(() => {
+                                                                setDisplaySetUpCosmicKeyModal(true)
+                                                            }, 500)
+                                                        }}
+                                                        style={Styling.modalWordButton}>
+                                                        <View style={{
+                                                            backgroundColor: '#f8200d',
+                                                            display: 'flex',
+                                                            justifyContent: 'flex-start',
+                                                            padding: HeightRatio(10),
+                                                            borderRadius: HeightRatio(80),
+                                                            alignSelf: 'center',
+                                                            margin: HeightRatio(10),
+                                                            width: WidthRatio(300)
+                                                        }}>
+                                                            <Text
+                                                                style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center' }}
+                                                                allowFontScaling={false}
+                                                            >
+                                                                Remove/Reset Keycode
+                                                            </Text>
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                </View>
+
+
+                                                <TouchableOpacity
+                                                    onPress={() => {
+                                                        deleteKey('cosmicKey');
+
+                                                        setMainState({
+                                                            bearerToken: null,
+                                                            userID: null,
+                                                            authState: false
+                                                        })
+                                                        navigation.dispatch(resetActionAuth)
+                                                    }}
+                                                    style={{ 
+                                                        backgroundColor: '#2c1097',
+                                                        display: 'flex',
+                                                        justifyContent: 'flex-start',
+                                                        padding: HeightRatio(10),
+                                                        borderRadius: HeightRatio(80),
+                                                        alignSelf: 'center',
+                                                        margin: HeightRatio(5),
+                                                        width: WidthRatio(300)
+                                                    }}
+                                                >
+                                                    <Text
+                                                        style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center' }}
+                                                        allowFontScaling={false}
+                                                    >
+                                                        Logout
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={{ marginBottom: 200 }}></View>
+                                        </>
+                                    }
+                                </View >
+                            </ScrollView>
+                        </SafeAreaView>
+                    </View>
+                    :
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
+                            <ActivityIndicator size="large" color="#00d8ff" />
+                        </View>
+                    </View>
+                }
             </View>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={displaySetUpCosmicKeyModal}
+                onRequestClose={() => {
+                    setDisplaySetUpCosmicKeyModal(!displaySetUpCosmicKeyModal);
+                }}
+            >
+                <View style={Styling.modal_centered_view}>
+                    <View style={Styling.modal_view}>
+                        <View style={{ flexDirection: 'column' }}>
+
+                            <SecureStorage />
+
+                            <TouchableOpacity
+                                onPress={() => setDisplaySetUpCosmicKeyModal(!displaySetUpCosmicKeyModal)}
+                                style={{ marginTop: HeightRatio(20) }}>
+                                <Text
+                                    style={{ color: '#35faa9', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center' }}
+                                    allowFontScaling={false}
+                                >
+                                    Close
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
 
             <StatusBar
                 barStyle="default"
