@@ -214,15 +214,6 @@ export const GameScreen = ({ navigation }) => {
 
     }, [])
 
-    // useEffect(() => {
-    //     CheckAuthState();
-    //     CurrentUser();
-    //     getSelectedColor();
-    //     setBothWordsSelected(false)
-    // }, [])
-
-
-
     const handleAddGame = async (w1, w2, t, s) => {
         if (authState) {
             console.log("AUTH TRUE")
@@ -247,74 +238,6 @@ export const GameScreen = ({ navigation }) => {
             console.log("AUTH FALSE")
         }
 
-    }
-
-
-
-
-    const keyLayers = [
-        { layer: layer_0, init: '0', final: 10 },
-        { layer: layer_1, init: '10', final: 19 },
-        { layer: layer_2, init: '19', final: 26 },
-    ]
-
-    const Keyboard = () => {
-        for (let x = 0; x < keyLayers.length; x++) {
-            let localInit = keyLayers[x].init;
-            let localFinal = keyLayers[x].final;
-            let localLayer = keyLayers[x].layer;
-            for (let i = localInit; i < localFinal; i++) {
-                localLayer[i] =
-                    <LinearGradient
-                        // Button Linear Gradient
-                        // colors={['#f8f9fa', '#ced4da']}
-                        colors={['rgba(0, 0, 0, 0.25)', 'rgba(0, 0, 0, 0.75)']}
-                        style={{
-                            borderRadius: 6,
-                            borderWidth: 1,
-                            borderColor: 'rgba(255, 255, 255, 0.25)',
-                            height: HeightRatio(50),
-                            width: WidthRatio(37),
-                            margin: 0.5
-                        }}
-                        key={i}
-                    >
-                        {/* <View key={i} style={{}}> */}
-                        <TouchableOpacity
-                            onPress={() => { setPromptGuessInput(keyContainer[i]); }}
-                            style={{}} //backgroundColor: 'rgba(0, 0, 0, 0.25)', width: WidthRatio(37), height: HeightRatio(50), borderColor: 'white', borderWidth: 0.5, borderRadius: 6, margin: 0.5
-                            key={`${layer_0}` + i}
-                            accessible={true} accessibilityLabel={`Keyboard letter ${keyContainer[i]}.`}
-                        >
-                            <Text
-                                style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', alignSelf: 'center' }}
-                                allowFontScaling={false}
-                            >
-                                {keyContainer[i]}
-                            </Text>
-                        </TouchableOpacity>
-                        {/* </View> */}
-                    </LinearGradient>
-            }
-        }
-
-        const MergeKeyboardLayers = () => {
-            let display = []
-            for (let i = 0; i < keyLayers.length; i++) {
-                display[i] =
-                    <View style={{ flexDirection: 'row', alignSelf: 'center' }} key={i}>
-                        {keyLayers[i].layer}
-                    </View>
-            }
-
-            return display;
-        }
-
-        return (
-            <View style={{ flexDirection: 'column', alignSelf: 'center', marginTop: windowHeight / 50, marginBottom: windowHeight / 10 }}>
-                <MergeKeyboardLayers />
-            </View>
-        )
     }
 
     const [selected, setSelected] = useState(null);
@@ -413,29 +336,6 @@ export const GameScreen = ({ navigation }) => {
         setDefinition5('')
     }
 
-    // // GEN VERSION 1
-    // const Generate = () => {
-    //     ResetAllVariables();
-    //     // Load the JSON file containing the words
-    //     const data = require('../../wordlist.json');
-
-    //     // Create an empty array to hold the chosen words
-    //     const chosenWords = [];
-
-    //     // Choose five random words from the list and add them to the array
-    //     for (let i = 0; i < 5; i++) {
-    //         // Generate a random index between 0 and the length of the words array
-    //         const index = Math.floor(Math.random() * data.words.length);
-
-    //         // Add the word at the chosen index to the array of chosen words
-    //         chosenWords.push(data.words[index]);
-    //     }
-
-    //     // Update the setWords state variable with the array of chosen words
-    //     setWords(chosenWords);
-    //     setDisplayGrid(true)
-    // }
-
     // GEN VERSION 2
     const Generate = () => {
         ResetAllVariables();
@@ -498,11 +398,11 @@ export const GameScreen = ({ navigation }) => {
                 setWord1(CompArray_1[i].w1)
                 setWord2(CompArray_1[i].w2)
 
-                console.log("- - - - - - - - - ")
-                console.log("WORDS: ")
-                console.log("#1: " + CompArray_1[i].w1)
-                console.log("#2: " + CompArray_1[i].w2)
-                console.log("- - - - - - - - - ")
+                // console.log("- - - - - - - - - ")
+                // console.log("WORDS: ")
+                // console.log("#1: " + CompArray_1[i].w1)
+                // console.log("#2: " + CompArray_1[i].w2)
+                // console.log("- - - - - - - - - ")
 
                 setBothWordsSelected(true)
 
@@ -669,7 +569,7 @@ export const GameScreen = ({ navigation }) => {
                 }
             }
         }
-
+        handleKeyPress(null)
 
     }
 
@@ -1009,9 +909,9 @@ export const GameScreen = ({ navigation }) => {
         let uniqueCombined = [...new Set(combined_v1)];
         let scrambledCombined = shuffle(uniqueCombined).map(letter => letter.toUpperCase());
     
-        while (scrambledCombined.length < 15) {
+        while (scrambledCombined.length < 13) {
             // Determine number of additional letters needed
-            const lettersNeeded = 15 - scrambledCombined.length;
+            const lettersNeeded = 13 - scrambledCombined.length;
     
             // Remove letters that already appear in the words or in the current scrambledCombined
             const usedLetters = [...new Set(letters_word1.concat(letters_word2, scrambledCombined))];

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { Alert, StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, StatusBar, SafeAreaView, Dimensions, Button, Linking, ImageBackground, FlatList, PixelRatio, Modal } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSolid, faUser, faPlus, faUpLong, faMagnifyingGlass, faCheck, faLocationPin, faEnvelope, faLock, faGear, faX } from '@fortawesome/free-solid-svg-icons';
@@ -6,6 +6,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Navbar } from '../../components/Navbar';
 import { Styling } from '../../Styling';
+import { useMutation, useQuery } from '@apollo/client';
+import { GET_USER_BY_ID } from '../../utils/queries';
+import { MainStateContext } from '../../App';
+import { CommonActions } from '@react-navigation/native';
+
 import * as SecureStore from 'expo-secure-store';
 
 const windowWidth = Dimensions.get('window').width;
@@ -29,11 +34,21 @@ const HeightRatio = (size) => {
   return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
 }
 
+const resetActionAuth = CommonActions.reset({
+  index: 1,
+  routes: [{ name: 'Auth', params: {} }]
+});
+
 
 export const HomeScreen = ({ navigation }) => {
-  const [userID, setUserID] = useState('');
-  const [authState, setAuthState] = useState(false);
+  const { mainState, setMainState } = useContext(MainStateContext);
+  const userID = useRef(false);
+  const authState = useRef(false);
+  const [displaySignUpModal, setDisplaySignUpModal] = useState(false);
+  const [displayUsername, setDisplayUsername] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const colors = [
     { value: 'red', gradient: ['#4f000b', '#ff595e'], image: require('../../assets/dalle_1.png'), id: 0 },
     { value: 'orange', gradient: ['#b21e35', '#faa307'], image: require('../../assets/dalle_4.png'), id: 1 },
@@ -43,19 +58,34 @@ export const HomeScreen = ({ navigation }) => {
     { value: '#0b132b', gradient: ['#0b132b', '#3a506b'], image: require('../../assets/dalle_7.png'), id: 5 },
   ];
 
-  const CheckAuthState = async () => {
-    let value = await AsyncStorage.getItem('@authState')
-    if (value === 'true') {
-      setAuthState(true);
-    } else if (value === 'false') {
-      setAuthState(false);
+  const { data: userByID, refetch } = useQuery(GET_USER_BY_ID, {
+    variables: { id: mainState.current.userID }
+  });
+
+
+  async function getValueFor(key) {
+    let result = await SecureStore.getItemAsync(key);
+    if (result && authState.current) {
+      setDisplayUsername(true)
+    } else if (!result && !authState.current) {
+      setDisplaySignUpModal(true)
+      setDisplayUsername(false)
     }
   }
 
-  const CurrentUser = async () => {
-    let value = await AsyncStorage.getItem('@userID', value);
-    setUserID(value);
-  }
+  // const CheckAuthState = async () => {
+  //   let value = await AsyncStorage.getItem('@authState')
+  //   if (value === 'true') {
+  //     setAuthState(true);
+  //   } else if (value === 'false') {
+  //     setAuthState(false);
+  //   }
+  // }
+
+  // const CurrentUser = async () => {
+  //   let value = await AsyncStorage.getItem('@userID', value);
+  //   setUserID(value);
+  // }
 
   const selectColor = async (color) => {
     // console.log(color)
@@ -151,9 +181,20 @@ export const HomeScreen = ({ navigation }) => {
     return buttonArray;
   }
 
+
+
   useEffect(() => {
-    CheckAuthState();
-    CurrentUser();
+    setLoading(true)
+    setTimeout(() => {
+      authState.current = mainState.current.authState
+      userID.current = mainState.current.userID;
+
+
+      getValueFor('cosmicKey')
+      setTimeout(() => {
+        setLoading(false)
+      }, 500)
+    }, 500)
   }, [])
 
   useEffect(() => {
@@ -165,7 +206,7 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <>
-      <View style={{...Styling.container, backgroundColor: 'black',}}>
+      <View style={{ ...Styling.container, backgroundColor: 'black', }}>
         <StatusBar
           barStyle="default"
           hidden={false}
@@ -189,10 +230,45 @@ export const HomeScreen = ({ navigation }) => {
           <SafeAreaView style={Styling.scrollContainer}>
             <ScrollView style={Styling.scrollView}>
 
+              {displayUsername ?
+                <>
+                  <View style={{ marginTop: windowHeight / 24, }}>
+                    <Text style={{
+                      color: 'white',
+                      fontSize: HeightRatio(30),
+                      fontWeight: 'bold',
+                      textAlign: 'center'
+                    }}
+                      allowFontScaling={false}
+                      ellipsizeMode='tail'
+                      numberOfLines={1}>
+                      {userByID?.user.username.toUpperCase()}
+                    </Text>
+                  </View>
+                </>
+                :
+                <>
+                  <View style={{ marginTop: windowHeight / 24, }}>
+                    <Text style={{
+                      color: 'white',
+                      fontSize: HeightRatio(30),
+                      fontWeight: 'bold',
+                      textAlign: 'center'
+                    }}
+                      allowFontScaling={false}
+                      ellipsizeMode='tail'
+                      numberOfLines={1}>
+                      WordLit
+                    </Text>
+                  </View>
+                </>
+
+              }
+
               <View
                 style={{
                   backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                  marginTop: windowHeight / 24,
+                  marginTop: HeightRatio(20),
                   padding: 20,
                   marginLeft: 5,
                   marginRight: 5,
@@ -449,6 +525,134 @@ export const HomeScreen = ({ navigation }) => {
         </View>
 
       </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={displaySignUpModal}
+        onRequestClose={() => {
+          setDisplaySignUpModal(!displaySignUpModal);
+        }}
+      >
+        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
+          <View style={{ backgroundColor: 'black', borderTopRightRadius: HeightRatio(10) }}>
+            {/* <LinearGradient
+              colors={['#261823', '#792555']}
+              style={{ flex: 1, borderWidth: 4 }}
+            > */}
+              <View
+                style={{
+                  backgroundColor: 'rgba(255, 0, 0, 1)',
+                  alignSelf: 'center',
+                  borderRadius: 8,
+                  position: 'absolute',
+                  zIndex: 10,
+                  top: 0,
+                  right: 0
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => { setDisplaySignUpModal(!displaySignUpModal); }}
+                  style={{
+                    borderRadius: 10,
+                    height: 50,
+                    width: 50
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faSolid, faX}
+                    style={{
+                      color: 'white',
+                      justifyContent: 'center',
+                      alignSelf: 'center',
+                      marginTop: 17
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={{ flexDirection: 'column' }}>
+                {/* <TouchableOpacity
+                onPress={() => setDisplaySignUpModal(!displaySignUpModal)}>
+                <View style={{
+                  backgroundColor: 'red',
+                  height: HeightRatio(20),
+                  width: HeightRatio(120),
+                  borderRadius: HeightRatio(100),
+                  marginTop: HeightRatio(20),
+                  alignSelf: 'center'
+                }} />
+              </TouchableOpacity> */}
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: HeightRatio(30),
+                    fontWeight: 'bold',
+                    alignSelf: 'center',
+                    marginTop: HeightRatio(20)
+                  }}
+                  allowFontScaling={false}>
+                  SIGN UP!
+                </Text>
+                <View style={{ height: 10 }}></View>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: HeightRatio(20),
+                    fontWeight: 'bold',
+                    width: windowWidth * 0.9,
+                    alignSelf: 'center'
+                  }}
+                  allowFontScaling={false}>
+                  Enhance your gaming experience and put your skills on display by
+                  signing up or logging in and climbing to the top of the leaderboard!
+                </Text>
+                <View style={{ height: 10 }}></View>
+
+                <TouchableOpacity
+                  onPress={() => navigation.dispatch(resetActionAuth)}
+                  style={{ ...Styling.modalWordButton, marginTop: 10 }}
+                >
+                  <View style={{
+                    // backgroundColor: '#09e049',
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                    padding: HeightRatio(20),
+                    borderRadius: HeightRatio(40),
+                    alignSelf: 'center',
+                    // margin: HeightRatio(10),
+                    width: windowWidth * 0.9
+                  }}>
+                    <LinearGradient
+                      colors={['#0b132b', '#181d21']}
+                      style={{
+                        ...Styling.background,
+                        height: HeightRatio(60),
+                        borderRadius: HeightRatio(8),
+                        borderWidth: 2,
+                        borderColor: '#ff0076',
+                        opacity: 0.9
+                      }}
+                    />
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontSize: HeightRatio(20),
+                        fontWeight: 'bold',
+                        alignSelf: 'center'
+                      }}
+                      allowFontScaling={false}
+                    >
+                      Sign Up or Login
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+
+
+              </View>
+            {/* </LinearGradient> */}
+          </View>
+        </View>
+      </Modal>
 
     </>
   );

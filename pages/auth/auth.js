@@ -255,7 +255,10 @@ export const Auth = ({ navigation }) => {
       <View style={{ ...Styling.container, backgroundColor: 'black' }}>
           <SafeAreaView style={{ height: '90%', marginBottom: 32, marginTop: 32 }}>
             <ScrollView style={{}} keyboardShouldPersistTaps={'always'} keyboardDismissMode="on-drag">
-
+              <LinearGradient
+                  colors={['#261823', '#792555']}
+                  style={{ flex: 1 }}
+              >
               {!isTokenValid &&
                 <>
                   {newUser ?
@@ -282,7 +285,7 @@ export const Auth = ({ navigation }) => {
                                 style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
                               />
                               <Text
-                                style={{ color: 'white', fontSize: HeightRatio(15), textAlign: 'center' }}
+                                style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
                                 allowFontScaling={false}
                               >Email</Text>
                             </View>
@@ -299,7 +302,7 @@ export const Auth = ({ navigation }) => {
                                 style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
                               />
                               <Text
-                                style={{ color: 'white', fontSize: HeightRatio(15), textAlign: 'center' }}
+                                style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
                                 allowFontScaling={false}
                               >Email</Text>
                             </View>
@@ -317,7 +320,7 @@ export const Auth = ({ navigation }) => {
                                 style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
                               />
                               <Text
-                                style={{ color: 'white', fontSize: HeightRatio(15), textAlign: 'center' }}
+                                style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
                                 allowFontScaling={false}
                               >Username </Text>
                             </View>
@@ -334,7 +337,7 @@ export const Auth = ({ navigation }) => {
                                 style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
                               />
                               <Text
-                                style={{ color: 'white', fontSize: HeightRatio(15), textAlign: 'center' }}
+                                style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
                                 allowFontScaling={false}
                               >Username </Text>
                             </View>
@@ -352,7 +355,7 @@ export const Auth = ({ navigation }) => {
                                 style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
                               />
                               <Text
-                                style={{ color: 'white', fontSize: HeightRatio(15), textAlign: 'center' }}
+                                style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
                                 allowFontScaling={false}
                               >Password</Text>
                             </View>
@@ -369,7 +372,7 @@ export const Auth = ({ navigation }) => {
                                 style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
                               />
                               <Text
-                                style={{ color: 'white', fontSize: HeightRatio(15), textAlign: 'center' }}
+                                style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
                                 allowFontScaling={false}
                               >Password</Text>
                             </View>
@@ -432,12 +435,12 @@ export const Auth = ({ navigation }) => {
                                 borderRadius: HeightRatio(80),
                                 alignSelf: 'center',
                                 margin: HeightRatio(20),
-                                width: WidthRatio(160)
+                                width: WidthRatio(300)
                               }}
 
                             >
                               <Text
-                                style={{ color: '#001219', fontSize: HeightRatio(15), fontWeight: 'bold', alignSelf: 'center' }}
+                                style={{ color: '#001219', fontSize: HeightRatio(22), fontWeight: 'bold', alignSelf: 'center' }}
                                 allowFontScaling={false}
                               >
                                 SIGN UP
@@ -458,11 +461,11 @@ export const Auth = ({ navigation }) => {
                                 borderRadius: HeightRatio(80),
                                 alignSelf: 'center',
                                 margin: HeightRatio(20),
-                                width: WidthRatio(160)
+                                width: WidthRatio(300)
                               }}
                             >
                               <Text
-                                style={{ color: '#001219', fontSize: HeightRatio(15), fontWeight: 'bold', alignSelf: 'center' }}
+                                style={{ color: '#001219', fontSize: HeightRatio(22), fontWeight: 'bold', alignSelf: 'center' }}
                                 allowFontScaling={false}
                               >
                                 SIGN UP
@@ -493,11 +496,11 @@ export const Auth = ({ navigation }) => {
                             borderRadius: HeightRatio(80),
                             alignSelf: 'center',
                             margin: HeightRatio(20),
-                            width: WidthRatio(160)
+                            width: WidthRatio(300)
                           }}
                         >
                           <Text
-                            style={{ color: 'white', fontSize: HeightRatio(15), fontWeight: 'bold', alignSelf: 'center' }}
+                            style={{ color: 'white', fontSize: HeightRatio(22), fontWeight: 'bold', alignSelf: 'center' }}
                             allowFontScaling={false}
                           >
                             LOGIN</Text>
@@ -561,11 +564,11 @@ export const Auth = ({ navigation }) => {
                                   borderRadius: HeightRatio(80),
                                   alignSelf: 'center',
                                   margin: HeightRatio(20),
-                                  width: WidthRatio(160)
+                                  width: WidthRatio(300)
                                 }}
                               >
                                 <Text
-                                  style={{ color: '#001219', fontSize: HeightRatio(15), fontWeight: 'bold', alignSelf: 'center' }}
+                                  style={{ color: '#001219', fontSize: HeightRatio(22), fontWeight: 'bold', alignSelf: 'center' }}
                                   allowFontScaling={false}
                                 >
                                   LOGIN
@@ -587,11 +590,11 @@ export const Auth = ({ navigation }) => {
                                   borderRadius: HeightRatio(80),
                                   alignSelf: 'center',
                                   margin: HeightRatio(20),
-                                  width: WidthRatio(160)
+                                  width: WidthRatio(300)
                                 }}
                               >
                                 <Text
-                                  style={{ color: '#001219', fontSize: HeightRatio(15), fontWeight: 'bold', alignSelf: 'center' }}
+                                  style={{ color: '#001219', fontSize: HeightRatio(22), fontWeight: 'bold', alignSelf: 'center' }}
                                   allowFontScaling={false}
                                 >
                                   LOGIN
@@ -602,7 +605,7 @@ export const Auth = ({ navigation }) => {
 
                           {/* <View style={Styling.profileDivisionLine}></View> */}
                           <View style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                            // backgroundColor: 'rgba(0, 0, 0, 0.25)',
                             margin: HeightRatio(10),
                             borderRadius: HeightRatio(30)
                           }}>
@@ -623,7 +626,7 @@ export const Auth = ({ navigation }) => {
                               style={{
                                 alignSelf: 'center',
                                 margin: HeightRatio(20),
-                                width: WidthRatio(160)
+                                width: WidthRatio(300)
                               }}
                             >
                               <View style={{ flexDirection: 'column', alignSelf: 'center' }}>
@@ -652,11 +655,11 @@ export const Auth = ({ navigation }) => {
                                       borderRadius: HeightRatio(80),
                                       alignSelf: 'center',
                                       margin: HeightRatio(20),
-                                      width: WidthRatio(160)
+                                      width: WidthRatio(300)
                                     }}
                                   >
                                     <Text
-                                      style={{ color: 'black', alignSelf: 'center', fontSize: HeightRatio(15), fontWeight: 'bold' }}
+                                      style={{ color: 'black', alignSelf: 'center', fontSize: HeightRatio(22), fontWeight: 'bold' }}
                                       allowFontScaling={false}
                                     >SUBMIT</Text>
                                   </View>
@@ -681,11 +684,11 @@ export const Auth = ({ navigation }) => {
                                     borderRadius: HeightRatio(80),
                                     alignSelf: 'center',
                                     margin: HeightRatio(20),
-                                    width: WidthRatio(160)
+                                    width: WidthRatio(300)
                                   }}
                                 >
                                   <Text
-                                    style={{ color: 'black', alignSelf: 'center', fontSize: HeightRatio(15), fontWeight: 'bold' }}
+                                    style={{ color: 'black', alignSelf: 'center', fontSize: HeightRatio(22), fontWeight: 'bold' }}
                                     allowFontScaling={false}
                                   >Have a reset token?</Text>
                                 </View>
@@ -735,7 +738,7 @@ export const Auth = ({ navigation }) => {
                                     />
                                     {promptResetPassword_0 == promptResetPassword_1 && promptResetPassword_0 != '' && promptResetPassword_1 != '' &&
                                       <View style={{ alignSelf: 'center' }}>
-                                        <Text style={{ color: 'white', fontSize: HeightRatio(15) }}
+                                        <Text style={{ color: 'white', fontSize: HeightRatio(22) }}
                                           allowFontScaling={false}>
                                           Passwords match!
                                         </Text>
@@ -743,7 +746,7 @@ export const Auth = ({ navigation }) => {
                                     }
                                     {promptResetPassword_0 != promptResetPassword_1 && promptResetPassword_0 != '' && promptResetPassword_1 != '' &&
                                       <View style={{ alignSelf: 'center' }}>
-                                        <Text style={{ color: 'white', fontSize: HeightRatio(15) }}
+                                        <Text style={{ color: 'white', fontSize: HeightRatio(22) }}
                                           allowFontScaling={false}>
                                           Passwords do not match!
                                         </Text>
@@ -760,11 +763,11 @@ export const Auth = ({ navigation }) => {
                                           borderRadius: HeightRatio(80),
                                           alignSelf: 'center',
                                           margin: HeightRatio(20),
-                                          width: WidthRatio(160)
+                                          width: WidthRatio(300)
                                         }}
                                       >
                                         <Text
-                                          style={{ color: 'black', alignSelf: 'center', fontSize: HeightRatio(15), fontWeight: 'bold' }}
+                                          style={{ color: 'black', alignSelf: 'center', fontSize: HeightRatio(22), fontWeight: 'bold' }}
                                           allowFontScaling={false}
                                         >SUBMIT</Text>
                                       </View>
@@ -848,11 +851,11 @@ export const Auth = ({ navigation }) => {
                                   borderRadius: HeightRatio(80),
                                   alignSelf: 'center',
                                   margin: HeightRatio(20),
-                                  width: WidthRatio(160)
+                                  width: WidthRatio(300)
                                 }}
                               >
                                 <Text
-                                  style={{ color: 'white', fontSize: HeightRatio(15), fontWeight: 'bold', alignSelf: 'center' }}
+                                  style={{ color: 'white', fontSize: HeightRatio(22), fontWeight: 'bold', alignSelf: 'center' }}
                                   allowFontScaling={false}
                                 >
                                   SIGN UP
@@ -876,6 +879,7 @@ export const Auth = ({ navigation }) => {
                 </>
               }
               <View style={{ marginBottom: HeightRatio(400) }}></View>
+              </LinearGradient>
             </ScrollView>
           </SafeAreaView>
         <Navbar nav={navigation} auth={isTokenValid} position={'absolute'} from={'auth'} />
