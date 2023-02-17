@@ -201,14 +201,14 @@ export const GameScreen = ({ navigation }) => {
     useEffect(() => {
         getSelectedColor();
         setBothWordsSelected(false)
-        
+
         refetch();
         setTimeout(() => {
             authState.current = mainState.current.authState
             userID.current = mainState.current.userID;
             getValueFor('cosmicKey')
             setTimeout(() => {
-                console.log(userByID)
+                // console.log(userByID)
             }, 500)
         }, 500)
 
@@ -384,7 +384,7 @@ export const GameScreen = ({ navigation }) => {
     }
 
     useEffect(() => {
-        console.log(letter)
+        // console.log(letter)
         setPromptGuessInput(letter)
     }, [count && letter])
 
@@ -441,7 +441,7 @@ export const GameScreen = ({ navigation }) => {
         ResetAllVariables();
         // Load the JSON file containing the words
         const data = require('../../output.json');
-        console.log(data.length)
+        // console.log(data.length)
 
         // Create an empty array to hold the chosen words
         const chosenWords = [];
@@ -498,11 +498,11 @@ export const GameScreen = ({ navigation }) => {
                 setWord1(CompArray_1[i].w1)
                 setWord2(CompArray_1[i].w2)
 
-                // console.log("- - - - - - - - - ")
-                // console.log("WORDS: ")
-                // console.log("#1: " + CompArray_1[i].w1)
-                // console.log("#2: " + CompArray_1[i].w2)
-                // console.log("- - - - - - - - - ")
+                console.log("- - - - - - - - - ")
+                console.log("WORDS: ")
+                console.log("#1: " + CompArray_1[i].w1)
+                console.log("#2: " + CompArray_1[i].w2)
+                console.log("- - - - - - - - - ")
 
                 setBothWordsSelected(true)
 
@@ -629,7 +629,7 @@ export const GameScreen = ({ navigation }) => {
                                                     accessible={true} accessibilityLabel="Block."
                                                 >
                                                     {i == (u0 + u1) ?
-                                                        <Text style={{...Styling.letters, color: 'white'}} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
+                                                        <Text style={{ ...Styling.letters, color: 'white' }} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
                                                         :
                                                         null
                                                     }
@@ -670,15 +670,15 @@ export const GameScreen = ({ navigation }) => {
             }
         }
 
-        
+
     }
 
     const PreviousGuess = () => {
         for (let i = 0; i < guesses.length; i++) {
             storedGuesses.splice(i, 1, guesses[i])
         }
-        
-        
+
+
 
         for (let i = 0; i < 12; i++) {
             guessBoxes[i] =
@@ -850,54 +850,55 @@ export const GameScreen = ({ navigation }) => {
 
     const ScoreCalculator = () => {
         const filteredArray = tempGridArray_0.filter(element => element !== "");
-        const unique = filteredArray.filter((item, index) => filteredArray.indexOf(item) === index);
-
         let localTimeTaken;
         let localScore;
-        //  Identify how many guess were correct
-        for (let i = 0; i < guesses.length; i++) {
+        let totalGuesses = storedGuesses.length;
+        let averageTimePerGuess = Math.trunc((endTime - startTime) / 1000 / totalGuesses);
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+        for (let i = 0; i < totalGuesses; i++) {
             if (tempGridArray_0.includes(`${storedGuesses[i]}`)) {
                 correctAnswers = correctAnswers + 1
             } else {
                 incorrectAnswers = incorrectAnswers + 1
             }
-
         }
-        setStoreCorrectAnswers(correctAnswers)
-        setStoreIncorrectAnswers(incorrectAnswers)
+        setStoreCorrectAnswers(correctAnswers);
+        setStoreIncorrectAnswers(incorrectAnswers);
 
         localTimeTaken = Math.trunc((endTime - startTime) / 1000);
         setTimeTaken(localTimeTaken);
-        // Calculate the score as a percentage of correct answers
-        // setScore(Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100));
 
-        // If the time taken is less than 60 seconds, add a bonus to the score
-        if (localTimeTaken < 30 && awardExtraPoints) {
-            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 100;
+        // Calculate the score as a percentage of correct answers
+        let scorePercentage = Math.trunc((correctAnswers / (correctAnswers + (incorrectAnswers * 2))) * 100);
+
+        // If the time taken is less than the average time per guess, add a bonus to the score
+        if (localTimeTaken < 20 && awardExtraPoints) {
+            localScore = scorePercentage + 100;
             setExtraPoints(100);
 
-        } else if (localTimeTaken >= 30 && localTimeTaken < 60 && awardExtraPoints) {
-            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 80;
+        } else if (localTimeTaken >= 20 && localTimeTaken < 40 && awardExtraPoints) {
+            localScore = scorePercentage + 80;
             setExtraPoints(80);
 
-        } else if (localTimeTaken >= 60 && localTimeTaken < 90 && awardExtraPoints) {
-            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 40;
+        } else if (localTimeTaken >= 40 && localTimeTaken < 60 && awardExtraPoints) {
+            localScore = scorePercentage + 40;
             setExtraPoints(40);
 
-        } else if (localTimeTaken >= 90 && localTimeTaken < 120 && awardExtraPoints) {
-            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 20;
+        } else if (localTimeTaken >= 60 && localTimeTaken < 80 && awardExtraPoints) {
+            localScore = scorePercentage + 20;
             setExtraPoints(20);
 
-        } else if (localTimeTaken >= 120 && localTimeTaken < 150 && awardExtraPoints) {
-            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 10;
+        } else if (localTimeTaken >= 80 && localTimeTaken < 100 && awardExtraPoints) {
+            localScore = scorePercentage + 10;
             setExtraPoints(10);
 
-        } else if (localTimeTaken >= 150 && awardExtraPoints) {
-            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100) + 5;
+        } else if (localTimeTaken >= 100 && awardExtraPoints) {
+            localScore = scorePercentage + 5;
             setExtraPoints(5);
 
         } else {
-            localScore = Math.trunc((correctAnswers / (correctAnswers + incorrectAnswers)) * 100);
+            localScore = scorePercentage;
             console.log("NO EXTRA")
         }
 
@@ -998,104 +999,73 @@ export const GameScreen = ({ navigation }) => {
         setRevealOptions(false);
         const letters_word1 = word1.split('');
         const letters_word2 = word2.split('');
-
+    
         const randomLetters = [];
-        for (let i = 0; i < 8; i++) {
-            const letterCode = Math.floor(Math.random() * 26) + 65;
-            const letter = String.fromCharCode(letterCode);
-            let lowerCaseLetter = letter.toLowerCase();
-            randomLetters.push(lowerCaseLetter);
-        }
-
+        let remainingLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+    
         let combined_v0 = letters_word1.concat(letters_word2);
         let combined_v1 = combined_v0.concat(randomLetters);
-
+    
         let uniqueCombined = [...new Set(combined_v1)];
-        let scambledCombined = shuffle(uniqueCombined).map(letter => letter.toUpperCase());
-
+        let scrambledCombined = shuffle(uniqueCombined).map(letter => letter.toUpperCase());
+    
+        while (scrambledCombined.length < 15) {
+            // Determine number of additional letters needed
+            const lettersNeeded = 15 - scrambledCombined.length;
+    
+            // Remove letters that already appear in the words or in the current scrambledCombined
+            const usedLetters = [...new Set(letters_word1.concat(letters_word2, scrambledCombined))];
+            remainingLetters = remainingLetters.filter(letter => !usedLetters.includes(letter));
+    
+            // Generate additional letters
+            for (let i = 0; i < lettersNeeded; i++) {
+                const letterCode = Math.floor(Math.random() * remainingLetters.length);
+                const letter = remainingLetters[letterCode];
+                remainingLetters.splice(letterCode, 1); // Remove selected letter from remaining letters
+                randomLetters.push(letter.toLowerCase());
+            }
+    
+            combined_v0 = letters_word1.concat(letters_word2);
+            combined_v1 = combined_v0.concat(randomLetters);
+    
+            uniqueCombined = [...new Set(combined_v1)];
+            scrambledCombined = shuffle(uniqueCombined).map(letter => letter.toUpperCase());
+        }
+    
         console.log("- - - - - - -")
         console.log("Combined and scrambled: ")
-        console.log(scambledCombined)
+        console.log(scrambledCombined)
         console.log("- - - - - - -")
-
-        setInputInit(scambledCombined.filter((letter, index) => scambledCombined.indexOf(letter) === index))
-
-        NewKeyboard(scambledCombined.filter((letter, index) => scambledCombined.indexOf(letter) === index), storedGuesses);
+    
+        setInputInit(scrambledCombined.filter((letter, index) => scrambledCombined.indexOf(letter) === index))
+    
+        NewKeyboard(scrambledCombined.filter((letter, index) => scrambledCombined.indexOf(letter) === index), storedGuesses);
     }
+    
+    
+      
+      
+      
 
-
-    // const NewKeyboard = (input, guesses) => {
-    //     let randomKeys = [];
-
-    //     for (let i = 0; i < input.length; i++) {
-
-    //         randomKeys[i] =
-    //             <View
-    //                 // Button Linear Gradient
-    //                 // colors={['#0b132b', '#181d21']}
-    //                 style={{
-    //                     borderRadius: 6,
-    //                     borderWidth: 2,
-    //                         borderColor: 'black',
-    //                     height: HeightRatio(60),
-    //                     width: WidthRatio(60),
-    //                     margin: WidthRatio(4),
-    //                     opacity: 0.9,
-    //                     backgroundColor: guesses.includes(input[i].toUpperCase()) ? 'black' : '#19d0bf' 
-    //                 }}
-    //                 key={i}
-    //             >
- 
-    //                 {/* <View key={i} style={{}}> */}
-    //                 <TouchableOpacity
-    //                     onPress={() => { setPromptGuessInput(input[i]); handleKeyPress(input[i].toUpperCase()) }}
-    //                     style={{}} //backgroundColor: 'rgba(0, 0, 0, 0.25)', width: WidthRatio(37), height: HeightRatio(50), borderColor: 'white', borderWidth: 0.5, borderRadius: 6, margin: 0.5
-    //                     key={`${layer_0}` + i}
-    //                     accessible={true} accessibilityLabel={`Keyboard letter ${input[i]}.`}
-    //                 >
-    //                     <Text
-    //                         style={{ 
-    //                             color: 'black', 
-    //                             fontSize: HeightRatio(35), 
-    //                             fontWeight: 'bold', 
-    //                             alignSelf: 'center',
-    //                             marginTop: HeightRatio(7) 
-    //                         }}
-    //                         allowFontScaling={false}
-    //                     >
-    //                         {input[i].toUpperCase()}
-    //                     </Text>
-    //                 </TouchableOpacity>
-    //                 </View>
-    //                 {/* </View> */}
-
-    //     }
-
-    //     setLetterOptionDisplay(randomKeys)
-
-    //     setTimeout(() => {
-    //         setRevealOptions(true);
-    //     }, 1000)
-    // }
 
     const NewKeyboard = (input, guesses) => {
         let keys = input.map(letter => {
-          return {
-            letter: letter.toUpperCase(),
-            guessed: guesses.includes(letter.toUpperCase()),
-            color: storedGuesses.includes(letter.toUpperCase()) ? 'black' : '#19d0bf',
-          };
+            return {
+                letter: letter.toUpperCase(),
+                guessed: guesses.includes(letter.toUpperCase()),
+                color: storedGuesses.includes(letter.toUpperCase()) ? 'black' : '#19d0bf',
+            };
         });
-      
+
         setLetterOptionDisplay(keys);
-      
+
         setTimeout(() => {
-          setRevealOptions(true);
+            setRevealOptions(true);
         }, 1000);
     };
 
-      
-      
+
+
 
     useEffect(() => {
         if (bothWordsSelected) {
@@ -1105,15 +1075,9 @@ export const GameScreen = ({ navigation }) => {
 
     }, [bothWordsSelected])
 
-    useEffect(() => {
-        console.log(storedGuesses)
-    }, [storedGuesses])
-
-
-
     return (
         <>
-            <View style={{...Styling.container, backgroundColor: 'black',}}>
+            <View style={{ ...Styling.container, backgroundColor: 'black', }}>
                 <Navbar nav={navigation} auth={authState} position={'relative'} from={'game'} />
                 {selectedColor && selectedColor.gradient && selectedColor.image ?
                     <DisplayGradient gradient={selectedColor.gradient} image={selectedColor.image} />
@@ -1136,9 +1100,9 @@ export const GameScreen = ({ navigation }) => {
                         marginTop: HeightRatio(40)
                     }}
                 >
-                    <View style={{ 
+                    <View style={{
                         flexDirection: 'column',
-                        
+
                     }}>
 
                         {/* - - - - - - - - - - - - - -  */}
@@ -1274,52 +1238,52 @@ export const GameScreen = ({ navigation }) => {
                                     </View>
                                 </View>
                                 {revealOptions ?
-                                    <View style={{ 
-                                        flexDirection: 'row', 
-                                        flexWrap: 'wrap', 
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        flexWrap: 'wrap',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         marginTop: HeightRatio(10)
                                     }}>
-                                    {letterOptionDisplay.map((key, index) => (
-                                        <View
-                                            key={index}
-                                            style={{
-                                            borderRadius: 6,
-                                            borderWidth: 2,
-                                            borderColor: 'black',
-                                            height: HeightRatio(60),
-                                            width: WidthRatio(60),
-                                            margin: WidthRatio(4),
-                                            opacity: 0.9,
-                                            backgroundColor: selectedKey === key.letter ? '#a2ffff' : key.color,
-                                            }}
-                                        >
-                                      
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                            setPromptGuessInput(key.letter);
-                                            handleKeyPress(key.letter);
-                                            }}
-                                            style={{}} //backgroundColor: 'rgba(0, 0, 0, 0.25)', width: WidthRatio(37), height: HeightRatio(50), borderColor: 'white', borderWidth: 0.5, borderRadius: 6, margin: 0.5
-                                            accessible={true}
-                                            accessibilityLabel={`Keyboard letter ${key.letter}.`}
-                                        >
-                                            <Text
-                                            style={{
-                                                color: 'black',
-                                                fontSize: HeightRatio(35),
-                                                fontWeight: 'bold',
-                                                alignSelf: 'center',
-                                                marginTop: HeightRatio(7),
-                                            }}
-                                            allowFontScaling={false}
+                                        {letterOptionDisplay.map((key, index) => (
+                                            <View
+                                                key={index}
+                                                style={{
+                                                    borderRadius: 6,
+                                                    borderWidth: 2,
+                                                    borderColor: 'black',
+                                                    height: HeightRatio(60),
+                                                    width: WidthRatio(60),
+                                                    margin: WidthRatio(4),
+                                                    opacity: 0.9,
+                                                    backgroundColor: selectedKey === key.letter ? '#a2ffff' : key.color,
+                                                }}
                                             >
-                                            {key.letter}
-                                            </Text>
-                                        </TouchableOpacity>
-                                        </View>
-                                    ))}
+
+                                                <TouchableOpacity
+                                                    onPress={() => {
+                                                        setPromptGuessInput(key.letter);
+                                                        handleKeyPress(key.letter);
+                                                    }}
+                                                    style={{}} //backgroundColor: 'rgba(0, 0, 0, 0.25)', width: WidthRatio(37), height: HeightRatio(50), borderColor: 'white', borderWidth: 0.5, borderRadius: 6, margin: 0.5
+                                                    accessible={true}
+                                                    accessibilityLabel={`Keyboard letter ${key.letter}.`}
+                                                >
+                                                    <Text
+                                                        style={{
+                                                            color: 'black',
+                                                            fontSize: HeightRatio(35),
+                                                            fontWeight: 'bold',
+                                                            alignSelf: 'center',
+                                                            marginTop: HeightRatio(7),
+                                                        }}
+                                                        allowFontScaling={false}
+                                                    >
+                                                        {key.letter}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        ))}
                                     </View>
 
 
@@ -1349,7 +1313,7 @@ export const GameScreen = ({ navigation }) => {
                                 {/* - - - - - - - - - - - - - -  */}
                                 <TouchableOpacity
                                     onPress={() => { Generate(); start(); }}
-                                    style={{ }}
+                                    style={{}}
                                 >
                                     <Image
                                         source={require('../../assets/new_game.png')}
@@ -1361,7 +1325,7 @@ export const GameScreen = ({ navigation }) => {
                                             marginTop: HeightRatio(100),
                                         }}
                                     />
-                                    <View style={{height: HeightRatio(200)}} />
+                                    <View style={{ height: HeightRatio(200) }} />
                                 </TouchableOpacity>
                             </View>
                         }
@@ -1430,12 +1394,12 @@ export const GameScreen = ({ navigation }) => {
                                                     source={require('../../assets/hint_top_to_bottom.png')}
                                                 />
                                             </TouchableOpacity>
-                                            
 
-                                            
+
+
                                             <View style={{ alignSelf: 'center' }}>
                                                 {definition3 != '' || definition4 != '' || definition5 != '' ?
-                                                    <View style={{marginTop: HeightRatio(10)}}>
+                                                    <View style={{ marginTop: HeightRatio(10) }}>
                                                         <Text style={Styling.modalContentHeader}>
                                                             Definitions
                                                         </Text>
@@ -1559,7 +1523,7 @@ export const GameScreen = ({ navigation }) => {
                                             </TouchableOpacity>
                                             <View style={{ width: WidthRatio(280), alignSelf: 'center' }}>
                                                 {definition0 != '' || definition1 != '' || definition2 != '' ?
-                                                    <View style={{marginTop: HeightRatio(10)}}>
+                                                    <View style={{ marginTop: HeightRatio(10) }}>
                                                         <Text style={Styling.modalContentHeader}>
                                                             Definitions
                                                         </Text>

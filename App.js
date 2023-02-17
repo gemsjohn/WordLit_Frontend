@@ -112,7 +112,8 @@ export default function App() {
               component={GameScreen}
               options={{
                 animationEnabled: false,
-                headerShown: false
+                headerShown: false,
+                orientation: 'portrait_up'
               }}
             />
             <Stack.Screen
@@ -120,7 +121,8 @@ export default function App() {
               component={ProfileScreen}
               options={{
                 animationEnabled: false,
-                headerShown: false
+                headerShown: false,
+                orientation: 'portrait_up'
               }}
             />
             <Stack.Screen
@@ -128,7 +130,8 @@ export default function App() {
               component={LeaderScreen}
               options={{
                 animationEnabled: false,
-                headerShown: false
+                headerShown: false,
+                orientation: 'portrait_up'
               }}
             />
 

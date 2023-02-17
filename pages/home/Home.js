@@ -423,19 +423,19 @@ export const HomeScreen = ({ navigation }) => {
                       Score points are based on time and guesses.
                     </Text>
                     <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                      +100 points if you guess both words within 12 guesses and under 30 seconds.
+                      +100 points if you guess both words within 12 guesses and under 20 seconds.
                     </Text>
                     <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                      +80 points if you guess both words within 12 guesses and under 60 seconds.
+                      +80 points if you guess both words within 12 guesses and under 40 seconds.
                     </Text>
                     <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                      +40 points if you guess both words within 12 guesses and under 90 seconds.
+                      +40 points if you guess both words within 12 guesses and under 60 seconds.
                     </Text>
                     <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                      +20 points if you guess both words within 12 guesses and under 120 seconds.
+                      +20 points if you guess both words within 12 guesses and under 80 seconds.
                     </Text>
                     <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                      +10 points if you guess both words within 12 guesses and under 150 seconds.
+                      +10 points if you guess both words within 12 guesses and under 100 seconds.
                     </Text>
                     <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
                       +5 points if you guess both words within 12 guesses.
