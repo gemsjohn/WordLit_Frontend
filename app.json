@@ -26,7 +26,7 @@
       "permissions": ["com.google.android.gms.permission.AD_ID"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/block_logo.png",
-        "backgroundColor": "#654785"
+        "backgroundColor": "#ff0076"
       }
     },
     "web": {

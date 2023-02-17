@@ -1040,13 +1040,10 @@ export const GameScreen = ({ navigation }) => {
                                     accessible={true}
                                     accessibilityLabel="Top down hint."
                                 >
-                                    <View
-
-                                    >
-                                        {/* <Text style={{ color: 'white', fontWeight: 'bold', fontSize: HeightRatio(20) }}>?</Text> */}
+                                    <View>
                                         <Image
                                             style={{ height: HeightRatio(50), width: HeightRatio(50) }}
-                                            source={require('../../assets/qmark.png')}
+                                            source={require('../../assets/Qmark_0.png')}
                                         />
                                     </View>
                                 </TouchableOpacity>
@@ -1067,13 +1064,10 @@ export const GameScreen = ({ navigation }) => {
                                     accessible={true}
                                     accessibilityLabel="Left right hint."
                                 >
-                                    <View
-
-                                    >
-                                        {/* <Text style={{ color: 'white', fontWeight: 'bold', fontSize: HeightRatio(20) }}>?</Text> */}
+                                    <View>
                                         <Image
                                             style={{ height: HeightRatio(50), width: HeightRatio(50) }}
-                                            source={require('../../assets/qmark.png')}
+                                            source={require('../../assets/Qmark.png')}
                                         />
                                     </View>
                                 </TouchableOpacity>
