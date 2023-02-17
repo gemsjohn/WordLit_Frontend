@@ -201,12 +201,12 @@ export const UserDetails = (props) => {
                         <LinearGradient
                             colors={['#0b132b', '#181d21']}
                             style={{
-                                ...Styling.background,
-                                height: HeightRatio(90),
-                                borderRadius: HeightRatio(20),
-                                borderWidth: 2,
-                                borderColor: 'rgba(255, 255, 255, 0.25)',
-                                opacity: 0.5
+                            ...Styling.background,
+                            height: HeightRatio(90),
+                            borderRadius: HeightRatio(8),
+                            borderWidth: 2,
+                            borderColor: '#ff0076',
+                            opacity: 0.9
                             }}
                         />
                         <View style={{ flexDirection: 'column', }}>
@@ -222,7 +222,7 @@ export const UserDetails = (props) => {
 
                             <Text
                                 style={{
-                                    color: '#fcd01f',
+                                    color: '#19d0bf',
                                     // alignSelf: 'center', 
                                     fontSize: HeightRatio(15),
                                     fontWeight: 'bold',
@@ -250,7 +250,7 @@ export const UserDetails = (props) => {
                                         padding: HeightRatio(10),
                                         borderRadius: HeightRatio(10),
                                         flexDirection: 'row',
-                                        backgroundColor: '#35faa9',
+                                        backgroundColor: '#a3ffad',
                                     }}
                                 >
                                     <Text
@@ -279,7 +279,7 @@ export const UserDetails = (props) => {
                                                             <TouchableOpacity onPress={() => copyToClipboard()} style={{}}>
                                                                 <View style={{
                                                                     flexDirection: 'row',
-                                                                    backgroundColor: 'blue',
+                                                                    backgroundColor: '#ff004e',
                                                                     width: WidthRatio(150),
                                                                     borderRadius: HeightRatio(20),
                                                                     padding: HeightRatio(20),
@@ -345,7 +345,7 @@ export const UserDetails = (props) => {
                                                                     setShowEditableFieldDelete(false);
                                                                 }}
                                                                 style={{
-                                                                    backgroundColor: 'rgba(53, 250, 169, 0.25)',
+                                                                    backgroundColor: '#09e049',
                                                                     padding: 10,
                                                                     justifyContent: 'center',
                                                                     margin: HeightRatio(10),
@@ -355,7 +355,7 @@ export const UserDetails = (props) => {
                                                             >
                                                                 <Text
                                                                     style={{
-                                                                        color: 'white',
+                                                                        color: 'black',
                                                                     }}
                                                                     allowFontScaling={false}
                                                                 >SUBMIT &nbsp;</Text>
@@ -440,7 +440,7 @@ export const UserDetails = (props) => {
                                                                 setShowEditableFieldDelete(false);
                                                             }}
                                                             style={{
-                                                                backgroundColor: 'rgba(53, 250, 169, 0.25)',
+                                                                backgroundColor: '#09e049',
                                                                 padding: 10,
                                                                 justifyContent: 'center',
                                                                 margin: HeightRatio(10),
@@ -450,7 +450,7 @@ export const UserDetails = (props) => {
                                                         >
                                                             <Text
                                                                 style={{
-                                                                    color: 'white',
+                                                                    color: 'black',
                                                                 }}
                                                                 allowFontScaling={false}
                                                             >SUBMIT &nbsp;</Text>

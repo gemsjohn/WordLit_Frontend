@@ -267,7 +267,7 @@ export const HomeScreen = ({ navigation }) => {
                     flexDirection: 'row',
                     flexWrap: 'wrap',
                     marginTop: HeightRatio(8),
-                    width: windowWidth * 0.8
+                    width: windowWidth * 0.9
 
                   }}
                 >

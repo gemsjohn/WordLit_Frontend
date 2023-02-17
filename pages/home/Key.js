@@ -91,7 +91,7 @@ export const KeyScreen = ({ navigation }) => {
     return (
         <>
             <LinearGradient
-                colors={['#480085', '#e966f5']}
+                colors={['#261823', '#792555']}
                 style={{ flex: 1 }}
             >
                 {pageLoadComplete ?
@@ -104,15 +104,15 @@ export const KeyScreen = ({ navigation }) => {
                             networkActivityIndicatorVisible={true}
                         />
                         <Image
-                            source={require('../../assets/WL_Logo.png')}
+                            source={require('../../assets/block_logo.png')}
                             style={{
-                                height: HeightRatio(80),
-                                width: HeightRatio(80),
+                                height: HeightRatio(300),
+                                width: HeightRatio(300),
                                 borderRadius: 200,
-                                marginTop: HeightRatio(5),
+                                marginTop: HeightRatio(40),
                                 alignSelf: 'center'
                             }} />
-                        <View style={{ marginTop: HeightRatio(50), alignSelf: 'center' }}>
+                        <View style={{ marginTop: HeightRatio(20), alignSelf: 'center' }}>
                             <View style={{ flexDirection: 'row' }}>
                                 {count > 0 ?
                                     <View style={{
@@ -193,7 +193,7 @@ export const KeyScreen = ({ navigation }) => {
 
 
                         </View>
-                        <View style={{ marginTop: HeightRatio(50) }}>
+                        <View style={{ marginTop: HeightRatio(20) }}>
                             <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                                 <TouchableOpacity style={{ backgroundColor: 'rgba(0, 0, 0, 0.25)', height: HeightRatio(60), width: HeightRatio(60), borderRadius: HeightRatio(200), margin: HeightRatio(10) }} onPress={() => handleKeyPress('1')}>
                                     <Text

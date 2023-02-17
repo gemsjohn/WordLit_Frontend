@@ -121,6 +121,8 @@ export const GameScreen = ({ navigation }) => {
 
     const [selectedColor, setSelectedColor] = useState(null);
 
+    const [inputInit, setInputInit] = useState([])
+
     const [words, setWords] = useState([])
     const [word1, setWord1] = useState('');
     const [word2, setWord2] = useState('');
@@ -604,7 +606,7 @@ export const GameScreen = ({ navigation }) => {
                                     {i == iVar[0] || i == iVar[1] || i == iVar[2] || i == iVar[3] || i == iVar[4] || i == iVar[5] || i == iVar[6] || i == iVar[7] || i == iVar[8] || i == iVar[9] || i == iVar[10] || i == iVar[11] ?
                                         <LinearGradient
                                             // Button Linear Gradient
-                                            colors={['#aacc00', '#80b918']}
+                                            colors={['#19d0bf', '#19d0bf']}
                                             style={Styling.gridBlock}
                                         >
                                             <TouchableOpacity
@@ -619,7 +621,7 @@ export const GameScreen = ({ navigation }) => {
                                             <LinearGradient
                                                 // Button Linear Gradient
                                                 // colors={['#ffba08', '#faa307']}
-                                                colors={['rgba(255, 186, 8, 0.75)', 'rgba(250, 163, 7, 0.75)']}
+                                                colors={['#d9005b', '#ff0076']}
                                                 style={Styling.gridBlock}
                                             >
                                                 <TouchableOpacity
@@ -627,7 +629,7 @@ export const GameScreen = ({ navigation }) => {
                                                     accessible={true} accessibilityLabel="Block."
                                                 >
                                                     {i == (u0 + u1) ?
-                                                        <Text style={Styling.letters} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
+                                                        <Text style={{...Styling.letters, color: 'white'}} allowFontScaling={false}>{tempGridArray_0[i]}</Text>
                                                         :
                                                         null
                                                     }
@@ -658,6 +660,7 @@ export const GameScreen = ({ navigation }) => {
     DisplayWords();
 
     const CheckArray = (guess) => {
+        // setSelectedKey(null);
         if (!guesses.includes(guess)) {
             setGuesses(guesses => [...guesses, guess])
             for (let i = 0; i < tempGridArray_0.length; i++) {
@@ -666,12 +669,16 @@ export const GameScreen = ({ navigation }) => {
                 }
             }
         }
+
+        
     }
 
     const PreviousGuess = () => {
         for (let i = 0; i < guesses.length; i++) {
             storedGuesses.splice(i, 1, guesses[i])
         }
+        
+        
 
         for (let i = 0; i < 12; i++) {
             guessBoxes[i] =
@@ -920,7 +927,7 @@ export const GameScreen = ({ navigation }) => {
 
         console.log(wordObject)
 
-        setPhonetic1(wordObject.phonetic)
+        // setPhonetic1(wordObject.phonetic)
 
         const updateDefState = (i, value) => {
             switch (i) {
@@ -945,7 +952,7 @@ export const GameScreen = ({ navigation }) => {
 
         console.log(wordObject)
 
-        setPhonetic2(wordObject.phonetic)
+        // setPhonetic2(wordObject.phonetic)
 
         const updateDefState = (i, value) => {
             switch (i) {
@@ -978,6 +985,14 @@ export const GameScreen = ({ navigation }) => {
 
 
 
+    const [currentGuess, setCurrentGuess] = useState([]);
+    const [selectedKey, setSelectedKey] = useState(null);
+
+    const handleKeyPress = (key) => {
+        setSelectedKey(key);
+        setCurrentGuess([...currentGuess, key]);
+        NewKeyboard(inputInit, currentGuess.concat([key]));
+    };
 
     const ReplaceKeyboard = () => {
         setRevealOptions(false);
@@ -1003,53 +1018,84 @@ export const GameScreen = ({ navigation }) => {
         console.log(scambledCombined)
         console.log("- - - - - - -")
 
-        NewKeyboard(scambledCombined.filter((letter, index) => scambledCombined.indexOf(letter) === index));
+        setInputInit(scambledCombined.filter((letter, index) => scambledCombined.indexOf(letter) === index))
+
+        NewKeyboard(scambledCombined.filter((letter, index) => scambledCombined.indexOf(letter) === index), storedGuesses);
     }
 
 
-    const NewKeyboard = (input) => {
-        let randomKeys = [];
+    // const NewKeyboard = (input, guesses) => {
+    //     let randomKeys = [];
 
-        for (let i = 0; i < input.length; i++) {
+    //     for (let i = 0; i < input.length; i++) {
 
-            randomKeys[i] =
-                <LinearGradient
-                    // Button Linear Gradient
-                    colors={['rgba(0, 0, 0, 0.25)', 'rgba(0, 0, 0, 0.75)']}
-                    style={{
-                        borderRadius: 6,
-                        borderWidth: 1,
-                        borderColor: 'rgba(255, 255, 255, 0.25)',
-                        height: HeightRatio(60),
-                        width: WidthRatio(60),
-                        margin: WidthRatio(4)
-                    }}
-                    key={i}
-                >
-                    {/* <View key={i} style={{}}> */}
-                    <TouchableOpacity
-                        onPress={() => { setPromptGuessInput(input[i]); }}
-                        style={{}} //backgroundColor: 'rgba(0, 0, 0, 0.25)', width: WidthRatio(37), height: HeightRatio(50), borderColor: 'white', borderWidth: 0.5, borderRadius: 6, margin: 0.5
-                        key={`${layer_0}` + i}
-                        accessible={true} accessibilityLabel={`Keyboard letter ${input[i]}.`}
-                    >
-                        <Text
-                            style={{ color: 'white', fontSize: HeightRatio(35), fontWeight: 'bold', alignSelf: 'center' }}
-                            allowFontScaling={false}
-                        >
-                            {input[i].toUpperCase()}
-                        </Text>
-                    </TouchableOpacity>
-                    {/* </View> */}
-                </LinearGradient>
-        }
+    //         randomKeys[i] =
+    //             <View
+    //                 // Button Linear Gradient
+    //                 // colors={['#0b132b', '#181d21']}
+    //                 style={{
+    //                     borderRadius: 6,
+    //                     borderWidth: 2,
+    //                         borderColor: 'black',
+    //                     height: HeightRatio(60),
+    //                     width: WidthRatio(60),
+    //                     margin: WidthRatio(4),
+    //                     opacity: 0.9,
+    //                     backgroundColor: guesses.includes(input[i].toUpperCase()) ? 'black' : '#19d0bf' 
+    //                 }}
+    //                 key={i}
+    //             >
+ 
+    //                 {/* <View key={i} style={{}}> */}
+    //                 <TouchableOpacity
+    //                     onPress={() => { setPromptGuessInput(input[i]); handleKeyPress(input[i].toUpperCase()) }}
+    //                     style={{}} //backgroundColor: 'rgba(0, 0, 0, 0.25)', width: WidthRatio(37), height: HeightRatio(50), borderColor: 'white', borderWidth: 0.5, borderRadius: 6, margin: 0.5
+    //                     key={`${layer_0}` + i}
+    //                     accessible={true} accessibilityLabel={`Keyboard letter ${input[i]}.`}
+    //                 >
+    //                     <Text
+    //                         style={{ 
+    //                             color: 'black', 
+    //                             fontSize: HeightRatio(35), 
+    //                             fontWeight: 'bold', 
+    //                             alignSelf: 'center',
+    //                             marginTop: HeightRatio(7) 
+    //                         }}
+    //                         allowFontScaling={false}
+    //                     >
+    //                         {input[i].toUpperCase()}
+    //                     </Text>
+    //                 </TouchableOpacity>
+    //                 </View>
+    //                 {/* </View> */}
 
-        setLetterOptionDisplay(randomKeys)
+    //     }
 
+    //     setLetterOptionDisplay(randomKeys)
+
+    //     setTimeout(() => {
+    //         setRevealOptions(true);
+    //     }, 1000)
+    // }
+
+    const NewKeyboard = (input, guesses) => {
+        let keys = input.map(letter => {
+          return {
+            letter: letter.toUpperCase(),
+            guessed: guesses.includes(letter.toUpperCase()),
+            color: storedGuesses.includes(letter.toUpperCase()) ? 'black' : '#19d0bf',
+          };
+        });
+      
+        setLetterOptionDisplay(keys);
+      
         setTimeout(() => {
-            setRevealOptions(true);
-        }, 1000)
-    }
+          setRevealOptions(true);
+        }, 1000);
+    };
+
+      
+      
 
     useEffect(() => {
         if (bothWordsSelected) {
@@ -1058,6 +1104,10 @@ export const GameScreen = ({ navigation }) => {
         }
 
     }, [bothWordsSelected])
+
+    useEffect(() => {
+        console.log(storedGuesses)
+    }, [storedGuesses])
 
 
 
@@ -1083,7 +1133,7 @@ export const GameScreen = ({ navigation }) => {
                         // marginTop: WidthRatio(30)
                         alignSelf: 'center',
                         justifyContent: 'center',
-                        marginTop: HeightRatio(60)
+                        marginTop: HeightRatio(40)
                     }}
                 >
                     <View style={{ 
@@ -1104,7 +1154,7 @@ export const GameScreen = ({ navigation }) => {
                                         flexDirection: 'row',
                                         flexWrap: 'wrap',
                                         marginTop: HeightRatio(30),
-                                        width: windowWidth * 0.8,
+                                        width: windowWidth * 0.9,
                                         padding: HeightRatio(10)
                                     }}
                                 >
@@ -1121,7 +1171,7 @@ export const GameScreen = ({ navigation }) => {
                                         alignItems: 'center',
                                         padding: 5,
                                         top: HeightRatio(8) - HeightRatio(8),
-                                        left: ((windowWidth * 0.145) * (u1 + 1)) + (u1 * 2) + ((windowWidth * 0.07) - HeightRatio(22))
+                                        left: ((windowWidth * 0.16) * (u1 + 1)) + (u1 * 2) - HeightRatio(15)
                                     }}
                                     accessible={true}
                                     accessibilityLabel="Top down hint."
@@ -1147,8 +1197,8 @@ export const GameScreen = ({ navigation }) => {
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         padding: 5,
-                                        top: HeightRatio(2) + ((windowWidth * 0.14) * ((u0) / 5)) + ((u0 / 5) * 2) + HeightRatio(48),
-                                        left: WidthRatio(18)
+                                        top: HeightRatio(-10) + ((windowWidth * 0.16) * ((u0) / 5)) + ((u0 / 5) * 2) + windowWidth * 0.16,
+                                        left: WidthRatio(8)
                                     }}
                                     accessible={true}
                                     accessibilityLabel="Left right hint."
@@ -1224,22 +1274,54 @@ export const GameScreen = ({ navigation }) => {
                                     </View>
                                 </View>
                                 {revealOptions ?
-                                    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                    <View
-                                        style={{
-                                            alignSelf: 'center',
-                                            flexDirection: 'row',
-                                            flexWrap: 'wrap',
-                                            alignSelf: 'center',
-                                            justifyContent: 'center',
-                                            marginTop: HeightRatio(20),
-                                            width: WidthRatio(350)
-                                        }}
-                                    >
-                                        {/* <Keyboard /> */}
-                                        {letterOptionDisplay}
+                                    <View style={{ 
+                                        flexDirection: 'row', 
+                                        flexWrap: 'wrap', 
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        marginTop: HeightRatio(10)
+                                    }}>
+                                    {letterOptionDisplay.map((key, index) => (
+                                        <View
+                                            key={index}
+                                            style={{
+                                            borderRadius: 6,
+                                            borderWidth: 2,
+                                            borderColor: 'black',
+                                            height: HeightRatio(60),
+                                            width: WidthRatio(60),
+                                            margin: WidthRatio(4),
+                                            opacity: 0.9,
+                                            backgroundColor: selectedKey === key.letter ? '#a2ffff' : key.color,
+                                            }}
+                                        >
+                                      
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                            setPromptGuessInput(key.letter);
+                                            handleKeyPress(key.letter);
+                                            }}
+                                            style={{}} //backgroundColor: 'rgba(0, 0, 0, 0.25)', width: WidthRatio(37), height: HeightRatio(50), borderColor: 'white', borderWidth: 0.5, borderRadius: 6, margin: 0.5
+                                            accessible={true}
+                                            accessibilityLabel={`Keyboard letter ${key.letter}.`}
+                                        >
+                                            <Text
+                                            style={{
+                                                color: 'black',
+                                                fontSize: HeightRatio(35),
+                                                fontWeight: 'bold',
+                                                alignSelf: 'center',
+                                                marginTop: HeightRatio(7),
+                                            }}
+                                            allowFontScaling={false}
+                                            >
+                                            {key.letter}
+                                            </Text>
+                                        </TouchableOpacity>
+                                        </View>
+                                    ))}
                                     </View>
-                                    </View>
+
 
                                     :
                                     <View style={{ marginTop: HeightRatio(100), alignItems: 'center', justifyContent: 'center' }}>
@@ -1267,42 +1349,19 @@ export const GameScreen = ({ navigation }) => {
                                 {/* - - - - - - - - - - - - - -  */}
                                 <TouchableOpacity
                                     onPress={() => { Generate(); start(); }}
-                                    style={{
-                                        borderWidth: 2,
-                                        borderColor: 'white',
-                                        width: WidthRatio(320),
-                                        height: HeightRatio(600),
-                                        borderRadius: WidthRatio(20),
-                                    }}
+                                    style={{ }}
                                 >
-                                    {/* <LinearGradient
-                                // Button Linear Gradient
-                                colors={['#aacc00', '#80b918']}
-                                style={{ ...Styling.modalWordButton, height: HeightRatio(400) }}
-                            > */}
-                                    <FontAwesomeIcon
-                                        icon={faSolid, faGamepad}
+                                    <Image
+                                        source={require('../../assets/new_game.png')}
                                         style={{
-                                            ...Styling.modalFontAwesomeIcons,
-                                            color: 'white',
-                                            marginTop: WidthRatio(90),
-                                        }}
-                                        size={260}
-                                    />
-                                    <Text
-                                        style={{
-                                            color: 'white',
-                                            fontWeight: 'bold',
-                                            fontSize: WidthRatio(60),
+                                            height: HeightRatio(300),
+                                            width: HeightRatio(300),
                                             alignSelf: 'center',
-                                            // justifyContent: 'center',
-                                            // margin: 4
+                                            justifyContent: 'center',
+                                            marginTop: HeightRatio(100),
                                         }}
-                                        allowFontScaling={false}
-                                    >
-                                        New Game
-                                    </Text>
-                                    {/* </LinearGradient> */}
+                                    />
+                                    <View style={{height: HeightRatio(200)}} />
                                 </TouchableOpacity>
                             </View>
                         }
@@ -1322,10 +1381,8 @@ export const GameScreen = ({ navigation }) => {
                         >
                             {/* [[[TOP ROW]]] */}
                             <LinearGradient
-                                // Button Linear Gradient
-                                colors={['#002855', '#001219']}
-                                // style={Styling.modalWordButton}
-                                style={{ ...Styling.modalView, alignSelf: 'center' }}
+                                colors={['#261823', '#792555']}
+                                style={{ ...Styling.modalView, alignSelf: 'center', borderWidth: 4 }}
                             >
                                 <View
                                     style={{
@@ -1361,40 +1418,41 @@ export const GameScreen = ({ navigation }) => {
                                 <SafeAreaView style={{}}>
                                     <ScrollView style={Styling.gameScrollView}>
                                         <View
-                                            style={{ flexDirection: 'column', marginTop: 10, marginBottom: 10 }}
+                                            style={{ flexDirection: 'column', marginTop: HeightRatio(10), marginBottom: 10 }}
                                         >
-                                            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: HeightRatio(20), marginBottom: HeightRatio(20), marginLeft: WidthRatio(20) }}>
-                                                <Text
-                                                    style={{ color: 'white', fontSize: HeightRatio(40), fontWeight: 'bold', width: WidthRatio(280) }}
-                                                    allowFontScaling={false}>
-                                                    Warning:
-                                                </Text>
-                                                <Text
-                                                    style={{ color: 'white', fontSize: HeightRatio(30), width: WidthRatio(280), alignSelf: 'center' }}
-                                                >
-                                                    Selecting hint reduces your score by 10 points!
-                                                </Text>
-                                            </View>
-
                                             <TouchableOpacity
                                                 onPress={() => { searchWord2(word2); setDisplayTopBottomHint(true); }}
                                                 // style={Styling.modalWordButton}
                                                 disabled={!displayTopBottomHint ? false : true}
                                             >
                                                 <Image
-                                                    style={{ height: 150, width: 150 }}
-                                                    source={require('../../assets/hint.png')}
+                                                    style={{ height: HeightRatio(150), width: HeightRatio(350) }}
+                                                    source={require('../../assets/hint_top_to_bottom.png')}
                                                 />
                                             </TouchableOpacity>
-                                            <View style={{ width: WidthRatio(280), alignSelf: 'center' }}>
+                                            
+
+                                            
+                                            <View style={{ alignSelf: 'center' }}>
                                                 {definition3 != '' || definition4 != '' || definition5 != '' ?
-                                                    <View>
+                                                    <View style={{marginTop: HeightRatio(10)}}>
                                                         <Text style={Styling.modalContentHeader}>
                                                             Definitions
                                                         </Text>
                                                     </View>
                                                     :
-                                                    null
+                                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: HeightRatio(10), marginBottom: HeightRatio(20), marginLeft: WidthRatio(20) }}>
+                                                        <Text
+                                                            style={{ color: '#ff0076', fontSize: HeightRatio(30), fontWeight: 'bold', width: WidthRatio(280) }}
+                                                            allowFontScaling={false}>
+                                                            Warning:
+                                                        </Text>
+                                                        <Text
+                                                            style={{ color: 'white', fontSize: HeightRatio(25), width: WidthRatio(280), alignSelf: 'center' }}
+                                                        >
+                                                            Selecting hint reduces your score by 10 points!
+                                                        </Text>
+                                                    </View>
                                                 }
                                                 {definition3 != '' ?
                                                     <View
@@ -1450,10 +1508,8 @@ export const GameScreen = ({ navigation }) => {
                         >
                             {/* [[[TOP ROW]]] */}
                             <LinearGradient
-                                // Button Linear Gradient
-                                colors={['#002855', '#001219']}
-                                // style={Styling.modalWordButton}
-                                style={{ ...Styling.modalView, alignSelf: 'center' }}
+                                colors={['#261823', '#792555']}
+                                style={{ ...Styling.modalView, alignSelf: 'center', borderWidth: 4 }}
                             >
                                 <View
                                     style={{
@@ -1491,36 +1547,36 @@ export const GameScreen = ({ navigation }) => {
                                         <View
                                             style={{ flexDirection: 'column', marginTop: 10, marginBottom: 10 }}
                                         >
-                                            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: HeightRatio(20), marginBottom: HeightRatio(20), marginLeft: WidthRatio(20) }}>
-                                                <Text
-                                                    style={{ color: 'white', fontSize: HeightRatio(40), fontWeight: 'bold', width: WidthRatio(280) }}
-                                                    allowFontScaling={false}
-                                                >
-                                                    Warning:
-                                                </Text>
-                                                <Text style={{ color: 'white', fontSize: HeightRatio(30), width: WidthRatio(280), alignSelf: 'center' }}>
-                                                    Selecting hint reduces your score by 10 points!
-                                                </Text>
-                                            </View>
                                             <TouchableOpacity
                                                 onPress={() => { searchWord1(word1); setDisplayLeftRightHint(true); }}
                                                 // style={Styling.modalWordButton}
                                                 disabled={!displayLeftRightHint ? false : true}
                                             >
                                                 <Image
-                                                    style={{ height: 150, width: 150 }}
-                                                    source={require('../../assets/hint.png')}
+                                                    style={{ height: HeightRatio(150), width: HeightRatio(350) }}
+                                                    source={require('../../assets/hint_left_to_right.png')}
                                                 />
                                             </TouchableOpacity>
                                             <View style={{ width: WidthRatio(280), alignSelf: 'center' }}>
                                                 {definition0 != '' || definition1 != '' || definition2 != '' ?
-                                                    <View>
+                                                    <View style={{marginTop: HeightRatio(10)}}>
                                                         <Text style={Styling.modalContentHeader}>
                                                             Definitions
                                                         </Text>
                                                     </View>
                                                     :
-                                                    null
+                                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: HeightRatio(10), marginBottom: HeightRatio(20), marginLeft: WidthRatio(20) }}>
+                                                        <Text
+                                                            style={{ color: '#ff0076', fontSize: HeightRatio(30), fontWeight: 'bold', width: WidthRatio(280) }}
+                                                            allowFontScaling={false}>
+                                                            Warning:
+                                                        </Text>
+                                                        <Text
+                                                            style={{ color: 'white', fontSize: HeightRatio(25), width: WidthRatio(280), alignSelf: 'center' }}
+                                                        >
+                                                            Selecting hint reduces your score by 10 points!
+                                                        </Text>
+                                                    </View>
                                                 }
                                                 {definition0 != '' ?
                                                     <View
@@ -1582,10 +1638,8 @@ export const GameScreen = ({ navigation }) => {
                                 <View>
                                     {/* [[[TOP ROW]]] */}
                                     <LinearGradient
-                                        // Button Linear Gradient
-                                        colors={['#002855', '#001219']}
-                                        // style={Styling.modalWordButton}
-                                        style={Styling.modalView}
+                                        colors={['#261823', '#792555']}
+                                        style={{ ...Styling.modalView, alignSelf: 'center', borderWidth: 4 }}
                                     >
                                         <View
                                             style={{
@@ -1659,7 +1713,7 @@ export const GameScreen = ({ navigation }) => {
                                                     <View style={{ marginLeft: 20 }}>
                                                         {displayDetails &&
                                                             <View>
-                                                                {phonetic1 != '' ?
+                                                                {/* {phonetic1 != '' ?
                                                                     <>
                                                                         <Text style={Styling.modalContentHeader}>
                                                                             Phonetic
@@ -1673,7 +1727,7 @@ export const GameScreen = ({ navigation }) => {
                                                                     </>
                                                                     :
                                                                     null
-                                                                }
+                                                                } */}
                                                                 {definition0 != '' || definition1 != '' || definition2 != '' ?
                                                                     <View>
                                                                         <Text style={Styling.modalContentHeader}>

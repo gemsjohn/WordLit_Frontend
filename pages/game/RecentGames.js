@@ -103,7 +103,7 @@ export const RecentGames = (props) => {
                 }}
                 key={i}
             >
-                <LinearGradient
+                {/* <LinearGradient
                     colors={[`${COLORS[index]}`, '#424242']}
                     style={{
                         ...Styling.background,
@@ -115,8 +115,19 @@ export const RecentGames = (props) => {
                         borderColor: `${COLORS[index]}`,
                         opacity: 0.5
                     }}
+                /> */}
+                <LinearGradient
+                    colors={['#0b132b', '#181d21']}
+                    style={{
+                        ...Styling.background,
+                        height: HeightRatio(90),
+                        borderRadius: HeightRatio(8),
+                        borderWidth: 2,
+                        borderColor: '#ff0076',
+                        opacity: 0.9
+                    }}
                 />
-                <View style={{ flexDirection: 'column', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: 100, width: WidthRatio(50), height: WidthRatio(50), marginRight: 10, borderLeftWidth: 2, borderBottomWidth: 2 }}>
+                <View style={{ flexDirection: 'column', backgroundColor: `${COLORS[index]}`, borderRadius: 100, width: WidthRatio(50), height: WidthRatio(50), marginRight: 10, borderLeftWidth: 2, borderBottomWidth: 2 }}>
                     <FontAwesomeIcon
                         icon={faSolid, faFlagCheckered}
                         style={{ color: 'white', alignSelf: 'center', marginRight: 10 }}
@@ -143,7 +154,7 @@ export const RecentGames = (props) => {
                     </View>
                     <View style={{ flexDirection: 'row', marginLeft: 30 }}>
                         <Text
-                            style={{ fontSize: windowWidth * 0.05, fontWeight: 'bold', color: '#aaf683', marginRight: 10 }}
+                            style={{ fontSize: windowWidth * 0.05, fontWeight: 'bold', color: '#19d0bf', marginRight: 10 }}
                             allowFontScaling={false}
                         >Words:</Text>
                         <Text

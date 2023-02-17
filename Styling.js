@@ -108,13 +108,15 @@ export const Styling = StyleSheet.create({
       alignSelf: 'center'
     },
     gridBlock: {
-      height: windowWidth * 0.14,
-      width: windowWidth * 0.14,
-      margin: 2,
+      height: windowWidth * 0.16,
+      width: windowWidth * 0.16,
+      margin: 1,
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      borderRadius: 6
+      // borderRadius: 6,
+      borderWidth: 2,
+      borderRadius: HeightRatio(10)
     },
     modalDivisionLine: {
       borderColor: '#4cc9f0',
@@ -255,7 +257,7 @@ export const Styling = StyleSheet.create({
         fontWeight: 'bold',
     },
     profileDivisionLine: {
-        borderColor: '#4cc9f0',
+        borderColor: 'white',
         borderBottomWidth: 1,
         width: windowWidth - 80,
         alignSelf: 'center',

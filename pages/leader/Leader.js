@@ -85,28 +85,28 @@ export const LeaderScreen = ({ navigation }) => {
       <View>
         <View
           style={{
-            // backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            // backgroundColor: 'rgba(149, 33, 66, 0.50)',
             // height: HeightRatio(100),
             width: WidthRatio(340),
-            height: HeightRatio(50),
+            height: HeightRatio(60),
             alignSelf: 'center',
-            // borderRadius: 50,
+            borderRadius: HeightRatio(8),
             flexDirection: 'row',
-            marginTop: HeightRatio(20)
+            marginTop: HeightRatio(10)
           }}
         >
           <LinearGradient
             colors={['#0b132b', '#181d21']}
             style={{
               ...Styling.background,
-              height: HeightRatio(50),
-              borderRadius: HeightRatio(20),
+              height: HeightRatio(60),
+              borderRadius: HeightRatio(8),
               borderWidth: 2,
-              borderColor: 'rgba(255, 255, 255, 0.25)',
-              opacity: 0.5
+              borderColor: '#ff0076',
+              opacity: 0.9
             }}
           />
-          <View style={{ flexDirection: 'column' }}>
+          {/* <View style={{ flexDirection: 'column' }}>
             <Text
               style={{
                 color: 'white',
@@ -119,55 +119,55 @@ export const LeaderScreen = ({ navigation }) => {
             >
               {pos}
             </Text>
-          </View>
-          <View style={{ flexDirection: 'row', marginLeft: WidthRatio(20), marginTop: HeightRatio(10), }}>
+          </View> */}
+          <View style={{ flexDirection: 'row', marginLeft: WidthRatio(20), marginTop: HeightRatio(15), }}>
             <View style={{ flexDirection: 'column' }}>
               <View style={{ alignSelf: 'flex-start' }}>
                 <Text
                   style={{
-                    fontSize: HeightRatio(20),
+                    fontSize: HeightRatio(25),
                     fontWeight: 'bold',
-                    color: '#efea5a',
-                    width: WidthRatio(100)
+                    color: 'white',
+                    width: WidthRatio(140)
                   }}
                   numberOfLines={1}
                   ellipsizeMode='tail'
                   allowFontScaling={false}
                 >
-                  {username}
+                  {username.toUpperCase()}
                 </Text>
               </View>
             </View>
             <View
               style={{
                 flexDirection: 'column',
-                width: WidthRatio(240),
+                width: WidthRatio(200),
                 
               }}
 
             >
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%' }}>
                 <Text
                   style={{
-                    fontSize: HeightRatio(20),
+                    fontSize: HeightRatio(25), // reduced font size
                     fontWeight: 'bold',
                     color: 'white',
-                    alignSelf: 'flex-end',
-                    marginLeft: 10,
+                    marginRight: HeightRatio(40),
+                    padding: 2, // reduced padding
                   }}
-                  numberOfLines={1}
-                  ellipsizeMode='tail'
+                  numberOfLines={1} // added numberOfLines prop
+                  ellipsizeMode='tail' // added ellipsizeMode prop
                   allowFontScaling={false}
                 >
-                  {score}
-                </Text>
-                <Text
-                  style={{ fontSize: HeightRatio(20), fontWeight: 'bold', color: '#83e377', alignSelf: 'flex-end', marginLeft: 4 }}
-                  allowFontScaling={false}
-                >
-                  points
+                  {score} 
+                  {/* <Text style={{ color: '#83e377' }} allowFontScaling={false}>
+                    {' points'}
+                  </Text> */}
                 </Text>
               </View>
+
+
+
             </View>
           </View>
         </View>
@@ -207,11 +207,11 @@ export const LeaderScreen = ({ navigation }) => {
         <View
           style={{
             alignSelf: 'center',
-
+            flexDirection: 'column'
           }}
         >
 
-          <View style={{ 
+          {/* <View style={{ 
             alignSelf: 'center', 
             flexDirection: 'column', 
             backgroundColor: '(rgba(255, 255, 255, 0.1)', 
@@ -222,8 +222,35 @@ export const LeaderScreen = ({ navigation }) => {
           }}>
             <Text style={{ color: 'white', fontSize: HeightRatio(40), fontWeight: 'bold', alignSelf: 'center' }}>Leaderboard</Text>
             <Text style={{ color: 'white', fontSize: HeightRatio(20), alignSelf: 'center' }}>Last 30 Days</Text>
-          </View>
-          <SafeAreaView style={{...Styling.flatlistContainer}}>
+          </View> */}
+            <Image
+              source={require('../../assets/leaderboard.png')}
+              style={{
+                height: HeightRatio(250),
+                width: HeightRatio(500),
+                alignSelf: 'center',
+                position: 'absolute',
+                top: HeightRatio(-20)
+              }}
+            />
+            {/* <Image
+              source={require('../../assets/leaderboard_1.png')}
+              style={{
+                height: HeightRatio(150),
+                width: HeightRatio(450),
+                alignSelf: 'center',
+                position: 'absolute',
+                top: HeightRatio(10)
+              }}
+            /> */}
+          <SafeAreaView 
+            style={{
+              ...Styling.flatlistContainer, 
+              position: 'absolute', 
+              top: HeightRatio(150),
+              left: HeightRatio(-185),
+              // backgroundColor: 'red'
+            }}>
             <FlatList
               data={DATA}
               renderItem={renderItem}

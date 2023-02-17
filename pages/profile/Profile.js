@@ -168,7 +168,16 @@ export const ProfileScreen = ({ navigation }) => {
                 }
                 {!loading ?
                     <View>
-
+                        <Image
+                        source={require('../../assets/profile.png')}
+                        style={{
+                            height: HeightRatio(250),
+                            width: HeightRatio(500),
+                            alignSelf: 'center',
+                            position: 'absolute',
+                            top: HeightRatio(-20)
+                        }}
+                        />
 
                         <SafeAreaView style={Styling.profileContainer}>
                             <ScrollView
@@ -177,7 +186,7 @@ export const ProfileScreen = ({ navigation }) => {
                                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                                 }
                             >
-                                <View style={{}}>
+                                <View style={{ marginTop: HeightRatio(100) }}>
                                     {/* Buttons */}
                                     {mainState.current.authState &&
                                         <>
@@ -191,9 +200,20 @@ export const ProfileScreen = ({ navigation }) => {
                                                         setLeaderBoardsOpen(false)
                                                         setPremiumOpen(false)
                                                     }}
+                                                    style={{
+                                                        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                                                        padding: HeightRatio(20),
+                                                        borderRadius: HeightRatio(20),
+                                                        borderWidth: 2, 
+                                                        borderColor: 'white',
+                                                        margin: HeightRatio(10) 
+                                                    }}
                                                 >
                                                     <View
-                                                        style={{ flexDirection: 'row', alignSelf: 'center' }}
+                                                        style={{ 
+                                                            flexDirection: 'row', 
+                                                            alignSelf: 'center'
+                                                        }}
                                                     >
                                                         
                                                         <Text style={Styling.modalScoringVarText} allowFontScaling={false}>
@@ -208,7 +228,7 @@ export const ProfileScreen = ({ navigation }) => {
                                                     :
                                                     null
                                                 }
-                                                <View style={Styling.profileDivisionLine}></View>
+                                                {/* <View style={Styling.profileDivisionLine}></View> */}
                                                 {/* [[[RECENT GAMES]]] */}
                                                 <TouchableOpacity
                                                     onPress={() => {
@@ -216,6 +236,14 @@ export const ProfileScreen = ({ navigation }) => {
                                                         setRecentGamesOpen(!recentGamesOpen)
                                                         setLeaderBoardsOpen(false)
                                                         setPremiumOpen(false)
+                                                    }}
+                                                    style={{
+                                                        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                                                        padding: HeightRatio(20),
+                                                        borderRadius: HeightRatio(20),
+                                                        borderWidth: 2, 
+                                                        borderColor: 'white',
+                                                        margin: HeightRatio(10)  
                                                     }}
                                                 >
                                                     <View
@@ -236,7 +264,7 @@ export const ProfileScreen = ({ navigation }) => {
                                                     :
                                                     null
                                                 }
-                                                <View style={Styling.profileDivisionLine}></View>
+                                                <View style={{...Styling.profileDivisionLine, height: HeightRatio(50)}}></View>
 
                                                 <View>
                                                     <TouchableOpacity
@@ -246,24 +274,25 @@ export const ProfileScreen = ({ navigation }) => {
                                                                 setDisplaySetUpCosmicKeyModal(true)
                                                             }, 500)
                                                         }}
-                                                        style={Styling.modalWordButton}>
-                                                        <View style={{
-                                                            backgroundColor: '#f8200d',
-                                                            display: 'flex',
-                                                            justifyContent: 'flex-start',
-                                                            padding: HeightRatio(10),
-                                                            borderRadius: HeightRatio(80),
-                                                            alignSelf: 'center',
-                                                            margin: HeightRatio(10),
-                                                            width: WidthRatio(300)
-                                                        }}>
-                                                            <Text
-                                                                style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center' }}
-                                                                allowFontScaling={false}
-                                                            >
-                                                                Remove/Reset Keycode
-                                                            </Text>
-                                                        </View>
+                                                        style={{
+                                                            backgroundColor: 'rgba(255, 0, 0, 0.5)',
+                                                            padding: HeightRatio(20),
+                                                            borderRadius: HeightRatio(20),
+                                                            borderWidth: 2, 
+                                                            borderColor: 'white',
+                                                            margin: HeightRatio(10) 
+                                                        }}
+                                                    >
+                                                        <View
+                                                        style={{ flexDirection: 'row', alignSelf: 'center' }}
+                                                    >
+                                                       
+                                                        <Text 
+                                                            style={{...Styling.modalScoringVarText, fontSize: HeightRatio(25)}} 
+                                                            allowFontScaling={false}>
+                                                            Remove/Reset Keycode
+                                                        </Text>
+                                                    </View>
                                                     </TouchableOpacity>
                                                 </View>
 
@@ -279,23 +308,25 @@ export const ProfileScreen = ({ navigation }) => {
                                                         })
                                                         navigation.dispatch(resetActionAuth)
                                                     }}
-                                                    style={{ 
-                                                        backgroundColor: '#2c1097',
-                                                        display: 'flex',
-                                                        justifyContent: 'flex-start',
-                                                        padding: HeightRatio(10),
-                                                        borderRadius: HeightRatio(80),
-                                                        alignSelf: 'center',
-                                                        margin: HeightRatio(5),
-                                                        width: WidthRatio(300)
+                                                    style={{
+                                                        backgroundColor: 'rgba(96, 106, 184, 0.5)',
+                                                        padding: HeightRatio(20),
+                                                        borderRadius: HeightRatio(20),
+                                                        borderWidth: 2, 
+                                                        borderColor: 'white',
+                                                        margin: HeightRatio(10) 
                                                     }}
                                                 >
-                                                    <Text
-                                                        style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center' }}
-                                                        allowFontScaling={false}
-                                                    >
+                                                    <View
+                                                    style={{ flexDirection: 'row', alignSelf: 'center' }}
+                                                >
+                                                   
+                                                    <Text 
+                                                        style={{...Styling.modalScoringVarText, fontSize: HeightRatio(25)}} 
+                                                        allowFontScaling={false}>
                                                         Logout
                                                     </Text>
+                                                </View>
                                                 </TouchableOpacity>
                                             </View>
                                             <View style={{ marginBottom: 200 }}></View>
