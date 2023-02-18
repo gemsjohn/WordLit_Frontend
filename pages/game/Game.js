@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import * as SecureStore from 'expo-secure-store';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -45,7 +45,6 @@ import {
     faGamepad,
     faSquareMinus
 } from '@fortawesome/free-solid-svg-icons'
-import { useRef } from 'react/cjs/react.development';
 
 export const GameScreen = ({ navigation }) => {
     const { mainState, setMainState } = useContext(MainStateContext);
@@ -69,9 +68,6 @@ export const GameScreen = ({ navigation }) => {
     let u0;
     let u1;
 
-    // const [userID, setUserID] = useState('');
-    // const [authState, setAuthState] = useState(false);
-
     const authState = useRef(false);
     const userID = useRef(null);
 
@@ -82,9 +78,10 @@ export const GameScreen = ({ navigation }) => {
     const [addGame] = useMutation(ADD_GAME);
 
     const [selectedColor, setSelectedColor] = useState(null);
+    const [currentGuess, setCurrentGuess] = useState([]);
+    const [selectedKey, setSelectedKey] = useState(null);
 
     const [inputInit, setInputInit] = useState([])
-
     const [words, setWords] = useState([])
     const [word1, setWord1] = useState('');
     const [word2, setWord2] = useState('');
@@ -157,15 +154,12 @@ export const GameScreen = ({ navigation }) => {
             authState.current = mainState.current.authState
             userID.current = mainState.current.userID;
             getValueFor('cosmicKey')
-            setTimeout(() => {
-                // console.log(userByID)
-            }, 500)
         }, 500)
 
     }, [])
 
     const handleAddGame = async (w1, w2, t, s) => {
-        if (authState.current == true && userID.current != null ) {
+        if (authState.current == true && userID.current != null) {
             console.log("AUTH TRUE")
             try {
                 const { data } = await addGame({
@@ -257,14 +251,8 @@ export const GameScreen = ({ navigation }) => {
     }
 
     useEffect(() => {
-        // console.log(letter)
         setPromptGuessInput(letter)
     }, [count && letter])
-
-
-    // useEffect(() => {
-    //     setPromptGuessInput(promptGuessInput)
-    // }, [promptGuessInput])
 
 
     const ResetAllVariables = () => {
@@ -291,7 +279,6 @@ export const GameScreen = ({ navigation }) => {
         ResetAllVariables();
         // Load the JSON file containing the words
         const data = require('../../output.json');
-        // console.log(data.length)
 
         // Create an empty array to hold the chosen words
         const chosenWords = [];
@@ -509,8 +496,9 @@ export const GameScreen = ({ navigation }) => {
     }
     DisplayWords();
 
+    // const oldStoredGuesses = useRef([...storedGuesses]);
+
     const CheckArray = (guess) => {
-        // setSelectedKey(null);
         if (!guesses.includes(guess)) {
             setGuesses(guesses => [...guesses, guess])
             for (let i = 0; i < tempGridArray_0.length; i++) {
@@ -519,16 +507,25 @@ export const GameScreen = ({ navigation }) => {
                 }
             }
         }
-        handleKeyPress(null)
+
+        // const contentsChanged = storedGuesses.every((guess, i) => guess === oldStoredGuesses[i]);
+
+        // if (contentsChanged) {
+        //     console.log("The contents of storedGuesses have not changed.");
+        // } else {
+        //     console.log("The contents of storedGuesses have changed.");
+        // }
+
 
     }
 
+
+
     const PreviousGuess = () => {
+        // oldStoredGuesses.current = [...storedGuesses];
         for (let i = 0; i < guesses.length; i++) {
             storedGuesses.splice(i, 1, guesses[i])
         }
-
-
 
         for (let i = 0; i < 12; i++) {
             guessBoxes[i] =
@@ -702,7 +699,6 @@ export const GameScreen = ({ navigation }) => {
         let localTimeTaken;
         let localScore;
         let totalGuesses = storedGuesses.length;
-        let averageTimePerGuess = Math.trunc((endTime - startTime) / 1000 / totalGuesses);
         let correctAnswers = 0;
         let incorrectAnswers = 0;
         for (let i = 0; i < totalGuesses; i++) {
@@ -717,7 +713,6 @@ export const GameScreen = ({ navigation }) => {
 
         localTimeTaken = Math.trunc((endTime - startTime) / 1000);
         setTimeTaken(localTimeTaken);
-
         // Calculate the score as a percentage of correct answers
         let scorePercentage = Math.trunc((correctAnswers / (correctAnswers + (incorrectAnswers * 2))) * 100);
 
@@ -772,12 +767,9 @@ export const GameScreen = ({ navigation }) => {
 
     function searchWord1(word) {
         const data = require('../../output.json');
-        // console.log(word.toLowerCase())
         const wordObject = data.find(obj => obj.word === word.toLowerCase());
 
-        console.log(wordObject)
-
-        // setPhonetic1(wordObject.phonetic)
+        // console.log(wordObject)
 
         const updateDefState = (i, value) => {
             switch (i) {
@@ -797,12 +789,9 @@ export const GameScreen = ({ navigation }) => {
     }
     function searchWord2(word) {
         const data = require('../../output.json');
-        // console.log(word.toLowerCase())
         const wordObject = data.find(obj => obj.word === word.toLowerCase());
 
-        console.log(wordObject)
-
-        // setPhonetic2(wordObject.phonetic)
+        // console.log(wordObject)
 
         const updateDefState = (i, value) => {
             switch (i) {
@@ -835,8 +824,7 @@ export const GameScreen = ({ navigation }) => {
 
 
 
-    const [currentGuess, setCurrentGuess] = useState([]);
-    const [selectedKey, setSelectedKey] = useState(null);
+
 
     const handleKeyPress = (key) => {
         setSelectedKey(key);
@@ -848,24 +836,24 @@ export const GameScreen = ({ navigation }) => {
         setRevealOptions(false);
         const letters_word1 = word1.split('');
         const letters_word2 = word2.split('');
-    
+
         const randomLetters = [];
         let remainingLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
-    
+
         let combined_v0 = letters_word1.concat(letters_word2);
         let combined_v1 = combined_v0.concat(randomLetters);
-    
+
         let uniqueCombined = [...new Set(combined_v1)];
         let scrambledCombined = shuffle(uniqueCombined).map(letter => letter.toUpperCase());
-    
+
         while (scrambledCombined.length < 13) {
             // Determine number of additional letters needed
             const lettersNeeded = 13 - scrambledCombined.length;
-    
+
             // Remove letters that already appear in the words or in the current scrambledCombined
             const usedLetters = [...new Set(letters_word1.concat(letters_word2, scrambledCombined))];
             remainingLetters = remainingLetters.filter(letter => !usedLetters.includes(letter));
-    
+
             // Generate additional letters
             for (let i = 0; i < lettersNeeded; i++) {
                 const letterCode = Math.floor(Math.random() * remainingLetters.length);
@@ -873,35 +861,35 @@ export const GameScreen = ({ navigation }) => {
                 remainingLetters.splice(letterCode, 1); // Remove selected letter from remaining letters
                 randomLetters.push(letter.toLowerCase());
             }
-    
+
             combined_v0 = letters_word1.concat(letters_word2);
             combined_v1 = combined_v0.concat(randomLetters);
-    
+
             uniqueCombined = [...new Set(combined_v1)];
             scrambledCombined = shuffle(uniqueCombined).map(letter => letter.toUpperCase());
         }
-    
+
         console.log("- - - - - - -")
         console.log("Combined and scrambled: ")
         console.log(scrambledCombined)
         console.log("- - - - - - -")
-    
+
         setInputInit(scrambledCombined.filter((letter, index) => scrambledCombined.indexOf(letter) === index))
-    
+
         NewKeyboard(scrambledCombined.filter((letter, index) => scrambledCombined.indexOf(letter) === index), storedGuesses);
     }
-    
-    
-      
-      
-      
+
+
+
+
+
 
 
     const NewKeyboard = (input, guesses) => {
         let keys = input.map(letter => {
             return {
                 letter: letter.toUpperCase(),
-                guessed: guesses.includes(letter.toUpperCase()),
+                // guessed: guesses.includes(letter.toUpperCase()),
                 color: storedGuesses.includes(letter.toUpperCase()) ? 'black' : '#19d0bf',
             };
         });
@@ -913,67 +901,63 @@ export const GameScreen = ({ navigation }) => {
         }, 1000);
     };
 
-
-
-
     useEffect(() => {
         if (bothWordsSelected) {
             ReplaceKeyboard()
-
         }
-
     }, [bothWordsSelected])
+
 
     const getSelectedColor = async () => {
         try {
-          const jsonValue = await AsyncStorage.getItem('selectedColor')
-          if (jsonValue != null) {
-            let color = JSON.parse(jsonValue)
-            setSelectedColor(color)
-          }
+            const jsonValue = await AsyncStorage.getItem('selectedColor')
+            if (jsonValue != null) {
+                let color = JSON.parse(jsonValue)
+                setSelectedColor(color)
+            }
         } catch (e) {
-          console.error(e)
+            console.error(e)
         }
-      }
-    
-      const DisplayGradient = (props) => {
+    }
+
+    const DisplayGradient = (props) => {
         return (
-          <>
-            <Image source={props.image} style={{ ...Styling.background, opacity: 0.4 }} />
-            <LinearGradient
-              colors={props.gradient}
-              style={{ ...Styling.background, opacity: 0.5 }}
-            />
-          </>
+            <>
+                <Image source={props.image} style={{ ...Styling.background, opacity: 0.4 }} />
+                <LinearGradient
+                    colors={props.gradient}
+                    style={{ ...Styling.background, opacity: 0.5 }}
+                />
+            </>
         )
     }
 
     useEffect(() => {
         getSelectedColor();
-      }, [selectedColor])
+    }, [selectedColor])
 
     return (
         <>
-            <View style={{ 
-                ...Styling.container, 
-                backgroundColor: 'black' 
+            <View style={{
+                ...Styling.container,
+                backgroundColor: 'black'
             }}>
-                <Navbar 
-                    nav={navigation} 
-                    auth={authState} 
-                    position={'relative'} 
-                    from={'game'} 
+                <Navbar
+                    nav={navigation}
+                    auth={authState}
+                    position={'relative'}
+                    from={'game'}
                 />
                 {selectedColor && selectedColor.gradient && selectedColor.image ?
-                    <DisplayGradient 
-                        gradient={selectedColor.gradient} 
-                        image={selectedColor.image} 
+                    <DisplayGradient
+                        gradient={selectedColor.gradient}
+                        image={selectedColor.image}
                     />
                     :
                     <>
-                        <Image 
-                            source={require('../../assets/dalle_7.png')} 
-                            style={{ ...Styling.background, opacity: 0.4 }} 
+                        <Image
+                            source={require('../../assets/dalle_7.png')}
+                            style={{ ...Styling.background, opacity: 0.4 }}
                         />
                         <LinearGradient
                             colors={['#0b132b', '#3a506b']}
@@ -998,176 +982,178 @@ export const GameScreen = ({ navigation }) => {
                         {/* - - - - - - - - - - - - - -  */}
                         {displayGrid ?
                             <>
-                            {revealOptions ?
-                            <>
-                                <View
-                                    style={{
-                                        alignSelf: 'center',
-                                        justifyContent: 'center',
-                                        flexDirection: 'row',
-                                        flexWrap: 'wrap',
-                                        marginTop: 30,
-                                        width: 400,
-                                        padding: 10
-                                    }}
-                                >
-                                    {buttonArray}
-                                </View>
-                                <TouchableOpacity
-                                    onPress={() => { setHintTopBottomModal(true) }}
-                                    style={{
-                                        position: 'absolute',
-                                        borderRadius: 100,
-                                        height: 40,
-                                        width: 40,
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        padding: 5,
-                                        top: 0,
-                                        left: ((75) * (u1 + 1)) + (u1 * 2) - 15
-                                    }}
-                                    accessible={true}
-                                    accessibilityLabel="Top down hint."
-                                >
-                                    <View>
-                                        <Image
-                                            style={{ height: 50, width: 50 }}
-                                            source={require('../../assets/Qmark_0.png')}
-                                        />
-                                    </View>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    onPress={() => { console.log("Q? L -> R"); setHintLeftRightModal(true) }}
-                                    style={{
-                                        position: 'absolute',
-                                        borderRadius: 100,
-                                        height: 40,
-                                        width: 40,
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        padding: 5,
-                                        top: ((75) * ((u0) / 5)) + ((u0 / 5) * 2) + 60,
-                                        left: 8
-                                    }}
-                                    accessible={true}
-                                    accessibilityLabel="Left right hint."
-                                >
-                                    <View>
-                                        <Image
-                                            style={{ height: 50, width: 50 }}
-                                            source={require('../../assets/Qmark.png')}
-                                        />
-                                    </View>
-                                </TouchableOpacity>
-                                {/* - - - - - - - - - - - - - -  */}
-                                {/* Guess Area */}
-                                {/* - - - - - - - - - - - - - -  */}
-                                <View
-                                    style={{
-                                        // flexDirection: 'row',
-                                        // alignSelf: 'center',
-                                        flexDirection: 'row',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        marginTop: 8,
-                                        width: 400,
-                                        alignSelf: 'center',
-                                        // backgroundColor: 'red'
-                                    }}
-                                >
-                                    {/* - - - - - - - - - - - - - -  */}
-                                    {/* Guess Box */}
-                                    {/* - - - - - - - - - - - - - -  */}
-                                    <View style={{ flexDirection: 'column' }}>
-
-                                        <TouchableOpacity
-                                            disabled={promptGuessInput == '' ? true : false}
-                                            onPress={() => { CheckArray(promptGuessInput); setPromptGuessInput([]); setCount(0) }}
+                                {revealOptions ?
+                                    <>
+                                        <View
+                                            style={{
+                                                alignSelf: 'center',
+                                                justifyContent: 'center',
+                                                flexDirection: 'row',
+                                                flexWrap: 'wrap',
+                                                marginTop: 30,
+                                                width: 400,
+                                                padding: 10
+                                            }}
                                         >
-                                            <Image
-                                                style={{ height: 25, width: 80, position: 'absolute', zIndex: 10, top: -12, left: -8 }}
-                                                source={require('../../assets/click.png')}
-                                            />
-                                            <View
-                                                style={{
-                                                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                                                    ...Styling.guessBlock
-                                                }}
-                                            >
-                                                <Text
-                                                    style={{ color: 'white', alignSelf: 'center', fontSize: 45, fontWeight: 'bold' }}
-                                                    allowFontScaling={false}
-                                                >
-                                                    {promptGuessInput}
-                                                </Text>
+                                            {buttonArray}
+                                        </View>
+                                        <TouchableOpacity
+                                            onPress={() => { setHintTopBottomModal(true) }}
+                                            style={{
+                                                position: 'absolute',
+                                                borderRadius: 100,
+                                                height: 40,
+                                                width: 40,
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                padding: 5,
+                                                top: 0,
+                                                left: ((75) * (u1 + 1)) + (u1 * 2) - 15
+                                            }}
+                                            accessible={true}
+                                            accessibilityLabel="Top down hint."
+                                        >
+                                            <View>
+                                                <Image
+                                                    style={{ height: 50, width: 50 }}
+                                                    source={require('../../assets/Qmark_0.png')}
+                                                />
                                             </View>
                                         </TouchableOpacity>
-                                        {/* <View style={{alignSelf: 'center'}}>
-                                    <Text style={{color: 'white', fontSize: HeightRatio(18), fontWeight: 'bold'}}>Enter</Text>
-                                </View> */}
-                                    </View>
-                                    {/* - - - - - - - - - - - - - -  */}
-                                    {/* Previous Guesses */}
-                                    {/* - - - - - - - - - - - - - -  */}
-                                    <View
-                                        style={{
-                                            width: 266,
-                                            marginLeft: 7,
-                                            marginRight: 7,
-                                        }}
-                                    >
-                                        <PreviousGuess />
-                                    </View>
-                                </View>
-                                
-                                    <View style={{
-                                        flexDirection: 'row',
-                                        flexWrap: 'wrap',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        marginTop: 10
-                                    }}>
-                                        {letterOptionDisplay.map((key, index) => (
-                                            <View
-                                                key={index}
-                                                style={{
-                                                    borderRadius: 6,
-                                                    borderWidth: 2,
-                                                    borderColor: 'black',
-                                                    height: 60,
-                                                    width: 70,
-                                                    margin: 4,
-                                                    opacity: 0.9,
-                                                    backgroundColor: selectedKey === key.letter ? '#a2ffff' : key.color,
-                                                }}
-                                            >
+
+                                        <TouchableOpacity
+                                            onPress={() => { console.log("Q? L -> R"); setHintLeftRightModal(true) }}
+                                            style={{
+                                                position: 'absolute',
+                                                borderRadius: 100,
+                                                height: 40,
+                                                width: 40,
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                padding: 5,
+                                                top: ((75) * ((u0) / 5)) + ((u0 / 5) * 2) + 60,
+                                                left: 8
+                                            }}
+                                            accessible={true}
+                                            accessibilityLabel="Left right hint."
+                                        >
+                                            <View>
+                                                <Image
+                                                    style={{ height: 50, width: 50 }}
+                                                    source={require('../../assets/Qmark.png')}
+                                                />
+                                            </View>
+                                        </TouchableOpacity>
+                                        {/* - - - - - - - - - - - - - -  */}
+                                        {/* Guess Area */}
+                                        {/* - - - - - - - - - - - - - -  */}
+                                        <View
+                                            style={{
+                                                // flexDirection: 'row',
+                                                // alignSelf: 'center',
+                                                flexDirection: 'row',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                marginTop: 8,
+                                                width: 400,
+                                                alignSelf: 'center',
+                                                // backgroundColor: 'red'
+                                            }}
+                                        >
+                                            {/* - - - - - - - - - - - - - -  */}
+                                            {/* Guess Box */}
+                                            {/* - - - - - - - - - - - - - -  */}
+                                            <View style={{ flexDirection: 'column' }}>
 
                                                 <TouchableOpacity
-                                                    onPress={() => {
-                                                        setPromptGuessInput(key.letter);
-                                                        handleKeyPress(key.letter);
-                                                    }}
-                                                    style={{}} 
-                                                    accessible={true}
-                                                    accessibilityLabel={`Keyboard letter ${key.letter}.`}
+                                                    disabled={promptGuessInput == '' ? true : false}
+                                                    onPress={() => { CheckArray(promptGuessInput); setPromptGuessInput([]); setCount(0) }}
                                                 >
-                                                    <Text
+                                                    <Image
+                                                        style={{ height: 25, width: 80, position: 'absolute', zIndex: 10, top: -12, left: -8 }}
+                                                        source={require('../../assets/click.png')}
+                                                    />
+                                                    <View
                                                         style={{
-                                                            color: 'black',
-                                                            fontSize: 35,
-                                                            fontWeight: 'bold',
-                                                            alignSelf: 'center',
-                                                            marginTop: 7,
+                                                            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                                                            ...Styling.guessBlock
                                                         }}
-                                                        allowFontScaling={false}
                                                     >
-                                                        {key.letter}
-                                                    </Text>
+                                                        <Text
+                                                            style={{ color: 'white', alignSelf: 'center', fontSize: 45, fontWeight: 'bold' }}
+                                                            allowFontScaling={false}
+                                                        >
+                                                            {promptGuessInput}
+                                                        </Text>
+                                                    </View>
                                                 </TouchableOpacity>
+                                                {/* <View style={{alignSelf: 'center'}}>
+                                    <Text style={{color: 'white', fontSize: HeightRatio(18), fontWeight: 'bold'}}>Enter</Text>
+                                </View> */}
                                             </View>
-                                        ))}
-                                    </View>
+                                            {/* - - - - - - - - - - - - - -  */}
+                                            {/* Previous Guesses */}
+                                            {/* - - - - - - - - - - - - - -  */}
+                                            <View
+                                                style={{
+                                                    width: 266,
+                                                    marginLeft: 7,
+                                                    marginRight: 7,
+                                                }}
+                                            >
+                                                <PreviousGuess />
+                                            </View>
+                                        </View>
+
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            flexWrap: 'wrap',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginTop: 10
+                                        }}>
+                                            {letterOptionDisplay.map((key, index) => (
+                                                <View
+                                                    key={index}
+                                                    style={{
+                                                        borderRadius: 6,
+                                                        borderWidth: 2,
+                                                        borderColor: 'black',
+                                                        height: 60,
+                                                        width: 70,
+                                                        margin: 4,
+                                                        opacity: 0.9,
+                                                        backgroundColor: selectedKey === key.letter ? '#a2ffff' : key.color,
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center'
+                                                    }}
+                                                >
+
+                                                    <TouchableOpacity
+                                                        onPress={() => {
+                                                            setPromptGuessInput(key.letter);
+                                                            handleKeyPress(key.letter);
+                                                        }}
+                                                        style={{}}
+                                                        accessible={true}
+                                                        accessibilityLabel={`Keyboard letter ${key.letter}.`}
+                                                    >
+                                                        <Text
+                                                            style={{
+                                                                color: 'black',
+                                                                fontSize: 35,
+                                                                fontWeight: 'bold',
+                                                                // alignSelf: 'center',
+                                                                // marginTop: 7,
+                                                            }}
+                                                            allowFontScaling={false}
+                                                        >
+                                                            {key.letter}
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            ))}
+                                        </View>
                                     </>
 
 
@@ -1920,4 +1906,3 @@ export const GameScreen = ({ navigation }) => {
     )
 
 }
-

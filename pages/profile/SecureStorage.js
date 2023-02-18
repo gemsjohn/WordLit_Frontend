@@ -1,8 +1,9 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, Button } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import { LinearGradient } from 'expo-linear-gradient';
 import { MainStateContext } from '../../App';
-import { HeightRatio, Styling } from '../../Styling';
+import { Styling, HeightRatio, WidthRatio, windowHeight, windowWidth } from '../../Styling';
 
 async function save(key, value) {
   await SecureStore.setItemAsync(key, value);
@@ -214,43 +215,57 @@ export const SecureStorage = () => {
 
             <View style={{ marginTop: 10, marginBottom: 10 }}>
               <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                    height: HeightRatio(60),
-                    width: HeightRatio(60),
-                    borderRadius: HeightRatio(200),
-                    margin: HeightRatio(10)
-                  }}
-                  onPress={() => handleKeyPress('1')}>
+                <TouchableOpacity style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                  height: HeightRatio(80),
+                  width: HeightRatio(80),
+                  borderRadius: HeightRatio(200),
+                  margin: HeightRatio(10),
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }} onPress={() => handleKeyPress('1')}>
                   <Text
-                    style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', flex: 1, alignSelf: 'center', marginTop: HeightRatio(12) }}
+                    style={{
+                      color: 'white',
+                      fontSize: HeightRatio(30),
+                      fontWeight: 'bold'
+                    }}
                     allowFontScaling={false}
                   >1</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                    height: HeightRatio(60),
-                    width: HeightRatio(60),
-                    borderRadius: HeightRatio(200),
-                    margin: HeightRatio(10)
-                  }}
-                  onPress={() => handleKeyPress('2')}>
+                <TouchableOpacity style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                  height: HeightRatio(80),
+                  width: HeightRatio(80),
+                  borderRadius: HeightRatio(200),
+                  margin: HeightRatio(10),
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }} onPress={() => handleKeyPress('2')}>
                   <Text
-                    style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', flex: 1, alignSelf: 'center', marginTop: HeightRatio(12) }}
+                    style={{
+                      color: 'white',
+                      fontSize: HeightRatio(30),
+                      fontWeight: 'bold'
+                    }}
                     allowFontScaling={false}
                   >2</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{
                   backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                  height: HeightRatio(60),
-                  width: HeightRatio(60),
+                  height: HeightRatio(80),
+                  width: HeightRatio(80),
                   borderRadius: HeightRatio(200),
-                  margin: HeightRatio(10)
+                  margin: HeightRatio(10),
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }} onPress={() => handleKeyPress('3')}>
                   <Text
-                    style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', flex: 1, alignSelf: 'center', marginTop: HeightRatio(12) }}
+                    style={{
+                      color: 'white',
+                      fontSize: HeightRatio(30),
+                      fontWeight: 'bold'
+                    }}
                     allowFontScaling={false}
                   >3</Text>
                 </TouchableOpacity>
@@ -258,37 +273,55 @@ export const SecureStorage = () => {
               <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                 <TouchableOpacity style={{
                   backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                  height: HeightRatio(60),
-                  width: HeightRatio(60),
+                  height: HeightRatio(80),
+                  width: HeightRatio(80),
                   borderRadius: HeightRatio(200),
-                  margin: HeightRatio(10)
+                  margin: HeightRatio(10),
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }} onPress={() => handleKeyPress('4')}>
                   <Text
-                    style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', flex: 1, alignSelf: 'center', marginTop: HeightRatio(12) }}
+                    style={{
+                      color: 'white',
+                      fontSize: HeightRatio(30),
+                      fontWeight: 'bold'
+                    }}
                     allowFontScaling={false}
                   >4</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{
                   backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                  height: HeightRatio(60),
-                  width: HeightRatio(60),
+                  height: HeightRatio(80),
+                  width: HeightRatio(80),
                   borderRadius: HeightRatio(200),
-                  margin: HeightRatio(10)
+                  margin: HeightRatio(10),
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }} onPress={() => handleKeyPress('5')}>
                   <Text
-                    style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', flex: 1, alignSelf: 'center', marginTop: HeightRatio(12) }}
+                    style={{
+                      color: 'white',
+                      fontSize: HeightRatio(30),
+                      fontWeight: 'bold'
+                    }}
                     allowFontScaling={false}
                   >5</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{
                   backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                  height: HeightRatio(60),
-                  width: HeightRatio(60),
+                  height: HeightRatio(80),
+                  width: HeightRatio(80),
                   borderRadius: HeightRatio(200),
-                  margin: HeightRatio(10)
+                  margin: HeightRatio(10),
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }} onPress={() => handleKeyPress('6')}>
                   <Text
-                    style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', flex: 1, alignSelf: 'center', marginTop: HeightRatio(12) }}
+                    style={{
+                      color: 'white',
+                      fontSize: HeightRatio(30),
+                      fontWeight: 'bold'
+                    }}
                     allowFontScaling={false}
                   >6</Text>
                 </TouchableOpacity>
@@ -296,110 +329,156 @@ export const SecureStorage = () => {
               <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                 <TouchableOpacity style={{
                   backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                  height: HeightRatio(60),
-                  width: HeightRatio(60),
+                  height: HeightRatio(80),
+                  width: HeightRatio(80),
                   borderRadius: HeightRatio(200),
-                  margin: HeightRatio(10)
+                  margin: HeightRatio(10),
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }} onPress={() => handleKeyPress('7')}>
                   <Text
-                    style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', flex: 1, alignSelf: 'center', marginTop: HeightRatio(12) }}
+                    style={{
+                      color: 'white',
+                      fontSize: HeightRatio(30),
+                      fontWeight: 'bold'
+                    }}
                     allowFontScaling={false}
                   >7</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{
                   backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                  height: HeightRatio(60),
-                  width: HeightRatio(60),
+                  height: HeightRatio(80),
+                  width: HeightRatio(80),
                   borderRadius: HeightRatio(200),
-                  margin: HeightRatio(10)
+                  margin: HeightRatio(10),
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }} onPress={() => handleKeyPress('8')}>
                   <Text
-                    style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', flex: 1, alignSelf: 'center', marginTop: HeightRatio(12) }}
+                    style={{
+                      color: 'white',
+                      fontSize: HeightRatio(30),
+                      fontWeight: 'bold'
+                    }}
                     allowFontScaling={false}
                   >8</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{
                   backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                  height: HeightRatio(60),
-                  width: HeightRatio(60),
+                  height: HeightRatio(80),
+                  width: HeightRatio(80),
                   borderRadius: HeightRatio(200),
-                  margin: HeightRatio(10)
+                  margin: HeightRatio(10),
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }} onPress={() => handleKeyPress('9')}>
                   <Text
-                    style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', flex: 1, alignSelf: 'center', marginTop: HeightRatio(12) }}
+                    style={{
+                      color: 'white',
+                      fontSize: HeightRatio(30),
+                      fontWeight: 'bold'
+                    }}
                     allowFontScaling={false}
                   >9</Text>
                 </TouchableOpacity>
               </View>
               <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                 <TouchableOpacity
-                  style={{
-                    backgroundColor: 'red',
-                  height: HeightRatio(60),
-                  width: HeightRatio(60),
+                  onPress={() => clearKeyCode()}>
+                  <View style={{
+                    height: HeightRatio(80),
+                    width: HeightRatio(80),
+                    borderRadius: HeightRatio(200),
+                    margin: HeightRatio(10),
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <LinearGradient
+                      colors={['#0b132b', '#181d21']}
+                      style={{
+                        ...Styling.background,
+                        height: HeightRatio(80),
+                        borderRadius: HeightRatio(80),
+                        borderWidth: 2,
+                        borderColor: '#ff0076',
+                        opacity: 0.9
+                      }}
+                    />
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontSize: HeightRatio(15),
+                        fontWeight: 'bold',
+                        alignSelf: 'center'
+                      }}
+                      allowFontScaling={false}
+                    >
+                      CLEAR
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                  height: HeightRatio(80),
+                  width: HeightRatio(80),
                   borderRadius: HeightRatio(200),
                   margin: HeightRatio(10),
                   alignItems: 'center',
                   justifyContent: 'center'
-                  }}
-                  onPress={() => clearKeyCode()}>
+                }} onPress={() => handleKeyPress('0')}>
                   <Text
                     style={{
                       color: 'white',
-                      fontSize: HeightRatio(16),
-                      fontWeight: 'bold',
-                      alignSelf: 'center'
+                      fontSize: HeightRatio(30),
+                      fontWeight: 'bold'
                     }}
-                    allowFontScaling={false}
-                  >
-                    Clear
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                  height: HeightRatio(60),
-                  width: HeightRatio(60),
-                  borderRadius: HeightRatio(200),
-                  margin: HeightRatio(10)
-                }} onPress={() => handleKeyPress('0')}>
-                  <Text
-                    style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', flex: 1, alignSelf: 'center', marginTop: HeightRatio(12) }}
                     allowFontScaling={false}
                   >0</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                style={{
-                  backgroundColor: 'green',
-                  height: HeightRatio(60),
-                  width: HeightRatio(60),
-                  borderRadius: HeightRatio(200),
-                  margin: HeightRatio(10),
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-                onPress={() => setKeyCode()}
-              >
-                <Text
-                  style={{
-                    color: 'white',
-                    fontSize: HeightRatio(16),
-                    fontWeight: 'bold',
-                    alignSelf: 'center'
-                  }}
-                  allowFontScaling={false}
+                  onPress={() => setKeyCode()}
                 >
-                  Save
-                </Text>
-              </TouchableOpacity>
+                  <View style={{
+                    height: HeightRatio(80),
+                    width: HeightRatio(80),
+                    borderRadius: HeightRatio(200),
+                    margin: HeightRatio(10),
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <LinearGradient
+                      colors={['#0b132b', '#181d21']}
+                      style={{
+                        ...Styling.background,
+                        height: HeightRatio(80),
+                        borderRadius: HeightRatio(80),
+                        borderWidth: 2,
+                        borderColor: '#09e049',
+                        opacity: 0.9
+                      }}
+                    />
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontSize: HeightRatio(15),
+                        fontWeight: 'bold',
+                        alignSelf: 'center'
+                      }}
+                      allowFontScaling={false}
+                    >
+                      SAVE
+                    </Text>
+                  </View>
+                </TouchableOpacity>
 
               </View>
             </View>
           </>
         </View>
         :
-        <View style={{ alignSelf: 'center' }}>
+        <View style={{ marginTop: windowHeight / 3, alignItems: 'center', justifyContent: 'center' }}>
           <Text style={{ fontSize: HeightRatio(50), color: 'white' }}>
-            &nbsp; Saved &nbsp;
+            &nbsp; Keycode Saved &nbsp;
           </Text>
         </View>
       }

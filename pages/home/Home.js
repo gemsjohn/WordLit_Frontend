@@ -229,48 +229,48 @@ export const HomeScreen = ({ navigation }) => {
           }
           <SafeAreaView style={Styling.scrollContainer}>
             <ScrollView style={Styling.scrollView}>
-              <View 
+              <View
                 style={{
                   backgroundColor: 'rgba(0, 0, 0, 0.5)',
                   padding: HeightRatio(20),
                   borderRadius: HeightRatio(20),
-                  borderWidth: 2, 
+                  borderWidth: 2,
                   borderColor: '#ff0076',
                   margin: HeightRatio(10),
-                  marginTop: windowHeight / 24 
+                  marginTop: windowHeight / 24
                 }}
               >
-              {displayUsername ?
-                <>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Image
-                      source={require('../../assets/block_logo.png')}
-                      style={{height: HeightRatio(50), width: HeightRatio(50), alignSelf: 'center'}}
-                    />
-                    <Text style={{
-                      color: 'white',
-                      fontSize: HeightRatio(30),
-                      fontWeight: 'bold',
-                      textAlign: 'center'
-                    }}
-                      allowFontScaling={false}
-                      ellipsizeMode='tail'
-                      numberOfLines={1}>
-                      {userByID?.user.username.toUpperCase()}
-                    </Text>
-                  </View>
-                </>
-                :
-                <>
-                  <View style={{  }}>
-                    <Image
-                      source={require('../../assets/feature_graphic.png')}
-                      style={{height: HeightRatio(75), width: HeightRatio(150)}}
-                    />
-                  </View>
-                </>
+                {displayUsername ?
+                  <>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Image
+                        source={require('../../assets/block_logo.png')}
+                        style={{ height: HeightRatio(50), width: HeightRatio(50), alignSelf: 'center' }}
+                      />
+                      <Text style={{
+                        color: 'white',
+                        fontSize: HeightRatio(30),
+                        fontWeight: 'bold',
+                        textAlign: 'center'
+                      }}
+                        allowFontScaling={false}
+                        ellipsizeMode='tail'
+                        numberOfLines={1}>
+                        {userByID?.user.username.toUpperCase()}
+                      </Text>
+                    </View>
+                  </>
+                  :
+                  <>
+                    <View style={{}}>
+                      <Image
+                        source={require('../../assets/feature_graphic.png')}
+                        style={{ height: HeightRatio(75), width: HeightRatio(150) }}
+                      />
+                    </View>
+                  </>
 
-              }
+                }
               </View>
 
               <View
@@ -285,7 +285,7 @@ export const HomeScreen = ({ navigation }) => {
                   borderBottomLeftRadius: 50,
                   borderWidth: 2,
                   borderColor: '#ff0076',
-                  
+
                 }}
               >
 
@@ -500,104 +500,105 @@ export const HomeScreen = ({ navigation }) => {
               colors={['#261823', '#792555']}
               style={{ flex: 1, borderWidth: 4 }}
             > */}
-              <View
+            <View
+              style={{
+                backgroundColor: 'rgba(255, 0, 0, 1)',
+                alignSelf: 'center',
+                borderRadius: 8,
+                position: 'absolute',
+                zIndex: 10,
+                top: 0,
+                right: 0
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => { setDisplaySignUpModal(!displaySignUpModal); }}
                 style={{
-                  backgroundColor: 'rgba(255, 0, 0, 1)',
-                  alignSelf: 'center',
-                  borderRadius: 8,
-                  position: 'absolute',
-                  zIndex: 10,
-                  top: 0,
-                  right: 0
+                  borderRadius: 10,
+                  height: 50,
+                  width: 50
                 }}
               >
-                <TouchableOpacity
-                  onPress={() => { setDisplaySignUpModal(!displaySignUpModal); }}
+                <FontAwesomeIcon
+                  icon={faSolid, faX}
                   style={{
-                    borderRadius: 10,
-                    height: 50,
-                    width: 50
+                    color: 'white',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    marginTop: 17
                   }}
-                >
-                  <FontAwesomeIcon
-                    icon={faSolid, faX}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={{ flexDirection: 'column' }}>
+              <Text
+                style={{
+                  color: 'white',
+                  fontSize: HeightRatio(30),
+                  fontWeight: 'bold',
+                  alignSelf: 'center',
+                  marginTop: HeightRatio(20)
+                }}
+                allowFontScaling={false}>
+                SIGN UP!
+              </Text>
+              <View style={{ height: 10 }}></View>
+              <Text
+                style={{
+                  color: 'white',
+                  fontSize: HeightRatio(20),
+                  fontWeight: 'bold',
+                  width: windowWidth * 0.9,
+                  alignSelf: 'center'
+                }}
+                allowFontScaling={false}>
+                Enhance your gaming experience and put your skills on display by
+                signing up or logging in and climbing to the top of the leaderboard!
+              </Text>
+              <View style={{ height: 10 }}></View>
+
+              <TouchableOpacity
+                onPress={() => navigation.dispatch(resetActionAuth)}
+                style={{ ...Styling.modalWordButton, marginTop: 10 }}
+              >
+                <View style={{
+                  // backgroundColor: '#09e049',
+                  display: 'flex',
+                  justifyContent: 'flex-start',
+                  padding: HeightRatio(20),
+                  borderRadius: HeightRatio(40),
+                  alignSelf: 'center',
+                  marginTop: HeightRatio(20),
+                  // margin: HeightRatio(10),
+                  width: WidthRatio(300)
+                }}>
+                  <LinearGradient
+                    colors={['#0b132b', '#181d21']}
                     style={{
-                      color: 'white',
-                      justifyContent: 'center',
-                      alignSelf: 'center',
-                      marginTop: 17
+                      ...Styling.background,
+                      height: HeightRatio(60),
+                      borderRadius: HeightRatio(80),
+                      borderWidth: 2,
+                      borderColor: '#ff0076',
+                      opacity: 0.9
                     }}
                   />
-                </TouchableOpacity>
-              </View>
-              <View style={{ flexDirection: 'column' }}>
-                <Text
-                  style={{
-                    color: 'white',
-                    fontSize: HeightRatio(30),
-                    fontWeight: 'bold',
-                    alignSelf: 'center',
-                    marginTop: HeightRatio(20)
-                  }}
-                  allowFontScaling={false}>
-                  SIGN UP!
-                </Text>
-                <View style={{ height: 10 }}></View>
-                <Text
-                  style={{
-                    color: 'white',
-                    fontSize: HeightRatio(20),
-                    fontWeight: 'bold',
-                    width: windowWidth * 0.9,
-                    alignSelf: 'center'
-                  }}
-                  allowFontScaling={false}>
-                  Enhance your gaming experience and put your skills on display by
-                  signing up or logging in and climbing to the top of the leaderboard!
-                </Text>
-                <View style={{ height: 10 }}></View>
-
-                <TouchableOpacity
-                  onPress={() => navigation.dispatch(resetActionAuth)}
-                  style={{ ...Styling.modalWordButton, marginTop: 10 }}
-                >
-                  <View style={{
-                    // backgroundColor: '#09e049',
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    padding: HeightRatio(20),
-                    borderRadius: HeightRatio(40),
-                    alignSelf: 'center',
-                    // margin: HeightRatio(10),
-                    width: windowWidth * 0.9
-                  }}>
-                    <LinearGradient
-                      colors={['#0b132b', '#181d21']}
-                      style={{
-                        ...Styling.background,
-                        height: HeightRatio(60),
-                        borderRadius: HeightRatio(8),
-                        borderWidth: 2,
-                        borderColor: '#ff0076',
-                        opacity: 0.9
-                      }}
-                    />
-                    <Text
-                      style={{
-                        color: 'white',
-                        fontSize: HeightRatio(20),
-                        fontWeight: 'bold',
-                        alignSelf: 'center'
-                      }}
-                      allowFontScaling={false}
-                    >
-                      Sign Up or Login
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontSize: HeightRatio(20),
+                      fontWeight: 'bold',
+                      alignSelf: 'center'
+                    }}
+                    allowFontScaling={false}
+                  >
+                    SIGN UP OR LOGIN
+                  </Text>
+                </View>
+              </TouchableOpacity>
 
 
-              </View>
+            </View>
             {/* </LinearGradient> */}
           </View>
         </View>

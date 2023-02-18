@@ -1,69 +1,24 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import { ApolloProvider, ApolloClient, HttpLink, InMemoryCache, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_USER_BY_ID, LEADERBOARD } from '../../utils/queries';
-import { Alert, StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, StatusBar, SafeAreaView, Dimensions, Button, Linking, ImageBackground, FlatList, PixelRatio, Modal } from 'react-native';
+import { Text, View, Image, StatusBar, SafeAreaView, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Navbar } from '../../components/Navbar';
-import { Styling } from '../../Styling';
+import { Styling, HeightRatio, WidthRatio, windowHeight, windowWidth } from '../../Styling';
 import { MainStateContext } from '../../App';
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
-
-const {
-  width: SCREEN_WIDTH,
-  height: SCREEN_HEIGHT,
-} = Dimensions.get('window');
-
-const scaleWidth = SCREEN_WIDTH / 360;
-const scaleHeight = SCREEN_HEIGHT / 800;
-
-const WidthRatio = (size) => {
-  const newSize = size * scaleWidth;
-  return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
-}
-
-const HeightRatio = (size) => {
-  const newSize = size * scaleHeight;
-  return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
-}
 
 export const LeaderScreen = ({ navigation }) => {
   const { mainState, setMainState } = useContext(MainStateContext);
-  const [userID, setUserID] = useState('');
-  const [authState, setAuthState] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
-
-  const CheckAuthState = async () => {
-    let value = await AsyncStorage.getItem('@authState')
-    if (value === 'true') {
-      setAuthState(true)
-    } else if (value === 'false') {
-      setAuthState(false)
-    }
-  }
-
-  const CurrentUser = async () => {
-    let value = await AsyncStorage.getItem('@userID', value);
-    setUserID(value)
-  }
-
-
   const { data: leaderboard, refetch } = useQuery(LEADERBOARD);
-  // console.log(leaderboard)
-
   const DATA = leaderboard?.leaderBoard;
-  // console.log(DATA)
-
 
   const Item = ({ username, score, pos }) => (
     <>
       <View>
         <View
           style={{
-            // backgroundColor: 'rgba(149, 33, 66, 0.50)',
-            // height: HeightRatio(100),
             width: WidthRatio(340),
             height: HeightRatio(60),
             alignSelf: 'center',
@@ -83,21 +38,12 @@ export const LeaderScreen = ({ navigation }) => {
               opacity: 0.9
             }}
           />
-          {/* <View style={{ flexDirection: 'column' }}>
-            <Text
-              style={{
-                color: 'white',
-                fontSize: HeightRatio(20),
-                fontWeight: 'bold',
-                marginTop: HeightRatio(10),
-                marginLeft: WidthRatio(20)
-              }}
-              allowFontScaling={false}
-            >
-              {pos}
-            </Text>
-          </View> */}
-          <View style={{ flexDirection: 'row', marginLeft: WidthRatio(20), marginTop: HeightRatio(15), }}>
+
+          <View style={{ 
+            flexDirection: 'row', 
+            marginLeft: WidthRatio(20), 
+            marginTop: HeightRatio(15), 
+          }}>
             <View style={{ flexDirection: 'column' }}>
               <View style={{ alignSelf: 'flex-start' }}>
                 <Text
@@ -119,9 +65,7 @@ export const LeaderScreen = ({ navigation }) => {
               style={{
                 flexDirection: 'column',
                 width: WidthRatio(200),
-                
               }}
-
             >
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%' }}>
                 <Text
@@ -137,18 +81,11 @@ export const LeaderScreen = ({ navigation }) => {
                   allowFontScaling={false}
                 >
                   {score} 
-                  {/* <Text style={{ color: '#83e377' }} allowFontScaling={false}>
-                    {' points'}
-                  </Text> */}
                 </Text>
               </View>
-
-
-
             </View>
           </View>
         </View>
-        {/* <View style={Styling.modalDivisionLine}></View> */}
       </View>
       
     </>
@@ -159,8 +96,6 @@ export const LeaderScreen = ({ navigation }) => {
   );
 
   useEffect(() => {
-    CheckAuthState();
-    CurrentUser();
     refetch();
   }, [])
 
@@ -194,13 +129,26 @@ useEffect(() => {
 
   return (
     <>
-      <View style={{ ...Styling.container, backgroundColor: 'black', }}>
-        <Navbar nav={navigation} auth={authState} position={'relative'} from={'leader'} />
+      <View style={{ 
+        ...Styling.container, 
+        backgroundColor: 'black' 
+      }}>
+        <Navbar 
+          nav={navigation} 
+          position={'relative'} 
+          from={'leader'} 
+        />
         {selectedColor && selectedColor.gradient && selectedColor.image ?
-            <DisplayGradient gradient={selectedColor.gradient} image={selectedColor.image} />
+            <DisplayGradient 
+              gradient={selectedColor.gradient} 
+              image={selectedColor.image} 
+            />
             :
           <>
-            <Image source={require('../../assets/dalle_7.png')} style={{ ...Styling.background, opacity: 0.4 }} />
+            <Image 
+              source={require('../../assets/dalle_7.png')} 
+              style={{ ...Styling.background, opacity: 0.4 }} 
+            />
             <LinearGradient
               colors={['#0b132b', '#3a506b']}
               style={{ ...Styling.background, opacity: 0.5 }}
@@ -215,45 +163,19 @@ useEffect(() => {
           }}
         >
 
-          {/* <View style={{ 
-            alignSelf: 'center', 
-            flexDirection: 'column', 
-            backgroundColor: '(rgba(255, 255, 255, 0.1)', 
-            padding: 10, 
-            borderRadius: 50, 
-            width: WidthRatio(340), 
-            marginTop: HeightRatio(30) 
-          }}>
-            <Text style={{ color: 'white', fontSize: HeightRatio(40), fontWeight: 'bold', alignSelf: 'center' }}>Leaderboard</Text>
-            <Text style={{ color: 'white', fontSize: HeightRatio(20), alignSelf: 'center' }}>Last 30 Days</Text>
-          </View> */}
-            <Image
-              source={require('../../assets/leaderboard.png')}
-              style={{
-                height: HeightRatio(200),
-                width: HeightRatio(400),
-                alignSelf: 'center',
-                position: 'absolute',
-                top: HeightRatio(-20)
-              }}
-            />
-            {/* <Image
-              source={require('../../assets/leaderboard_1.png')}
-              style={{
-                height: HeightRatio(150),
-                width: HeightRatio(450),
-                alignSelf: 'center',
-                position: 'absolute',
-                top: HeightRatio(10)
-              }}
-            /> */}
+          <View style={{marginTop: HeightRatio(50)}}>
+            <Text style={{
+              color: 'white', 
+              fontSize: HeightRatio(50), 
+              textAlign: 'center'}}
+            >
+              Leaderboard
+            </Text>
+          </View>
           <SafeAreaView 
             style={{
               ...Styling.flatlistContainer, 
-              position: 'absolute', 
-              top: HeightRatio(150),
-              left: HeightRatio(-185),
-              // backgroundColor: 'red'
+              marginTop: HeightRatio(20)
             }}>
             <FlatList
               data={DATA}

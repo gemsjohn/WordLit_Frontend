@@ -54,7 +54,7 @@ export const UserDetails = (props) => {
         variables: { id: mainState.current.userID }
     });
 
-    console.log(mainState.current.userID)
+    // console.log(mainState.current.userID)
 
     useLayoutEffect(() => {
         refetch()
