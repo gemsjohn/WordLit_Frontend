@@ -79,7 +79,7 @@ export const SecureStorage = () => {
   return (
     <>
       {!displaySetCode ?
-        <View style={{ marginTop: HeightRatio(10), borderRadius: 40, backgroundColor: 'black' }}>
+        <View style={{ marginTop: HeightRatio(10), borderRadius: 40 }}>
           <View style={{ alignSelf: 'center' }}>
             <Text
               style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', textAlign: 'center', width: HeightRatio(200), margin: HeightRatio(10), marginTop: HeightRatio(20) }}
@@ -100,7 +100,7 @@ export const SecureStorage = () => {
                 }}>
                   <Text style={{
                     color: 'black',
-                    fontSize: HeightRatio(15),
+                    fontSize: HeightRatio(30),
                     fontWeight: 'bold',
                     alignSelf: 'center'
                   }}
@@ -128,7 +128,7 @@ export const SecureStorage = () => {
                 }}>
                   <Text style={{
                     color: 'black',
-                    fontSize: HeightRatio(15),
+                    fontSize: HeightRatio(30),
                     fontWeight: 'bold',
                     alignSelf: 'center'
                   }}
@@ -156,7 +156,7 @@ export const SecureStorage = () => {
                 }}>
                   <Text style={{
                     color: 'black',
-                    fontSize: HeightRatio(15),
+                    fontSize: HeightRatio(30),
                     fontWeight: 'bold',
                     alignSelf: 'center'
                   }}
@@ -184,7 +184,7 @@ export const SecureStorage = () => {
                 }}>
                   <Text style={{
                     color: 'black',
-                    fontSize: HeightRatio(15),
+                    fontSize: HeightRatio(30),
                     fontWeight: 'bold',
                     alignSelf: 'center'
                   }}
@@ -335,15 +335,25 @@ export const SecureStorage = () => {
                 <TouchableOpacity
                   style={{
                     backgroundColor: 'red',
-                    height: HeightRatio(60),
-                    width: HeightRatio(60),
-                    borderRadius: HeightRatio(200),
-                    margin: HeightRatio(10)
+                  height: HeightRatio(60),
+                  width: HeightRatio(60),
+                  borderRadius: HeightRatio(200),
+                  margin: HeightRatio(10),
+                  alignItems: 'center',
+                  justifyContent: 'center'
                   }}
                   onPress={() => clearKeyCode()}>
-                  <Text style={{ color: 'white', fontSize: HeightRatio(16), fontWeight: 'bold', flex: 1, alignSelf: 'center', marginTop: HeightRatio(15) }}
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontSize: HeightRatio(16),
+                      fontWeight: 'bold',
+                      alignSelf: 'center'
+                    }}
                     allowFontScaling={false}
-                  >Clear</Text>
+                  >
+                    Clear
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{
                   backgroundColor: 'rgba(255, 255, 255, 0.25)',
@@ -358,18 +368,30 @@ export const SecureStorage = () => {
                   >0</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
+                style={{
+                  backgroundColor: 'green',
+                  height: HeightRatio(60),
+                  width: HeightRatio(60),
+                  borderRadius: HeightRatio(200),
+                  margin: HeightRatio(10),
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                onPress={() => setKeyCode()}
+              >
+                <Text
                   style={{
-                    backgroundColor: 'green',
-                    height: HeightRatio(60),
-                    width: HeightRatio(60),
-                    borderRadius: HeightRatio(200),
-                    margin: HeightRatio(10)
+                    color: 'white',
+                    fontSize: HeightRatio(16),
+                    fontWeight: 'bold',
+                    alignSelf: 'center'
                   }}
-                  onPress={() => setKeyCode()}>
-                  <Text style={{ color: 'white', fontSize: HeightRatio(16), fontWeight: 'bold', flex: 1, alignSelf: 'center', marginTop: HeightRatio(15) }}
-                    allowFontScaling={false}
-                  >Save</Text>
-                </TouchableOpacity>
+                  allowFontScaling={false}
+                >
+                  Save
+                </Text>
+              </TouchableOpacity>
+
               </View>
             </View>
           </>

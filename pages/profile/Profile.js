@@ -14,6 +14,7 @@ import { GET_USER_BY_ID } from '../../utils/queries';
 import { RecentGames } from '../game/RecentGames';
 import { Styling, HeightRatio, WidthRatio } from '../../Styling';
 import { Navbar } from '../../components/Navbar';
+
 import {
     StyleSheet,
     Text,
@@ -56,7 +57,6 @@ async function deleteKey(key) {
 }
 
 export const ProfileScreen = ({ navigation }) => {
-
     // const [userID, setUserID] = useState('');
     // const [authState, setAuthState] = useState(false);
     const [selectedColor, setSelectedColor] = useState(null);
@@ -65,34 +65,6 @@ export const ProfileScreen = ({ navigation }) => {
     const [recentGamesOpen, setRecentGamesOpen] = useState(false);
     const [leaderBoardsOpen, setLeaderBoardsOpen] = useState(false);
     const [premiumOpen, setPremiumOpen] = useState(false);
-
-
-    const getSelectedColor = async () => {
-        try {
-            const jsonValue = await AsyncStorage.getItem('selectedColor')
-            if (jsonValue != null) {
-                let color = JSON.parse(jsonValue)
-                console.log(color)
-                setSelectedColor(color);
-            }
-        } catch (e) {
-            console.error(e)
-        }
-    }
-
-    const DisplayGradient = (props) => {
-        return (
-            <>
-                <Image source={props.image} style={{ ...Styling.background, opacity: 0.4 }} />
-                <LinearGradient
-                    colors={props.gradient}
-                    style={{ ...Styling.background, opacity: 0.5 }}
-                />
-            </>
-        )
-    }
-
-
 
     const { mainState, setMainState } = useContext(MainStateContext);
     const [displaySetUpCosmicKeyModal, setDisplaySetUpCosmicKeyModal] = useState(false);
@@ -151,6 +123,34 @@ export const ProfileScreen = ({ navigation }) => {
 
     }, [])
 
+    const getSelectedColor = async () => {
+        try {
+          const jsonValue = await AsyncStorage.getItem('selectedColor')
+          if (jsonValue != null) {
+            let color = JSON.parse(jsonValue)
+            setSelectedColor(color)
+          }
+        } catch (e) {
+          console.error(e)
+        }
+      }
+    
+      const DisplayGradient = (props) => {
+        return (
+          <>
+            <Image source={props.image} style={{ ...Styling.background, opacity: 0.4 }} />
+            <LinearGradient
+              colors={props.gradient}
+              style={{ ...Styling.background, opacity: 0.5 }}
+            />
+          </>
+        )
+    }
+
+    useEffect(() => {
+        getSelectedColor();
+      }, [selectedColor])
+
     return (
         <>
             <View style={{...Styling.container, backgroundColor: 'black',}}>
@@ -171,8 +171,8 @@ export const ProfileScreen = ({ navigation }) => {
                         <Image
                         source={require('../../assets/profile.png')}
                         style={{
-                            height: HeightRatio(250),
-                            width: HeightRatio(500),
+                            height: HeightRatio(200),
+                            width: HeightRatio(400),
                             alignSelf: 'center',
                             position: 'absolute',
                             top: HeightRatio(-20)

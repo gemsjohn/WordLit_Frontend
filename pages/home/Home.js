@@ -229,10 +229,24 @@ export const HomeScreen = ({ navigation }) => {
           }
           <SafeAreaView style={Styling.scrollContainer}>
             <ScrollView style={Styling.scrollView}>
-
+              <View 
+                style={{
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  padding: HeightRatio(20),
+                  borderRadius: HeightRatio(20),
+                  borderWidth: 2, 
+                  borderColor: '#ff0076',
+                  margin: HeightRatio(10),
+                  marginTop: windowHeight / 24 
+                }}
+              >
               {displayUsername ?
                 <>
-                  <View style={{ marginTop: windowHeight / 24, }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Image
+                      source={require('../../assets/block_logo.png')}
+                      style={{height: HeightRatio(50), width: HeightRatio(50), alignSelf: 'center'}}
+                    />
                     <Text style={{
                       color: 'white',
                       fontSize: HeightRatio(30),
@@ -248,92 +262,38 @@ export const HomeScreen = ({ navigation }) => {
                 </>
                 :
                 <>
-                  <View style={{ marginTop: windowHeight / 24, }}>
-                    <Text style={{
-                      color: 'white',
-                      fontSize: HeightRatio(30),
-                      fontWeight: 'bold',
-                      textAlign: 'center'
-                    }}
-                      allowFontScaling={false}
-                      ellipsizeMode='tail'
-                      numberOfLines={1}>
-                      WordLit
-                    </Text>
+                  <View style={{  }}>
+                    <Image
+                      source={require('../../assets/feature_graphic.png')}
+                      style={{height: HeightRatio(75), width: HeightRatio(150)}}
+                    />
                   </View>
                 </>
 
               }
-
-              <View
-                style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                  marginTop: HeightRatio(20),
-                  padding: 20,
-                  marginLeft: 5,
-                  marginRight: 5,
-                  borderTopLeftRadius: 10,
-                  borderBottomLeftRadius: 50,
-
-                }}
-              >
-                <LinearGradient
-                  colors={['#0b132b', '#181d21']}
-                  style={{
-                    ...Styling.background,
-                    height: HeightRatio(130),
-                    borderTopLeftRadius: 10,
-                    borderBottomLeftRadius: 50,
-                    borderColor: 'rgba(255, 255, 255, 0.25)',
-                    opacity: 0.5
-                  }}
-                />
-                <Text
-                  style={{ color: 'white', fontSize: HeightRatio(24), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}
-                  allowFontScaling={false}
-                >
-                  Choose a background color:
-                </Text>
-
-                <View style={Styling.circlecontainer}>
-                  {colors.map((color) => (
-                    <TouchableOpacity
-                      key={color.id}
-                      style={[Styling.circle, { backgroundColor: color.value }]}
-                      onPress={() => selectColor(color)}
-                      accessible={true}
-                      accessibilityLabel={`${color} background.`}
-                    />
-                  ))}
-                </View>
               </View>
+
               <View
                 style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  margin: HeightRatio(10),
                   marginTop: 20,
                   padding: 20,
-                  marginLeft: 5,
-                  marginRight: 5,
-                  borderTopLeftRadius: 10,
+                  // marginLeft: 5,
+                  // marginRight: 5,
+                  borderRadius: 10,
                   borderBottomLeftRadius: 50,
+                  borderWidth: 2,
+                  borderColor: '#ff0076',
+                  
                 }}
               >
-                <LinearGradient
-                  colors={['#0b132b', '#181d21']}
-                  style={{
-                    ...Styling.background,
-                    height: HeightRatio(1110),
-                    borderTopLeftRadius: 10,
-                    borderBottomLeftRadius: 50,
-                    borderColor: 'rgba(255, 255, 255, 0.25)',
-                    opacity: 0.5
-                  }}
-                />
+
                 <Text
-                  style={{ color: 'white', fontSize: HeightRatio(24), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}
+                  style={{ color: 'white', fontSize: HeightRatio(40), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}
                   allowFontScaling={false}
                 >
-                  How to play:
+                  How to Play
                 </Text>
                 <View
                   style={{
@@ -535,7 +495,7 @@ export const HomeScreen = ({ navigation }) => {
         }}
       >
         <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
-          <View style={{ backgroundColor: 'black', borderTopRightRadius: HeightRatio(10) }}>
+          <View style={{ backgroundColor: '#161b21', borderTopRightRadius: HeightRatio(10) }}>
             {/* <LinearGradient
               colors={['#261823', '#792555']}
               style={{ flex: 1, borderWidth: 4 }}
@@ -571,17 +531,6 @@ export const HomeScreen = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
               <View style={{ flexDirection: 'column' }}>
-                {/* <TouchableOpacity
-                onPress={() => setDisplaySignUpModal(!displaySignUpModal)}>
-                <View style={{
-                  backgroundColor: 'red',
-                  height: HeightRatio(20),
-                  width: HeightRatio(120),
-                  borderRadius: HeightRatio(100),
-                  marginTop: HeightRatio(20),
-                  alignSelf: 'center'
-                }} />
-              </TouchableOpacity> */}
                 <Text
                   style={{
                     color: 'white',

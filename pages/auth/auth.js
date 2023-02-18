@@ -503,7 +503,7 @@ export const Auth = ({ navigation }) => {
                             </TouchableOpacity>
                       }
                       <Text
-                        style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(20), margin: 20, fontWeight: 'bold' }}
+                        style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(30), marginTop: HeightRatio(50), fontWeight: 'bold' }}
                         allowFontScaling={false}
                       >
                         Already have an account?
@@ -945,7 +945,7 @@ export const Auth = ({ navigation }) => {
                             :
                             <>
                             <Text
-                              style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(20), marginTop: HeightRatio(50), fontWeight: 'bold' }}
+                              style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(30), marginTop: HeightRatio(50), fontWeight: 'bold' }}
                               allowFontScaling={false}
                             >
                               Don't have an account?

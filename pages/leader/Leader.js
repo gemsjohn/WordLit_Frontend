@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { ApolloProvider, ApolloClient, HttpLink, InMemoryCache, useMutation, useQuery } from "@apollo/client";
 import { GET_USER_BY_ID, LEADERBOARD } from '../../utils/queries';
 import { Alert, StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, StatusBar, SafeAreaView, Dimensions, Button, Linking, ImageBackground, FlatList, PixelRatio, Modal } from 'react-native';
@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Navbar } from '../../components/Navbar';
 import { Styling } from '../../Styling';
+import { MainStateContext } from '../../App';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -29,6 +30,7 @@ const HeightRatio = (size) => {
 }
 
 export const LeaderScreen = ({ navigation }) => {
+  const { mainState, setMainState } = useContext(MainStateContext);
   const [userID, setUserID] = useState('');
   const [authState, setAuthState] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
@@ -45,31 +47,6 @@ export const LeaderScreen = ({ navigation }) => {
   const CurrentUser = async () => {
     let value = await AsyncStorage.getItem('@userID', value);
     setUserID(value)
-  }
-
-
-  const getSelectedColor = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('selectedColor')
-      if (jsonValue != null) {
-        let color = JSON.parse(jsonValue)
-        setSelectedColor(color)
-      }
-    } catch (e) {
-      // error reading value
-    }
-  }
-
-  const DisplayGradient = (props) => {
-    return (
-      <>
-        <Image source={props.image} style={{ ...Styling.background, opacity: 0.4 }} />
-        <LinearGradient
-          colors={props.gradient}
-          style={{ ...Styling.background, opacity: 0.5 }}
-        />
-      </>
-    )
   }
 
 
@@ -184,17 +161,44 @@ export const LeaderScreen = ({ navigation }) => {
   useEffect(() => {
     CheckAuthState();
     CurrentUser();
-    getSelectedColor();
     refetch();
   }, [])
+
+  const getSelectedColor = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('selectedColor')
+      if (jsonValue != null) {
+        let color = JSON.parse(jsonValue)
+        setSelectedColor(color)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const DisplayGradient = (props) => {
+    return (
+      <>
+        <Image source={props.image} style={{ ...Styling.background, opacity: 0.4 }} />
+        <LinearGradient
+          colors={props.gradient}
+          style={{ ...Styling.background, opacity: 0.5 }}
+        />
+      </>
+    )
+}
+
+useEffect(() => {
+    getSelectedColor();
+  }, [selectedColor])
 
   return (
     <>
       <View style={{ ...Styling.container, backgroundColor: 'black', }}>
         <Navbar nav={navigation} auth={authState} position={'relative'} from={'leader'} />
         {selectedColor && selectedColor.gradient && selectedColor.image ?
-          <DisplayGradient gradient={selectedColor.gradient} image={selectedColor.image} />
-          :
+            <DisplayGradient gradient={selectedColor.gradient} image={selectedColor.image} />
+            :
           <>
             <Image source={require('../../assets/dalle_7.png')} style={{ ...Styling.background, opacity: 0.4 }} />
             <LinearGradient
@@ -226,8 +230,8 @@ export const LeaderScreen = ({ navigation }) => {
             <Image
               source={require('../../assets/leaderboard.png')}
               style={{
-                height: HeightRatio(250),
-                width: HeightRatio(500),
+                height: HeightRatio(200),
+                width: HeightRatio(400),
                 alignSelf: 'center',
                 position: 'absolute',
                 top: HeightRatio(-20)

@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions, StatusBar, PixelRatio } from 'react-native';
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+export const windowWidth = Dimensions.get('window').width;
+export const windowHeight = Dimensions.get('window').height;
 
 const {
   width: SCREEN_WIDTH,
@@ -309,7 +309,7 @@ export const Styling = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
         width: windowWidth - 20,
-        height: windowHeight - 80
+        height: HeightRatio(650)
     },
     modalContentHeader: {
         color: '#4cc9f0',
@@ -362,18 +362,18 @@ export const Styling = StyleSheet.create({
     modal_view: {
       margin: HeightRatio(20),
       width: '100%',
-      backgroundColor: "rgba(0, 0, 0, 1.0)",
+      backgroundColor: "#161b21",
       // borderRadius: 20,
       padding: HeightRatio(35),
       alignItems: "center",
-      shadowColor: "#c5ffff",
-      shadowOffset: {
-        width: 0,
-        height: 2
-      },
-      shadowOpacity: 1.0,
-      shadowRadius: 4,
-      elevation: 20
+      // shadowColor: "#c5ffff",
+      // shadowOffset: {
+      //   width: 0,
+      //   height: 2
+      // },
+      // shadowOpacity: 1.0,
+      // shadowRadius: 4,
+      // elevation: 20
     },
   });
   

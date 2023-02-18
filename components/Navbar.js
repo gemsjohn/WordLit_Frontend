@@ -8,6 +8,7 @@ import { MainStateContext } from '../App';
 import moment from 'moment';
 import { useQuery } from '@apollo/client';
 import { GET_USER_BY_ID, GET_ME } from '../utils/queries';
+import { Styling } from '../Styling';
 
 
 const {
@@ -28,6 +29,15 @@ const HeightRatio = (size) => {
     return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
 }
 
+const colors = [
+    { value: 'red', gradient: ['#4f000b', '#ff595e'], image: require('../assets/dalle_1.png'), id: 0 },
+    { value: 'orange', gradient: ['#b21e35', '#faa307'], image: require('../assets/dalle_4.png'), id: 1 },
+    { value: 'green', gradient: ['#132a13', '#83e377'], image: require('../assets/dalle_2.png'), id: 2 },
+    { value: 'blue', gradient: ['#00171f', '#0466c8'], image: require('../assets/dalle_3.png'), id: 3 },
+    { value: 'purple', gradient: ['#240046', '#c77dff'], image: require('../assets/dalle_5.png'), id: 4 },
+    { value: '#0b132b', gradient: ['#0b132b', '#3a506b'], image: require('../assets/dalle_7.png'), id: 5 },
+  ];
+
 
 export const Navbar = (props) => {
     const { mainState, setMainState } = useContext(MainStateContext);
@@ -41,6 +51,7 @@ export const Navbar = (props) => {
     const [profileBg, setProfileBg] = useState('rgba(255, 255, 255, 0.1)');
     const [bearerToken, storeBearerToken] = useState(false);
     const [isTokenValid, setIsTokenValid] = useState(null);
+    const [displayColorOptions, setDisplayColorOptions] = useState(false);
 
     const authState = useRef(false);
     const userID = useRef(null);
@@ -102,6 +113,17 @@ export const Navbar = (props) => {
     });
 
 
+    const selectColor = async (color) => {
+        // console.log(color)
+        // setSelectedColor(color);
+        try {
+          const jsonValue = JSON.stringify(color)
+          await AsyncStorage.setItem('selectedColor', jsonValue);
+        } catch (e) {
+          console.error(e)
+        }
+    };
+
 
 
 
@@ -124,6 +146,57 @@ export const Navbar = (props) => {
 
 
     return (
+        <>
+        {displayColorOptions &&
+        <>
+        <View
+                style={{
+                    position: 'absolute',
+                    zIndex: 10,
+                    // left: 0,
+                    // right: 0,
+                    // bottom: HeightRatio(100),
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    flexDirection: 'row',
+                    padding: HeightRatio(10),
+                    height: windowHeight,
+                    width: windowWidth,
+                    borderRadius: HeightRatio(30)
+                }}
+            ></View>
+            <View
+                style={{
+                    position: 'absolute',
+                    zIndex: 20,
+                    // left: 0,
+                    // right: 0,
+                    bottom: HeightRatio(100),
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    backgroundColor: '#161b21',
+                    flexDirection: 'row',
+                    padding: HeightRatio(10),
+                    height: HeightRatio(90),
+                    width: HeightRatio(350),
+                    borderRadius: HeightRatio(30)
+                }}
+            >
+                <View style={Styling.circlecontainer}>
+                  {colors.map((color) => (
+                    <TouchableOpacity
+                      key={color.id}
+                      style={[Styling.circle, { backgroundColor: color.value }]}
+                      onPress={() => {selectColor(color); setDisplayColorOptions(current => !current)}}
+                      accessible={true}
+                      accessibilityLabel={`${color} background.`}
+                    />
+                  ))}
+                </View>
+            </View>
+            </>
+        }
         <View
             style={{
                 position: 'absolute',
@@ -133,7 +206,7 @@ export const Navbar = (props) => {
                 bottom: 0,
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: 'black',
+                backgroundColor: '#161b21',
                 flexDirection: 'row',
                 padding: HeightRatio(10)
             }}
@@ -146,7 +219,7 @@ export const Navbar = (props) => {
                     style={{
                         backgroundColor: `${homeBg}`,
                         padding: 8,
-                        borderRadius: 30,
+                        borderRadius: HeightRatio(10),
                         width: windowWidth / 5,
                         flexDirection: 'column'
                     }}
@@ -175,7 +248,7 @@ export const Navbar = (props) => {
                     style={{
                         backgroundColor: `${gameBg}`,
                         padding: 8,
-                        borderRadius: 30,
+                        borderRadius: HeightRatio(10),
                         width: windowWidth / 5,
                         flexDirection: 'column'
                     }}
@@ -195,6 +268,31 @@ export const Navbar = (props) => {
                     </Text>
                 </View>
             </TouchableOpacity>
+
+            {/* [[[COLOR]]] */}
+            <TouchableOpacity
+                onPress={() => {  setDisplayColorOptions(current => !current) }}
+            >
+                <View
+                    style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                        padding: 8,
+                        borderRadius: HeightRatio(50),
+                        width: windowWidth / 8,
+                        margin: HeightRatio(10),
+                        flexDirection: 'column'
+                    }}
+                    accessible={true}
+                    accessibilityLabel="Game"
+                >
+                    <Image
+                        source={require('../assets/color_wheel.png')}
+                        style={{ width: HeightRatio(40), height: HeightRatio(40), alignSelf: 'center' }}
+                    />
+                </View>
+            </TouchableOpacity>
+
+
             {/* [[[LEADER BOARD]]] */}
             <TouchableOpacity
                 onPress={() => { props.nav.dispatch(resetActionLeader); }}
@@ -203,7 +301,7 @@ export const Navbar = (props) => {
                     style={{
                         backgroundColor: `${leaderBg}`,
                         padding: 8,
-                        borderRadius: 30,
+                        borderRadius: HeightRatio(10),
                         width: windowWidth / 5,
                         flexDirection: 'column',
                         alignSelf: 'center'
@@ -236,7 +334,7 @@ export const Navbar = (props) => {
                         style={{
                             backgroundColor: `${profileBg}`,
                             padding: 8,
-                            borderRadius: 30,
+                            borderRadius: HeightRatio(10),
                             width: windowWidth / 5,
                             flexDirection: 'column'
                         }}
@@ -264,7 +362,7 @@ export const Navbar = (props) => {
                         style={{
                             backgroundColor: `${profileBg}`,
                             padding: 8,
-                            borderRadius: 30,
+                            borderRadius: HeightRatio(10),
                             width: windowWidth / 5,
                             flexDirection: 'column'
                         }}
@@ -285,5 +383,6 @@ export const Navbar = (props) => {
 
             }
         </View>
+        </>
     )
 }

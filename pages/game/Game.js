@@ -9,7 +9,7 @@ import { ADD_GAME } from '../../utils/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_USER_BY_ID } from '../../utils/queries';
 import { CommonActions, useTheme } from '@react-navigation/native';
-import { Styling } from '../../Styling';
+import { Styling, HeightRatio, WidthRatio, windowHeight, windowWidth } from '../../Styling';
 import { Navbar } from '../../components/Navbar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MainStateContext } from '../../App';
@@ -46,44 +46,6 @@ import {
     faSquareMinus
 } from '@fortawesome/free-solid-svg-icons'
 import { useRef } from 'react/cjs/react.development';
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
-
-const {
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT,
-} = Dimensions.get('window');
-
-const scaleWidth = SCREEN_WIDTH / 360;
-const scaleHeight = SCREEN_HEIGHT / 800;
-
-const WidthRatio = (size) => {
-    const newSize = size * scaleWidth;
-    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
-    //   if (Platform.OS === 'ios') {
-    //     return Math.round(PixelRatio.roundToNearestPixel(newSize))
-    //   } else {
-    //     return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
-    //   }
-}
-
-const HeightRatio = (size) => {
-    const newSize = size * scaleHeight;
-    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
-}
-
-const DisplayGradient = (props) => {
-    return (
-        <>
-            <Image source={props.image} style={{ ...Styling.background, opacity: 0.4 }} />
-            <LinearGradient
-                colors={props.gradient}
-                style={{ ...Styling.background, opacity: 0.5 }}
-            />
-        </>
-    )
-}
 
 export const GameScreen = ({ navigation }) => {
     const { mainState, setMainState } = useContext(MainStateContext);
@@ -176,17 +138,6 @@ export const GameScreen = ({ navigation }) => {
         routes: [{ name: 'Game', params: {} }]
     });
 
-    const getSelectedColor = async () => {
-        try {
-            const jsonValue = await AsyncStorage.getItem('selectedColor')
-            if (jsonValue != null) {
-                let color = JSON.parse(jsonValue)
-                setSelectedColor(color);
-            }
-        } catch (e) {
-            console.error(e)
-        }
-    }
 
     async function getValueFor(key) {
         let result = await SecureStore.getItemAsync(key);
@@ -199,7 +150,6 @@ export const GameScreen = ({ navigation }) => {
 
     // ADD_GAME
     useEffect(() => {
-        getSelectedColor();
         setBothWordsSelected(false)
 
         refetch();
@@ -215,7 +165,7 @@ export const GameScreen = ({ navigation }) => {
     }, [])
 
     const handleAddGame = async (w1, w2, t, s) => {
-        if (authState) {
+        if (authState.current == true && userID.current != null ) {
             console.log("AUTH TRUE")
             try {
                 const { data } = await addGame({
@@ -639,7 +589,6 @@ export const GameScreen = ({ navigation }) => {
         return (
             <View
                 style={{
-                    // width: WidthRatio(230),
                     flexDirection: 'row',
                     flexWrap: 'wrap',
                 }}
@@ -975,15 +924,57 @@ export const GameScreen = ({ navigation }) => {
 
     }, [bothWordsSelected])
 
+    const getSelectedColor = async () => {
+        try {
+          const jsonValue = await AsyncStorage.getItem('selectedColor')
+          if (jsonValue != null) {
+            let color = JSON.parse(jsonValue)
+            setSelectedColor(color)
+          }
+        } catch (e) {
+          console.error(e)
+        }
+      }
+    
+      const DisplayGradient = (props) => {
+        return (
+          <>
+            <Image source={props.image} style={{ ...Styling.background, opacity: 0.4 }} />
+            <LinearGradient
+              colors={props.gradient}
+              style={{ ...Styling.background, opacity: 0.5 }}
+            />
+          </>
+        )
+    }
+
+    useEffect(() => {
+        getSelectedColor();
+      }, [selectedColor])
+
     return (
         <>
-            <View style={{ ...Styling.container, backgroundColor: 'black', }}>
-                <Navbar nav={navigation} auth={authState} position={'relative'} from={'game'} />
+            <View style={{ 
+                ...Styling.container, 
+                backgroundColor: 'black' 
+            }}>
+                <Navbar 
+                    nav={navigation} 
+                    auth={authState} 
+                    position={'relative'} 
+                    from={'game'} 
+                />
                 {selectedColor && selectedColor.gradient && selectedColor.image ?
-                    <DisplayGradient gradient={selectedColor.gradient} image={selectedColor.image} />
+                    <DisplayGradient 
+                        gradient={selectedColor.gradient} 
+                        image={selectedColor.image} 
+                    />
                     :
                     <>
-                        <Image source={require('../../assets/dalle_7.png')} style={{ ...Styling.background, opacity: 0.4 }} />
+                        <Image 
+                            source={require('../../assets/dalle_7.png')} 
+                            style={{ ...Styling.background, opacity: 0.4 }} 
+                        />
                         <LinearGradient
                             colors={['#0b132b', '#3a506b']}
                             style={{ ...Styling.background, opacity: 0.5 }}
@@ -994,15 +985,12 @@ export const GameScreen = ({ navigation }) => {
                 <View
                     style={{
                         alignSelf: 'center',
-                        // marginTop: WidthRatio(30)
-                        alignSelf: 'center',
                         justifyContent: 'center',
                         marginTop: HeightRatio(40)
                     }}
                 >
                     <View style={{
-                        flexDirection: 'column',
-
+                        flexDirection: 'column'
                     }}>
 
                         {/* - - - - - - - - - - - - - -  */}
@@ -1012,7 +1000,6 @@ export const GameScreen = ({ navigation }) => {
                             <>
                                 <View
                                     style={{
-                                        alignItems: 'center',
                                         alignSelf: 'center',
                                         justifyContent: 'center',
                                         flexDirection: 'row',
@@ -1025,7 +1012,7 @@ export const GameScreen = ({ navigation }) => {
                                     {buttonArray}
                                 </View>
                                 <TouchableOpacity
-                                    onPress={() => { console.log("Q? T -> B"); setHintTopBottomModal(true) }}
+                                    onPress={() => { setHintTopBottomModal(true) }}
                                     style={{
                                         position: 'absolute',
                                         borderRadius: 100,
@@ -1264,7 +1251,7 @@ export const GameScreen = ({ navigation }) => {
                                         <FontAwesomeIcon
                                             icon={faSolid, faX}
                                             style={{
-                                                color: 'black',
+                                                color: 'white',
                                                 justifyContent: 'center',
                                                 alignSelf: 'center',
                                                 marginTop: 17
@@ -1391,7 +1378,7 @@ export const GameScreen = ({ navigation }) => {
                                         <FontAwesomeIcon
                                             icon={faSolid, faX}
                                             style={{
-                                                color: 'black',
+                                                color: 'white',
                                                 justifyContent: 'center',
                                                 alignSelf: 'center',
                                                 marginTop: 17
@@ -1521,7 +1508,7 @@ export const GameScreen = ({ navigation }) => {
                                                 <FontAwesomeIcon
                                                     icon={faSolid, faX}
                                                     style={{
-                                                        color: 'black',
+                                                        color: 'white',
                                                         justifyContent: 'center',
                                                         alignSelf: 'center',
                                                         marginTop: 17
