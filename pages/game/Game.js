@@ -230,7 +230,7 @@ export const GameScreen = ({ navigation }) => {
         }
 
         return (
-            <View style={{ flexDirection: 'column', alignSelf: 'center', marginTop: windowHeight / 50, marginBottom: windowHeight / 10 }}>
+            <View style={{ flexDirection: 'column', alignSelf: 'center', marginTop: 200, marginBottom: 80 }}>
                 {buttons.map((row, index) => (
                     <View key={index} style={Styling.row}>
                         {row.map((button) => (
@@ -546,7 +546,7 @@ export const GameScreen = ({ navigation }) => {
                                         style={{
                                             color: 'black',
                                             fontWeight: 'bold',
-                                            fontSize: HeightRatio(25),
+                                            fontSize: 25,
                                         }}
                                         allowFontScaling={false}
                                     >
@@ -575,7 +575,7 @@ export const GameScreen = ({ navigation }) => {
                                 style={{
                                     color: 'black',
                                     fontWeight: 'bold',
-                                    fontSize: HeightRatio(25),
+                                    fontSize: 25,
                                 }}
                                 allowFontScaling={false}
                             >
@@ -986,7 +986,7 @@ export const GameScreen = ({ navigation }) => {
                     style={{
                         alignSelf: 'center',
                         justifyContent: 'center',
-                        marginTop: HeightRatio(40)
+                        marginTop: 40
                     }}
                 >
                     <View style={{
@@ -998,15 +998,17 @@ export const GameScreen = ({ navigation }) => {
                         {/* - - - - - - - - - - - - - -  */}
                         {displayGrid ?
                             <>
+                            {revealOptions ?
+                            <>
                                 <View
                                     style={{
                                         alignSelf: 'center',
                                         justifyContent: 'center',
                                         flexDirection: 'row',
                                         flexWrap: 'wrap',
-                                        marginTop: HeightRatio(30),
-                                        width: windowWidth * 0.9,
-                                        padding: HeightRatio(10)
+                                        marginTop: 30,
+                                        width: 400,
+                                        padding: 10
                                     }}
                                 >
                                     {buttonArray}
@@ -1016,20 +1018,20 @@ export const GameScreen = ({ navigation }) => {
                                     style={{
                                         position: 'absolute',
                                         borderRadius: 100,
-                                        height: HeightRatio(40),
-                                        width: HeightRatio(40),
+                                        height: 40,
+                                        width: 40,
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         padding: 5,
-                                        top: HeightRatio(8) - HeightRatio(8),
-                                        left: ((windowWidth * 0.16) * (u1 + 1)) + (u1 * 2) - HeightRatio(15)
+                                        top: 0,
+                                        left: ((75) * (u1 + 1)) + (u1 * 2) - 15
                                     }}
                                     accessible={true}
                                     accessibilityLabel="Top down hint."
                                 >
                                     <View>
                                         <Image
-                                            style={{ height: HeightRatio(50), width: HeightRatio(50) }}
+                                            style={{ height: 50, width: 50 }}
                                             source={require('../../assets/Qmark_0.png')}
                                         />
                                     </View>
@@ -1040,20 +1042,20 @@ export const GameScreen = ({ navigation }) => {
                                     style={{
                                         position: 'absolute',
                                         borderRadius: 100,
-                                        height: HeightRatio(40),
-                                        width: HeightRatio(40),
+                                        height: 40,
+                                        width: 40,
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         padding: 5,
-                                        top: HeightRatio(-10) + ((windowWidth * 0.16) * ((u0) / 5)) + ((u0 / 5) * 2) + windowWidth * 0.16,
-                                        left: WidthRatio(8)
+                                        top: ((75) * ((u0) / 5)) + ((u0 / 5) * 2) + 60,
+                                        left: 8
                                     }}
                                     accessible={true}
                                     accessibilityLabel="Left right hint."
                                 >
                                     <View>
                                         <Image
-                                            style={{ height: HeightRatio(50), width: HeightRatio(50) }}
+                                            style={{ height: 50, width: 50 }}
                                             source={require('../../assets/Qmark.png')}
                                         />
                                     </View>
@@ -1068,8 +1070,8 @@ export const GameScreen = ({ navigation }) => {
                                         flexDirection: 'row',
                                         justifyContent: 'center',
                                         alignItems: 'center',
-                                        marginTop: HeightRatio(8),
-                                        width: windowWidth,
+                                        marginTop: 8,
+                                        width: 400,
                                         alignSelf: 'center',
                                         // backgroundColor: 'red'
                                     }}
@@ -1084,7 +1086,7 @@ export const GameScreen = ({ navigation }) => {
                                             onPress={() => { CheckArray(promptGuessInput); setPromptGuessInput([]); setCount(0) }}
                                         >
                                             <Image
-                                                style={{ height: HeightRatio(25), width: WidthRatio(60), position: 'absolute', zIndex: 10, top: -12, left: -8 }}
+                                                style={{ height: 25, width: 80, position: 'absolute', zIndex: 10, top: -12, left: -8 }}
                                                 source={require('../../assets/click.png')}
                                             />
                                             <View
@@ -1094,7 +1096,7 @@ export const GameScreen = ({ navigation }) => {
                                                 }}
                                             >
                                                 <Text
-                                                    style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(45), fontWeight: 'bold' }}
+                                                    style={{ color: 'white', alignSelf: 'center', fontSize: 45, fontWeight: 'bold' }}
                                                     allowFontScaling={false}
                                                 >
                                                     {promptGuessInput}
@@ -1110,21 +1112,21 @@ export const GameScreen = ({ navigation }) => {
                                     {/* - - - - - - - - - - - - - -  */}
                                     <View
                                         style={{
-                                            width: WidthRatio(200),
-                                            marginLeft: WidthRatio(4),
-                                            marginRight: WidthRatio(4),
+                                            width: 266,
+                                            marginLeft: 7,
+                                            marginRight: 7,
                                         }}
                                     >
                                         <PreviousGuess />
                                     </View>
                                 </View>
-                                {revealOptions ?
+                                
                                     <View style={{
                                         flexDirection: 'row',
                                         flexWrap: 'wrap',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        marginTop: HeightRatio(10)
+                                        marginTop: 10
                                     }}>
                                         {letterOptionDisplay.map((key, index) => (
                                             <View
@@ -1133,9 +1135,9 @@ export const GameScreen = ({ navigation }) => {
                                                     borderRadius: 6,
                                                     borderWidth: 2,
                                                     borderColor: 'black',
-                                                    height: HeightRatio(60),
-                                                    width: WidthRatio(60),
-                                                    margin: WidthRatio(4),
+                                                    height: 60,
+                                                    width: 70,
+                                                    margin: 4,
                                                     opacity: 0.9,
                                                     backgroundColor: selectedKey === key.letter ? '#a2ffff' : key.color,
                                                 }}
@@ -1146,17 +1148,17 @@ export const GameScreen = ({ navigation }) => {
                                                         setPromptGuessInput(key.letter);
                                                         handleKeyPress(key.letter);
                                                     }}
-                                                    style={{}} //backgroundColor: 'rgba(0, 0, 0, 0.25)', width: WidthRatio(37), height: HeightRatio(50), borderColor: 'white', borderWidth: 0.5, borderRadius: 6, margin: 0.5
+                                                    style={{}} 
                                                     accessible={true}
                                                     accessibilityLabel={`Keyboard letter ${key.letter}.`}
                                                 >
                                                     <Text
                                                         style={{
                                                             color: 'black',
-                                                            fontSize: HeightRatio(35),
+                                                            fontSize: 35,
                                                             fontWeight: 'bold',
                                                             alignSelf: 'center',
-                                                            marginTop: HeightRatio(7),
+                                                            marginTop: 7,
                                                         }}
                                                         allowFontScaling={false}
                                                     >
@@ -1166,10 +1168,11 @@ export const GameScreen = ({ navigation }) => {
                                             </View>
                                         ))}
                                     </View>
+                                    </>
 
 
                                     :
-                                    <View style={{ marginTop: HeightRatio(100), alignItems: 'center', justifyContent: 'center' }}>
+                                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                                         <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
                                             <ActivityIndicator size="large" color="#00d8ff" />
                                         </View>
@@ -1184,8 +1187,8 @@ export const GameScreen = ({ navigation }) => {
                                     justifyContent: 'center',
                                     flexDirection: 'row',
                                     flexWrap: 'wrap',
-                                    height: windowWidth * 0.833,
-                                    width: windowWidth * 0.833,
+                                    height: 300,
+                                    width: 300,
                                     margin: 10,
                                 }}
                             >
@@ -1199,14 +1202,14 @@ export const GameScreen = ({ navigation }) => {
                                     <Image
                                         source={require('../../assets/new_game.png')}
                                         style={{
-                                            height: HeightRatio(300),
-                                            width: HeightRatio(300),
+                                            height: 300,
+                                            width: 300,
                                             alignSelf: 'center',
                                             justifyContent: 'center',
-                                            marginTop: HeightRatio(100),
+                                            marginTop: 100,
                                         }}
                                     />
-                                    <View style={{ height: HeightRatio(200) }} />
+                                    <View style={{ height: 200 }} />
                                 </TouchableOpacity>
                             </View>
                         }
@@ -1263,7 +1266,7 @@ export const GameScreen = ({ navigation }) => {
                                 <SafeAreaView style={{}}>
                                     <ScrollView style={Styling.gameScrollView}>
                                         <View
-                                            style={{ flexDirection: 'column', marginTop: HeightRatio(10), marginBottom: 10 }}
+                                            style={{ flexDirection: 'column', marginTop: 10, marginBottom: 10 }}
                                         >
                                             <TouchableOpacity
                                                 onPress={() => { searchWord2(word2); setDisplayTopBottomHint(true); }}
@@ -1271,7 +1274,7 @@ export const GameScreen = ({ navigation }) => {
                                                 disabled={!displayTopBottomHint ? false : true}
                                             >
                                                 <Image
-                                                    style={{ height: HeightRatio(150), width: HeightRatio(350) }}
+                                                    style={{ height: 150, width: 350, alignSelf: 'center' }}
                                                     source={require('../../assets/hint_top_to_bottom.png')}
                                                 />
                                             </TouchableOpacity>
@@ -1280,20 +1283,20 @@ export const GameScreen = ({ navigation }) => {
 
                                             <View style={{ alignSelf: 'center' }}>
                                                 {definition3 != '' || definition4 != '' || definition5 != '' ?
-                                                    <View style={{ marginTop: HeightRatio(10) }}>
+                                                    <View style={{ marginTop: 10 }}>
                                                         <Text style={Styling.modalContentHeader}>
                                                             Definitions
                                                         </Text>
                                                     </View>
                                                     :
-                                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: HeightRatio(10), marginBottom: HeightRatio(20), marginLeft: WidthRatio(20) }}>
+                                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 10, marginBottom: 20, marginLeft: 20 }}>
                                                         <Text
-                                                            style={{ color: '#ff0076', fontSize: HeightRatio(30), fontWeight: 'bold', width: WidthRatio(280) }}
+                                                            style={{ color: '#ff0076', fontSize: 30, fontWeight: 'bold', width: 280 }}
                                                             allowFontScaling={false}>
                                                             Warning:
                                                         </Text>
                                                         <Text
-                                                            style={{ color: 'white', fontSize: HeightRatio(25), width: WidthRatio(280), alignSelf: 'center' }}
+                                                            style={{ color: 'white', fontSize: 25, width: 280, alignSelf: 'center' }}
                                                         >
                                                             Selecting hint reduces your score by 10 points!
                                                         </Text>
@@ -1398,26 +1401,26 @@ export const GameScreen = ({ navigation }) => {
                                                 disabled={!displayLeftRightHint ? false : true}
                                             >
                                                 <Image
-                                                    style={{ height: HeightRatio(150), width: HeightRatio(350) }}
+                                                    style={{ height: 150, width: 350, alignSelf: 'center' }}
                                                     source={require('../../assets/hint_left_to_right.png')}
                                                 />
                                             </TouchableOpacity>
-                                            <View style={{ width: WidthRatio(280), alignSelf: 'center' }}>
+                                            <View style={{ alignSelf: 'center' }}>
                                                 {definition0 != '' || definition1 != '' || definition2 != '' ?
-                                                    <View style={{ marginTop: HeightRatio(10) }}>
+                                                    <View style={{ marginTop: 10 }}>
                                                         <Text style={Styling.modalContentHeader}>
                                                             Definitions
                                                         </Text>
                                                     </View>
                                                     :
-                                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: HeightRatio(10), marginBottom: HeightRatio(20), marginLeft: WidthRatio(20) }}>
+                                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 10, marginBottom: 20, marginLeft: 20 }}>
                                                         <Text
-                                                            style={{ color: '#ff0076', fontSize: HeightRatio(30), fontWeight: 'bold', width: WidthRatio(280) }}
+                                                            style={{ color: '#ff0076', fontSize: 30, fontWeight: 'bold', width: 280 }}
                                                             allowFontScaling={false}>
                                                             Warning:
                                                         </Text>
                                                         <Text
-                                                            style={{ color: 'white', fontSize: HeightRatio(25), width: WidthRatio(280), alignSelf: 'center' }}
+                                                            style={{ color: 'white', fontSize: 25, width: 280, alignSelf: 'center' }}
                                                         >
                                                             Selecting hint reduces your score by 10 points!
                                                         </Text>
@@ -1466,9 +1469,6 @@ export const GameScreen = ({ navigation }) => {
                         </Modal>
                     }
 
-                    {/* - - - - - - - - - - - - - -  */}
-                    {/* [[[  RESULT MODAL  ]]] */}
-                    {/* - - - - - - - - - - - - - -  */}
                     {modalVisible &&
                         <Modal
                             animationType="slide"
