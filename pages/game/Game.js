@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState, useContext, useRef } from 'react';
+import { useEffect, useState, useContext, useRef, useLayoutEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import * as SecureStore from 'expo-secure-store';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -125,8 +125,10 @@ export const GameScreen = ({ navigation }) => {
     const [leftRightHintReduction, setLeftRightHintReduction] = useState(0);
     const [topBottomHintReduction, setTopBottomHintReduction] = useState(0);
 
+    
+
     // Timer: Start and Stop
-    const start = () => { setStartTime(Date.now()) };
+    const start = () => { setStartTime(Date.now()); };
     const end = () => { setEndTime(Date.now()) };
 
     // REACT Navigation
@@ -134,6 +136,10 @@ export const GameScreen = ({ navigation }) => {
         index: 1,
         routes: [{ name: 'Game', params: {} }]
     });
+
+    useLayoutEffect(() => {
+        Generate(); 
+    }, [])
 
 
     async function getValueFor(key) {
@@ -818,9 +824,16 @@ export const GameScreen = ({ navigation }) => {
 
     useEffect(() => {
         if (endTime) {
+            setRevealOptions(false);
             ScoreCalculator();
         }
     }, [endTime])
+
+    useEffect(() => {
+        if (revealOptions) {
+            start();
+        }
+    }, [revealOptions])
 
 
 
@@ -1167,37 +1180,8 @@ export const GameScreen = ({ navigation }) => {
                                 }
                             </>
                             :
-                            <View
-                                style={{
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    flexDirection: 'row',
-                                    flexWrap: 'wrap',
-                                    height: 300,
-                                    width: 300,
-                                    margin: 10,
-                                }}
-                            >
-                                {/* - - - - - - - - - - - - - -  */}
-                                {/* BUTTON: New Game */}
-                                {/* - - - - - - - - - - - - - -  */}
-                                <TouchableOpacity
-                                    onPress={() => { Generate(); start(); }}
-                                    style={{}}
-                                >
-                                    <Image
-                                        source={require('../../assets/new_game.png')}
-                                        style={{
-                                            height: 300,
-                                            width: 300,
-                                            alignSelf: 'center',
-                                            justifyContent: 'center',
-                                            marginTop: 100,
-                                        }}
-                                    />
-                                    <View style={{ height: 200 }} />
-                                </TouchableOpacity>
-                            </View>
+                            
+                            null
                         }
 
 

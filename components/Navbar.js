@@ -52,6 +52,8 @@ export const Navbar = (props) => {
     const [bearerToken, storeBearerToken] = useState(false);
     const [isTokenValid, setIsTokenValid] = useState(null);
     const [displayColorOptions, setDisplayColorOptions] = useState(false);
+    const [displaySignUpModal, setDisplaySignUpModal] = useState(false)
+    const displaySignUpModalPreviousRef = useRef(null);
 
     const authState = useRef(false);
     const userID = useRef(null);
@@ -125,7 +127,8 @@ export const Navbar = (props) => {
     };
 
 
-
+    // let checkSignUpModalIntervalID; 
+    const checkSignUpModalIntervalID = useRef(null);
 
     useEffect(() => {
         if (props.from == 'home') { setHomeBg('rgba(255, 255, 255, 0.1)') } else { setHomeBg('transparent') }
@@ -138,11 +141,36 @@ export const Navbar = (props) => {
 
         authState.current = mainState.current.authState
         userID.current = mainState.current.userID;
+
+        if (props.from == 'home') {
+            checkSignUpModalIntervalID.current = setInterval(() => {
+                displaySignUpModalPreviousRef.current = displaySignUpModal;
+                if (authState.current == true && userID != null && !mainState.current.displaySignUpModal) {
+                    setDisplaySignUpModal(false)
+        
+        
+                } else {
+                    setDisplaySignUpModal(true)
+                }
+            }, 10)
+        }
+        return () => clearInterval(checkSignUpModalIntervalID.current); // Clear the interval on unmount
     }, [])
 
     if (localKeyMoment != mainState.current.initialKeyMoment && mainState.current.bearerToken != null) {
         checkToken();
     }
+
+    useEffect(() => {
+        if (displaySignUpModalPreviousRef.current != displaySignUpModal) {
+            console.log("NO CHNAGE")
+        } else {
+            console.log("THERE HAS BEEN A CHANGE")
+            clearInterval(checkSignUpModalIntervalID.current)
+        }
+    }, [displaySignUpModal])
+
+
 
 
     return (
@@ -208,8 +236,10 @@ export const Navbar = (props) => {
                 alignItems: 'center',
                 backgroundColor: '#161b21',
                 flexDirection: 'row',
-                padding: HeightRatio(10)
+                padding: HeightRatio(10),
+                opacity: displaySignUpModal ? 0.1 : 1.0
             }}
+            
         >
             {/* [[[HOME]]] */}
             <TouchableOpacity

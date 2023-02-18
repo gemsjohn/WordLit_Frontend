@@ -249,441 +249,483 @@ export const Auth = ({ navigation }) => {
     }
   }
 
+  const [selectedColor, setSelectedColor] = useState(null);
+
+
+  const getSelectedColor = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('selectedColor')
+      if (jsonValue != null) {
+        let color = JSON.parse(jsonValue)
+        setSelectedColor(color)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const DisplayGradient = (props) => {
+    return (
+      <>
+        <Image source={props.image} style={{ ...Styling.background, opacity: 0.4 }} />
+        <LinearGradient
+          colors={props.gradient}
+          style={{ ...Styling.background, opacity: 0.5 }}
+        />
+      </>
+    )
+  }
+
+  useEffect(() => {
+    getSelectedColor();
+  }, [selectedColor])
+
 
   return (
     <>
       <View style={{ ...Styling.container, backgroundColor: 'black' }}>
-          <SafeAreaView style={{ height: '90%', marginBottom: 32, marginTop: 32 }}>
-            <ScrollView style={{}} keyboardShouldPersistTaps={'always'} keyboardDismissMode="on-drag">
-              <LinearGradient
+        {selectedColor && selectedColor.gradient && selectedColor.image ?
+          <DisplayGradient gradient={selectedColor.gradient} image={selectedColor.image} />
+          :
+          <>
+            <Image source={require('../../assets/dalle_7.png')} style={{ ...Styling.background, opacity: 0.4 }} />
+            <LinearGradient
+              colors={['#0b132b', '#3a506b']}
+              style={{ ...Styling.background, opacity: 0.5 }}
+            />
+          </>
+        }
+        <SafeAreaView style={{ height: '90%', marginBottom: 32, marginTop: 32 }}>
+          <ScrollView style={{}} keyboardShouldPersistTaps={'always'} keyboardDismissMode="on-drag">
+            {/* <LinearGradient
                   colors={['#261823', '#792555']}
                   style={{ flex: 1 }}
-              >
-              {!isTokenValid &&
-                <>
-                  {newUser ?
+              > */}
+            {!isTokenValid &&
+              <>
+                {newUser ?
+                  <>
+                    <Text
+                      style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(50), marginTop: HeightRatio(10), fontWeight: 'bold' }}
+                      allowFontScaling={false}
+                    >
+                      Sign Up
+                    </Text>
                     <>
-                      <Text
-                        style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(50), marginTop: HeightRatio(10), fontWeight: 'bold' }}
-                        allowFontScaling={false}
-                      >
-                        Sign Up
-                      </Text>
-                      <>
-                        {/* [[[CHECK BOXES]]] */}
-                        <View style={{ flexDirection: 'row', alignSelf: 'center', margin: HeightRatio(20) }}>
-                          {promptEmailInput ?
-                            <View
-                              style={{
-                                flexDirection: 'column',
-                                marginLeft: HeightRatio(20),
-                                marginRight: HeightRatio(20)
-                              }}
-                            >
-                              <FontAwesomeIcon
-                                icon={faSolid, faCheck}
-                                style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
-                              />
-                              <Text
-                                style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
-                                allowFontScaling={false}
-                              >Email</Text>
-                            </View>
-                            :
-                            <View
-                              style={{
-                                flexDirection: 'column',
-                                marginLeft: HeightRatio(20),
-                                marginRight: HeightRatio(20)
-                              }}
-                            >
-                              <FontAwesomeIcon
-                                icon={faSolid, faEnvelope}
-                                style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
-                              />
-                              <Text
-                                style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
-                                allowFontScaling={false}
-                              >Email</Text>
-                            </View>
-                          }
-                          {promptUsernameInput ?
-                            <View
-                              style={{
-                                flexDirection: 'column',
-                                marginLeft: HeightRatio(20),
-                                marginRight: HeightRatio(20)
-                              }}
-                            >
-                              <FontAwesomeIcon
-                                icon={faSolid, faCheck}
-                                style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
-                              />
-                              <Text
-                                style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
-                                allowFontScaling={false}
-                              >Username </Text>
-                            </View>
-                            :
-                            <View
-                              style={{
-                                flexDirection: 'column',
-                                marginLeft: HeightRatio(20),
-                                marginRight: HeightRatio(20)
-                              }}
-                            >
-                              <FontAwesomeIcon
-                                icon={faSolid, faUser}
-                                style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
-                              />
-                              <Text
-                                style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
-                                allowFontScaling={false}
-                              >Username </Text>
-                            </View>
-                          }
-                          {promptPasswordInput ?
-                            <View
-                              style={{
-                                flexDirection: 'column',
-                                marginLeft: HeightRatio(20),
-                                marginRight: HeightRatio(20)
-                              }}
-                            >
-                              <FontAwesomeIcon
-                                icon={faSolid, faCheck}
-                                style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
-                              />
-                              <Text
-                                style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
-                                allowFontScaling={false}
-                              >Password</Text>
-                            </View>
-                            :
-                            <View
-                              style={{
-                                flexDirection: 'column',
-                                marginLeft: HeightRatio(20),
-                                marginRight: HeightRatio(20)
-                              }}
-                            >
-                              <FontAwesomeIcon
-                                icon={faSolid, faLock}
-                                style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
-                              />
-                              <Text
-                                style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
-                                allowFontScaling={false}
-                              >Password</Text>
-                            </View>
-                          }
-                        </View>
-                      </>
-
-                      <TextInput
-                        type="text"
-                        name="email"
-                        placeholder="Email"
-                        placeholderTextColor="white"
-                        value={promptEmailInput}
-                        onChangeText={setPromptEmailInput}
-                        style={Styling.textInputStyle}
-                        disableFullscreenUI={true}
-                        allowFontScaling={false}
-                      />
-                      <TextInput
-                        type="text"
-                        name="username"
-                        placeholder="Username"
-                        placeholderTextColor="white"
-                        value={promptUsernameInput}
-                        onChangeText={setPromptUsernameInput}
-                        style={Styling.textInputStyle}
-                        disableFullscreenUI={true}
-                        allowFontScaling={false}
-                      />
-                      <TextInput
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        placeholderTextColor="white"
-                        value={promptPasswordInput}
-                        onChangeText={setPromptPasswordInput}
-                        secureTextEntry={true}
-                        style={Styling.textInputStyle}
-                        disableFullscreenUI={true}
-                        allowFontScaling={false}
-                      />
-
-                      {
-                        promptEmailInput != "" &&
-                          promptUsernameInput != "" &&
-                          promptPasswordInput != "" ?
-                          <TouchableOpacity
-                            onPress={() => {
-                              handleFormSubmit()
-                              setDisplayLoading(true);
+                      {/* [[[CHECK BOXES]]] */}
+                      <View style={{ flexDirection: 'row', alignSelf: 'center', margin: HeightRatio(20) }}>
+                        {promptEmailInput ?
+                          <View
+                            style={{
+                              flexDirection: 'column',
+                              marginLeft: HeightRatio(20),
+                              marginRight: HeightRatio(20)
                             }}
-
                           >
+                            <FontAwesomeIcon
+                              icon={faSolid, faCheck}
+                              style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
+                            />
+                            <Text
+                              style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
+                              allowFontScaling={false}
+                            >Email</Text>
+                          </View>
+                          :
+                          <View
+                            style={{
+                              flexDirection: 'column',
+                              marginLeft: HeightRatio(20),
+                              marginRight: HeightRatio(20)
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faSolid, faEnvelope}
+                              style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
+                            />
+                            <Text
+                              style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
+                              allowFontScaling={false}
+                            >Email</Text>
+                          </View>
+                        }
+                        {promptUsernameInput ?
+                          <View
+                            style={{
+                              flexDirection: 'column',
+                              marginLeft: HeightRatio(20),
+                              marginRight: HeightRatio(20)
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faSolid, faCheck}
+                              style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
+                            />
+                            <Text
+                              style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
+                              allowFontScaling={false}
+                            >Username </Text>
+                          </View>
+                          :
+                          <View
+                            style={{
+                              flexDirection: 'column',
+                              marginLeft: HeightRatio(20),
+                              marginRight: HeightRatio(20)
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faSolid, faUser}
+                              style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
+                            />
+                            <Text
+                              style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
+                              allowFontScaling={false}
+                            >Username </Text>
+                          </View>
+                        }
+                        {promptPasswordInput ?
+                          <View
+                            style={{
+                              flexDirection: 'column',
+                              marginLeft: HeightRatio(20),
+                              marginRight: HeightRatio(20)
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faSolid, faCheck}
+                              style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
+                            />
+                            <Text
+                              style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
+                              allowFontScaling={false}
+                            >Password</Text>
+                          </View>
+                          :
+                          <View
+                            style={{
+                              flexDirection: 'column',
+                              marginLeft: HeightRatio(20),
+                              marginRight: HeightRatio(20)
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faSolid, faLock}
+                              style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
+                            />
+                            <Text
+                              style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
+                              allowFontScaling={false}
+                            >Password</Text>
+                          </View>
+                        }
+                      </View>
+                    </>
+
+                    <TextInput
+                      type="text"
+                      name="email"
+                      placeholder="Email"
+                      placeholderTextColor="white"
+                      value={promptEmailInput}
+                      onChangeText={setPromptEmailInput}
+                      style={Styling.textInputStyle}
+                      disableFullscreenUI={true}
+                      allowFontScaling={false}
+                    />
+                    <TextInput
+                      type="text"
+                      name="username"
+                      placeholder="Username"
+                      placeholderTextColor="white"
+                      value={promptUsernameInput}
+                      onChangeText={setPromptUsernameInput}
+                      style={Styling.textInputStyle}
+                      disableFullscreenUI={true}
+                      allowFontScaling={false}
+                    />
+                    <TextInput
+                      type="password"
+                      name="password"
+                      placeholder="Password"
+                      placeholderTextColor="white"
+                      value={promptPasswordInput}
+                      onChangeText={setPromptPasswordInput}
+                      secureTextEntry={true}
+                      style={Styling.textInputStyle}
+                      disableFullscreenUI={true}
+                      allowFontScaling={false}
+                    />
+
+                    {
+                      promptEmailInput != "" &&
+                        promptUsernameInput != "" &&
+                        promptPasswordInput != "" ?
+                        <TouchableOpacity
+                          onPress={() => {
+                            handleFormSubmit()
+                            setDisplayLoading(true);
+                          }}
+
+                        >
+                          <View style={{
+                            // backgroundColor: '#09e049',
+                            display: 'flex',
+                            justifyContent: 'flex-start',
+                            padding: HeightRatio(20),
+                            borderRadius: HeightRatio(40),
+                            alignSelf: 'center',
+                            marginTop: HeightRatio(20),
+                            // margin: HeightRatio(10),
+                            width: WidthRatio(300)
+                          }}>
+                            <LinearGradient
+                              colors={['#0b132b', '#181d21']}
+                              style={{
+                                ...Styling.background,
+                                height: HeightRatio(60),
+                                borderRadius: HeightRatio(80),
+                                borderWidth: 2,
+                                borderColor: '#09e049',
+                                opacity: 0.9
+                              }}
+                            />
+                            <Text
+                              style={{
+                                color: 'white',
+                                fontSize: HeightRatio(20),
+                                fontWeight: 'bold',
+                                alignSelf: 'center'
+                              }}
+                              allowFontScaling={false}
+                            >
+                              SIGN UP
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                        :
+                        <TouchableOpacity
+                          onPress={() => { }}
+                          disabled={true}
+                        >
+                          <View style={{
+                            // backgroundColor: '#09e049',
+                            display: 'flex',
+                            justifyContent: 'flex-start',
+                            padding: HeightRatio(20),
+                            borderRadius: HeightRatio(40),
+                            alignSelf: 'center',
+                            marginTop: HeightRatio(20),
+                            // margin: HeightRatio(10),
+                            width: WidthRatio(300)
+                          }}>
+                            <LinearGradient
+                              colors={['#0b132b', '#181d21']}
+                              style={{
+                                ...Styling.background,
+                                height: HeightRatio(60),
+                                borderRadius: HeightRatio(80),
+                                borderWidth: 2,
+                                borderColor: '#09e049',
+                                opacity: 0.9
+                              }}
+                            />
+                            <Text
+                              style={{
+                                color: 'white',
+                                fontSize: HeightRatio(20),
+                                fontWeight: 'bold',
+                                alignSelf: 'center'
+                              }}
+                              allowFontScaling={false}
+                            >
+                              SIGN UP
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                    }
+                    <Text
+                      style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(30), marginTop: HeightRatio(50), fontWeight: 'bold' }}
+                      allowFontScaling={false}
+                    >
+                      Already have an account?
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setPromptEmailInput("")
+                        setPromptUsernameInput("")
+                        setPromptPasswordInput("")
+                        setNewUser(false)
+                      }}
+                    >
+                      <View style={{
+                        // backgroundColor: '#09e049',
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                        padding: HeightRatio(20),
+                        borderRadius: HeightRatio(40),
+                        alignSelf: 'center',
+                        marginTop: HeightRatio(20),
+                        // margin: HeightRatio(10),
+                        width: WidthRatio(300)
+                      }}>
+                        <LinearGradient
+                          colors={['#0b132b', '#181d21']}
+                          style={{
+                            ...Styling.background,
+                            height: HeightRatio(60),
+                            borderRadius: HeightRatio(80),
+                            borderWidth: 2,
+                            borderColor: '#ff0076',
+                            opacity: 0.9
+                          }}
+                        />
+                        <Text
+                          style={{
+                            color: 'white',
+                            fontSize: HeightRatio(20),
+                            fontWeight: 'bold',
+                            alignSelf: 'center'
+                          }}
+                          allowFontScaling={false}
+                        >
+                          LOGIN
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  </>
+                  :
+                  <>
+                    {displayLoading ?
+                      <Loading />
+                      :
+                      <View>
+                        <Text
+                          style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(50), margin: HeightRatio(15), marginTop: HeightRatio(10), fontWeight: 'bold' }}
+                          allowFontScaling={false}
+                        >
+                          Login
+                        </Text>
+                        <TextInput
+                          type="text"
+                          name="username"
+                          placeholder="Username"
+                          placeholderTextColor="white"
+                          value={promptInput_0}
+                          onChangeText={setPromptInput_0}
+                          style={Styling.textInputStyle}
+                          disableFullscreenUI={true}
+                          allowFontScaling={false}
+                        />
+                        <TextInput
+                          type="password"
+                          name="password"
+                          placeholder="Password"
+                          placeholderTextColor="white"
+                          value={promptInput_1}
+                          onChangeText={setPromptInput_1}
+                          secureTextEntry={true}
+                          style={Styling.textInputStyle}
+                          disableFullscreenUI={true}
+                          allowFontScaling={false}
+                        />
+                        {displayLoginFailureAlert &&
+                          <View style={{ alignSelf: 'center' }}>
+                            <Text
+                              style={{ fontSize: HeightRatio(60), fontWeight: 'bold', color: 'red' }}
+                              allowFontScaling={false}
+                            >
+                              Incorrect Credentials
+                            </Text>
+                          </View>
+                        }
+                        {promptInput_0 != "" &&
+                          promptInput_1 != "" ?
+                          <TouchableOpacity onPress={() => { handleLogin(); setDisplayLoading(true); }}>
                             <View style={{
-                                // backgroundColor: '#09e049',
-                                display: 'flex',
-                                justifyContent: 'flex-start',
-                                padding: HeightRatio(20),
-                                borderRadius: HeightRatio(40),
-                                alignSelf: 'center',
-                                marginTop: HeightRatio(20),
-                                // margin: HeightRatio(10),
-                                width: WidthRatio(300)
-                              }}>
-                                <LinearGradient
-                                  colors={['#0b132b', '#181d21']}
-                                  style={{
-                                    ...Styling.background,
-                                    height: HeightRatio(60),
-                                    borderRadius: HeightRatio(80),
-                                    borderWidth: 2,
-                                    borderColor: '#09e049',
-                                    opacity: 0.9
-                                  }}
-                                />
-                                <Text
-                                  style={{
-                                    color: 'white',
-                                    fontSize: HeightRatio(20),
-                                    fontWeight: 'bold',
-                                    alignSelf: 'center'
-                                  }}
-                                  allowFontScaling={false}
-                                >
-                                  SIGN UP
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
+                              // backgroundColor: '#09e049',
+                              display: 'flex',
+                              justifyContent: 'flex-start',
+                              padding: HeightRatio(20),
+                              borderRadius: HeightRatio(40),
+                              alignSelf: 'center',
+                              marginTop: HeightRatio(20),
+                              // margin: HeightRatio(10),
+                              width: WidthRatio(300)
+                            }}>
+                              <LinearGradient
+                                colors={['#0b132b', '#181d21']}
+                                style={{
+                                  ...Styling.background,
+                                  height: HeightRatio(60),
+                                  borderRadius: HeightRatio(80),
+                                  borderWidth: 2,
+                                  borderColor: '#09e049',
+                                  opacity: 0.9
+                                }}
+                              />
+                              <Text
+                                style={{
+                                  color: 'white',
+                                  fontSize: HeightRatio(20),
+                                  fontWeight: 'bold',
+                                  alignSelf: 'center'
+                                }}
+                                allowFontScaling={false}
+                              >
+                                LOGIN
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
                           :
                           <TouchableOpacity
                             onPress={() => { }}
                             disabled={true}
                           >
                             <View style={{
-                                // backgroundColor: '#09e049',
-                                display: 'flex',
-                                justifyContent: 'flex-start',
-                                padding: HeightRatio(20),
-                                borderRadius: HeightRatio(40),
-                                alignSelf: 'center',
-                                marginTop: HeightRatio(20),
-                                // margin: HeightRatio(10),
-                                width: WidthRatio(300)
-                              }}>
-                                <LinearGradient
-                                  colors={['#0b132b', '#181d21']}
-                                  style={{
-                                    ...Styling.background,
-                                    height: HeightRatio(60),
-                                    borderRadius: HeightRatio(80),
-                                    borderWidth: 2,
-                                    borderColor: '#09e049',
-                                    opacity: 0.9
-                                  }}
-                                />
-                                <Text
-                                  style={{
-                                    color: 'white',
-                                    fontSize: HeightRatio(20),
-                                    fontWeight: 'bold',
-                                    alignSelf: 'center'
-                                  }}
-                                  allowFontScaling={false}
-                                >
-                                  SIGN UP
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
-                      }
-                      <Text
-                        style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(30), marginTop: HeightRatio(50), fontWeight: 'bold' }}
-                        allowFontScaling={false}
-                      >
-                        Already have an account?
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() => {
-                          setPromptEmailInput("")
-                          setPromptUsernameInput("")
-                          setPromptPasswordInput("")
-                          setNewUser(false)
-                        }}
-                      >
-                        <View style={{
-                                // backgroundColor: '#09e049',
-                                display: 'flex',
-                                justifyContent: 'flex-start',
-                                padding: HeightRatio(20),
-                                borderRadius: HeightRatio(40),
-                                alignSelf: 'center',
-                                marginTop: HeightRatio(20),
-                                // margin: HeightRatio(10),
-                                width: WidthRatio(300)
-                              }}>
-                                <LinearGradient
-                                  colors={['#0b132b', '#181d21']}
-                                  style={{
-                                    ...Styling.background,
-                                    height: HeightRatio(60),
-                                    borderRadius: HeightRatio(80),
-                                    borderWidth: 2,
-                                    borderColor: '#ff0076',
-                                    opacity: 0.9
-                                  }}
-                                />
-                                <Text
-                                  style={{
-                                    color: 'white',
-                                    fontSize: HeightRatio(20),
-                                    fontWeight: 'bold',
-                                    alignSelf: 'center'
-                                  }}
-                                  allowFontScaling={false}
-                                >
-                                  LOGIN
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
-                    </>
-                    :
-                    <>
-                      {displayLoading ?
-                        <Loading />
-                        :
-                        <View>
-                          <Text
-                            style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(50), margin: HeightRatio(15), marginTop: HeightRatio(10), fontWeight: 'bold' }}
-                            allowFontScaling={false}
-                          >
-                            Login
-                          </Text>
-                          <TextInput
-                            type="text"
-                            name="username"
-                            placeholder="Username"
-                            placeholderTextColor="white"
-                            value={promptInput_0}
-                            onChangeText={setPromptInput_0}
-                            style={Styling.textInputStyle}
-                            disableFullscreenUI={true}
-                            allowFontScaling={false}
-                          />
-                          <TextInput
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                            placeholderTextColor="white"
-                            value={promptInput_1}
-                            onChangeText={setPromptInput_1}
-                            secureTextEntry={true}
-                            style={Styling.textInputStyle}
-                            disableFullscreenUI={true}
-                            allowFontScaling={false}
-                          />
-                          {displayLoginFailureAlert &&
-                            <View style={{ alignSelf: 'center' }}>
+                              // backgroundColor: '#09e049',
+                              display: 'flex',
+                              justifyContent: 'flex-start',
+                              padding: HeightRatio(20),
+                              borderRadius: HeightRatio(40),
+                              alignSelf: 'center',
+                              marginTop: HeightRatio(20),
+                              // margin: HeightRatio(10),
+                              width: WidthRatio(300)
+                            }}>
+                              <LinearGradient
+                                colors={['#0b132b', '#181d21']}
+                                style={{
+                                  ...Styling.background,
+                                  height: HeightRatio(60),
+                                  borderRadius: HeightRatio(80),
+                                  borderWidth: 2,
+                                  borderColor: '#09e049',
+                                  opacity: 0.9
+                                }}
+                              />
                               <Text
-                                style={{ fontSize: HeightRatio(60), fontWeight: 'bold', color: 'red' }}
+                                style={{
+                                  color: 'white',
+                                  fontSize: HeightRatio(20),
+                                  fontWeight: 'bold',
+                                  alignSelf: 'center'
+                                }}
                                 allowFontScaling={false}
                               >
-                                Incorrect Credentials
+                                LOGIN
                               </Text>
                             </View>
-                          }
-                          {promptInput_0 != "" &&
-                            promptInput_1 != "" ?
-                            <TouchableOpacity onPress={() => { handleLogin(); setDisplayLoading(true); }}>
-                              <View style={{
-                                // backgroundColor: '#09e049',
-                                display: 'flex',
-                                justifyContent: 'flex-start',
-                                padding: HeightRatio(20),
-                                borderRadius: HeightRatio(40),
-                                alignSelf: 'center',
-                                marginTop: HeightRatio(20),
-                                // margin: HeightRatio(10),
-                                width: WidthRatio(300)
-                              }}>
-                                <LinearGradient
-                                  colors={['#0b132b', '#181d21']}
-                                  style={{
-                                    ...Styling.background,
-                                    height: HeightRatio(60),
-                                    borderRadius: HeightRatio(80),
-                                    borderWidth: 2,
-                                    borderColor: '#09e049',
-                                    opacity: 0.9
-                                  }}
-                                />
-                                <Text
-                                  style={{
-                                    color: 'white',
-                                    fontSize: HeightRatio(20),
-                                    fontWeight: 'bold',
-                                    alignSelf: 'center'
-                                  }}
-                                  allowFontScaling={false}
-                                >
-                                  LOGIN
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
-                            :
-                            <TouchableOpacity
-                              onPress={() => { }}
-                              disabled={true}
-                            >
-                              <View style={{
-                                // backgroundColor: '#09e049',
-                                display: 'flex',
-                                justifyContent: 'flex-start',
-                                padding: HeightRatio(20),
-                                borderRadius: HeightRatio(40),
-                                alignSelf: 'center',
-                                marginTop: HeightRatio(20),
-                                // margin: HeightRatio(10),
-                                width: WidthRatio(300)
-                              }}>
-                                <LinearGradient
-                                  colors={['#0b132b', '#181d21']}
-                                  style={{
-                                    ...Styling.background,
-                                    height: HeightRatio(60),
-                                    borderRadius: HeightRatio(80),
-                                    borderWidth: 2,
-                                    borderColor: '#09e049',
-                                    opacity: 0.9
-                                  }}
-                                />
-                                <Text
-                                  style={{
-                                    color: 'white',
-                                    fontSize: HeightRatio(20),
-                                    fontWeight: 'bold',
-                                    alignSelf: 'center'
-                                  }}
-                                  allowFontScaling={false}
-                                >
-                                  LOGIN
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
-                          }
+                          </TouchableOpacity>
+                        }
 
-                          {/* <View style={Styling.profileDivisionLine}></View> */}
-                          <View style={{
-                            // backgroundColor: 'rgba(0, 0, 0, 0.25)',
-                            margin: HeightRatio(10),
-                            marginTop: HeightRatio(20),
-                            borderRadius: HeightRatio(30)
-                          }}>
+                        {/* <View style={Styling.profileDivisionLine}></View> */}
+                        <View style={{
+                          // backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                          margin: HeightRatio(10),
+                          marginTop: HeightRatio(20),
+                          borderRadius: HeightRatio(30)
+                        }}>
 
                           <TouchableOpacity
                             onPress={() => setDisplayForgotPasswordContent(current => !current)}>
@@ -721,41 +763,41 @@ export const Auth = ({ navigation }) => {
                                 {/* [[[SUBMIT BUTTON]]] */}
 
                                 <TouchableOpacity onPress={() => handleRequestReset()}>
-                                <View style={{
-                                // backgroundColor: '#09e049',
-                                display: 'flex',
-                                justifyContent: 'flex-start',
-                                padding: HeightRatio(20),
-                                borderRadius: HeightRatio(40),
-                                alignSelf: 'center',
-                                marginTop: HeightRatio(20),
-                                // margin: HeightRatio(10),
-                                width: WidthRatio(300)
-                              }}>
-                                <LinearGradient
-                                  colors={['#0b132b', '#181d21']}
-                                  style={{
-                                    ...Styling.background,
-                                    height: HeightRatio(60),
-                                    borderRadius: HeightRatio(80),
-                                    borderWidth: 2,
-                                    borderColor: '#09e049',
-                                    opacity: 0.9
-                                  }}
-                                />
-                                <Text
-                                  style={{
-                                    color: 'white',
-                                    fontSize: HeightRatio(20),
-                                    fontWeight: 'bold',
-                                    alignSelf: 'center'
-                                  }}
-                                  allowFontScaling={false}
-                                >
-                                  SUBMIT
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
+                                  <View style={{
+                                    // backgroundColor: '#09e049',
+                                    display: 'flex',
+                                    justifyContent: 'flex-start',
+                                    padding: HeightRatio(20),
+                                    borderRadius: HeightRatio(40),
+                                    alignSelf: 'center',
+                                    marginTop: HeightRatio(20),
+                                    // margin: HeightRatio(10),
+                                    width: WidthRatio(300)
+                                  }}>
+                                    <LinearGradient
+                                      colors={['#0b132b', '#181d21']}
+                                      style={{
+                                        ...Styling.background,
+                                        height: HeightRatio(60),
+                                        borderRadius: HeightRatio(80),
+                                        borderWidth: 2,
+                                        borderColor: '#09e049',
+                                        opacity: 0.9
+                                      }}
+                                    />
+                                    <Text
+                                      style={{
+                                        color: 'white',
+                                        fontSize: HeightRatio(20),
+                                        fontWeight: 'bold',
+                                        alignSelf: 'center'
+                                      }}
+                                      allowFontScaling={false}
+                                    >
+                                      SUBMIT
+                                    </Text>
+                                  </View>
+                                </TouchableOpacity>
                               </View>
                               {resetRequestStatus != '' &&
                                 <View style={{}}>
@@ -767,41 +809,41 @@ export const Auth = ({ navigation }) => {
                               }
 
                               <TouchableOpacity onPress={() => setDisplayForgotPasswordForm(true)}>
-                              <View style={{
-                                // backgroundColor: '#09e049',
-                                display: 'flex',
-                                justifyContent: 'flex-start',
-                                padding: HeightRatio(20),
-                                borderRadius: HeightRatio(40),
-                                alignSelf: 'center',
-                                marginTop: HeightRatio(20),
-                                // margin: HeightRatio(10),
-                                width: WidthRatio(300)
-                              }}>
-                                <LinearGradient
-                                  colors={['#0b132b', '#181d21']}
-                                  style={{
-                                    ...Styling.background,
-                                    height: HeightRatio(60),
-                                    borderRadius: HeightRatio(80),
-                                    borderWidth: 2,
-                                    borderColor: '#ff0076',
-                                    opacity: 0.9
-                                  }}
-                                />
-                                <Text
-                                  style={{
-                                    color: 'white',
-                                    fontSize: HeightRatio(20),
-                                    fontWeight: 'bold',
-                                    alignSelf: 'center'
-                                  }}
-                                  allowFontScaling={false}
-                                >
-                                  RESET TOKEN
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
+                                <View style={{
+                                  // backgroundColor: '#09e049',
+                                  display: 'flex',
+                                  justifyContent: 'flex-start',
+                                  padding: HeightRatio(20),
+                                  borderRadius: HeightRatio(40),
+                                  alignSelf: 'center',
+                                  marginTop: HeightRatio(20),
+                                  // margin: HeightRatio(10),
+                                  width: WidthRatio(300)
+                                }}>
+                                  <LinearGradient
+                                    colors={['#0b132b', '#181d21']}
+                                    style={{
+                                      ...Styling.background,
+                                      height: HeightRatio(60),
+                                      borderRadius: HeightRatio(80),
+                                      borderWidth: 2,
+                                      borderColor: '#ff0076',
+                                      opacity: 0.9
+                                    }}
+                                  />
+                                  <Text
+                                    style={{
+                                      color: 'white',
+                                      fontSize: HeightRatio(20),
+                                      fontWeight: 'bold',
+                                      alignSelf: 'center'
+                                    }}
+                                    allowFontScaling={false}
+                                  >
+                                    RESET TOKEN
+                                  </Text>
+                                </View>
+                              </TouchableOpacity>
                               {displayForgotPasswordForm &&
                                 <>
                                   <TextInput
@@ -944,69 +986,69 @@ export const Auth = ({ navigation }) => {
                             </View>
                             :
                             <>
-                            <Text
-                              style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(30), marginTop: HeightRatio(50), fontWeight: 'bold' }}
-                              allowFontScaling={false}
-                            >
-                              Don't have an account?
-                            </Text>
-                            <TouchableOpacity onPress={() => { setNewUser(true) }}>
-                            <View style={{
-                              // backgroundColor: '#09e049',
-                              display: 'flex',
-                              justifyContent: 'flex-start',
-                              padding: HeightRatio(20),
-                              borderRadius: HeightRatio(40),
-                              alignSelf: 'center',
-                              marginTop: HeightRatio(20),
-                              // margin: HeightRatio(10),
-                              width: WidthRatio(300)
-                            }}>
-                              <LinearGradient
-                                colors={['#0b132b', '#181d21']}
-                                style={{
-                                  ...Styling.background,
-                                  height: HeightRatio(60),
-                                  borderRadius: HeightRatio(80),
-                                  borderWidth: 2,
-                                  borderColor: '#ff0076',
-                                  opacity: 0.9
-                                }}
-                              />
                               <Text
-                                style={{
-                                  color: 'white',
-                                  fontSize: HeightRatio(20),
-                                  fontWeight: 'bold',
-                                  alignSelf: 'center'
-                                }}
+                                style={{ color: 'white', alignSelf: 'center', fontSize: HeightRatio(30), marginTop: HeightRatio(50), fontWeight: 'bold' }}
                                 allowFontScaling={false}
                               >
-                                SIGN UP
+                                Don't have an account?
                               </Text>
-                            </View>
-                          </TouchableOpacity>
-                            
-                          </>
+                              <TouchableOpacity onPress={() => { setNewUser(true) }}>
+                                <View style={{
+                                  // backgroundColor: '#09e049',
+                                  display: 'flex',
+                                  justifyContent: 'flex-start',
+                                  padding: HeightRatio(20),
+                                  borderRadius: HeightRatio(40),
+                                  alignSelf: 'center',
+                                  marginTop: HeightRatio(20),
+                                  // margin: HeightRatio(10),
+                                  width: WidthRatio(300)
+                                }}>
+                                  <LinearGradient
+                                    colors={['#0b132b', '#181d21']}
+                                    style={{
+                                      ...Styling.background,
+                                      height: HeightRatio(60),
+                                      borderRadius: HeightRatio(80),
+                                      borderWidth: 2,
+                                      borderColor: '#ff0076',
+                                      opacity: 0.9
+                                    }}
+                                  />
+                                  <Text
+                                    style={{
+                                      color: 'white',
+                                      fontSize: HeightRatio(20),
+                                      fontWeight: 'bold',
+                                      alignSelf: 'center'
+                                    }}
+                                    allowFontScaling={false}
+                                  >
+                                    SIGN UP
+                                  </Text>
+                                </View>
+                              </TouchableOpacity>
+
+                            </>
                           }
-                          </View>
-
-                          {/* <View style={Styling.profileDivisionLine}></View> */}
-
-
-                          
-
                         </View>
-                      }
-                    </>
-                  }
 
-                </>
-              }
-              <View style={{ marginBottom: HeightRatio(400) }}></View>
-              </LinearGradient>
-            </ScrollView>
-          </SafeAreaView>
+                        {/* <View style={Styling.profileDivisionLine}></View> */}
+
+
+
+
+                      </View>
+                    }
+                  </>
+                }
+
+              </>
+            }
+            <View style={{ marginBottom: HeightRatio(400) }}></View>
+            {/* </LinearGradient> */}
+          </ScrollView>
+        </SafeAreaView>
         <Navbar nav={navigation} auth={isTokenValid} position={'absolute'} from={'auth'} />
       </View>
 
@@ -1023,26 +1065,26 @@ export const Auth = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   centeredView: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 22
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
   },
   modalView: {
-      margin: 20,
-      backgroundColor: "#edf2f4",
-      borderRadius: 10,
-      borderWidth: 3,
-      padding: 35,
-      alignItems: "center",
-      shadowColor: "#000",
-      shadowOffset: {
-          width: 0,
-          height: 2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
-      width: WidthRatio(300)
+    margin: 20,
+    backgroundColor: "#edf2f4",
+    borderRadius: 10,
+    borderWidth: 3,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: WidthRatio(300)
   }
 });

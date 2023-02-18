@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
-import { Alert, StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, StatusBar, SafeAreaView, Dimensions, Button, Linking, ImageBackground, FlatList, PixelRatio, Modal } from 'react-native';
+import React, { useEffect, useState, useRef, useContext, useCallback } from 'react';
+import { Alert, StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, StatusBar, SafeAreaView, Dimensions, Button, Linking, ImageBackground, FlatList, PixelRatio, Modal, ActivityIndicator } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSolid, faUser, faPlus, faUpLong, faMagnifyingGlass, faCheck, faLocationPin, faEnvelope, faLock, faGear, faX } from '@fortawesome/free-solid-svg-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,8 +10,8 @@ import { useMutation, useQuery } from '@apollo/client';
 import { GET_USER_BY_ID } from '../../utils/queries';
 import { MainStateContext } from '../../App';
 import { CommonActions } from '@react-navigation/native';
-
 import * as SecureStore from 'expo-secure-store';
+import { GameScreen } from '../game/Game';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -37,6 +37,11 @@ const HeightRatio = (size) => {
 const resetActionAuth = CommonActions.reset({
   index: 1,
   routes: [{ name: 'Auth', params: {} }]
+});
+
+const resetActionGame = CommonActions.reset({
+  index: 1,
+  routes: [{ name: 'Game', params: {} }]
 });
 
 
@@ -69,35 +74,13 @@ export const HomeScreen = ({ navigation }) => {
       setDisplayUsername(true)
     } else if (!result && !authState.current) {
       setDisplaySignUpModal(true)
+      setMainState({
+        displaySignUpModal: true
+      })
       setDisplayUsername(false)
     }
   }
 
-  // const CheckAuthState = async () => {
-  //   let value = await AsyncStorage.getItem('@authState')
-  //   if (value === 'true') {
-  //     setAuthState(true);
-  //   } else if (value === 'false') {
-  //     setAuthState(false);
-  //   }
-  // }
-
-  // const CurrentUser = async () => {
-  //   let value = await AsyncStorage.getItem('@userID', value);
-  //   setUserID(value);
-  // }
-
-  const selectColor = async (color) => {
-    // console.log(color)
-    // setSelectedColor(color);
-    try {
-      const jsonValue = JSON.stringify(color)
-      await AsyncStorage.setItem('selectedColor', jsonValue);
-      setSelectedColor(color)
-    } catch (e) {
-      console.error(e)
-    }
-  };
 
   const getSelectedColor = async () => {
     try {
@@ -215,317 +198,373 @@ export const HomeScreen = ({ navigation }) => {
           networkActivityIndicatorVisible={true}
         />
         <Navbar nav={navigation} auth={authState} position={'relative'} from={'home'} />
-        <View>
-          {selectedColor && selectedColor.gradient && selectedColor.image ?
-            <DisplayGradient gradient={selectedColor.gradient} image={selectedColor.image} />
-            :
-            <>
-              <Image source={require('../../assets/dalle_7.png')} style={{ ...Styling.background, opacity: 0.4 }} />
-              <LinearGradient
-                colors={['#0b132b', '#3a506b']}
-                style={{ ...Styling.background, opacity: 0.5 }}
-              />
-            </>
-          }
+        {selectedColor && selectedColor.gradient && selectedColor.image ?
+          <DisplayGradient gradient={selectedColor.gradient} image={selectedColor.image} />
+          :
+          <>
+            <Image source={require('../../assets/dalle_7.png')} style={{ ...Styling.background, opacity: 0.4 }} />
+            <LinearGradient
+              colors={['#0b132b', '#3a506b']}
+              style={{ ...Styling.background, opacity: 0.5 }}
+            />
+          </>
+        }
+        {!loading ?
           <SafeAreaView style={Styling.scrollContainer}>
             <ScrollView style={Styling.scrollView}>
-              <View
-                style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  padding: HeightRatio(20),
-                  borderRadius: HeightRatio(20),
-                  borderWidth: 2,
-                  borderColor: '#ff0076',
-                  margin: HeightRatio(10),
-                  marginTop: windowHeight / 24
-                }}
-              >
-                {displayUsername ?
+
+              <>
+                {!displaySignUpModal &&
                   <>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <Image
-                        source={require('../../assets/block_logo.png')}
-                        style={{ height: HeightRatio(50), width: HeightRatio(50), alignSelf: 'center' }}
-                      />
-                      <Text style={{
-                        color: 'white',
-                        fontSize: HeightRatio(30),
-                        fontWeight: 'bold',
-                        textAlign: 'center'
+                    <View
+                      style={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        padding: HeightRatio(20),
+                        borderRadius: HeightRatio(20),
+                        borderWidth: 2,
+                        borderColor: '#ff0076',
+                        margin: HeightRatio(10),
+                        marginTop: windowHeight / 24
                       }}
+
+                    >
+
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image
+                          source={require('../../assets/block_logo.png')}
+                          style={{ height: HeightRatio(50), width: HeightRatio(50), alignSelf: 'center' }}
+                        />
+                        {authState.current == true && userID.current != null ?
+                          <Text style={{
+                            color: 'white',
+                            fontSize: HeightRatio(30),
+                            fontWeight: 'bold',
+                            textAlign: 'center'
+                          }}
+                            allowFontScaling={false}
+                            ellipsizeMode='tail'
+                            numberOfLines={1}>
+                            {userByID?.user.username.toUpperCase()}
+                          </Text>
+                          :
+                          <Text style={{
+                            color: 'white',
+                            fontSize: HeightRatio(30),
+                            fontWeight: 'bold',
+                            textAlign: 'center'
+                          }}
+                            allowFontScaling={false}
+                            ellipsizeMode='tail'
+                            numberOfLines={1}>
+                            WordLit
+                          </Text>
+                        }
+                      </View>
+                    </View>
+
+                    <View
+                      style={{
+                        
+                      }}
+                    >
+                      {/* - - - - - - - - - - - - - -  */}
+                      {/* BUTTON: New Game */}
+                      {/* - - - - - - - - - - - - - -  */}
+                      <TouchableOpacity
+                        onPress={() => { navigation.dispatch(resetActionGame); }}
+                        style={{}}
+                      >
+                        <Image
+                          source={require('../../assets/new_game.png')}
+                          style={{
+                            height: 150,
+                            width: 150,
+                            alignSelf: 'center',
+                            justifyContent: 'center',
+                            marginTop: 10,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    </View>
+
+
+                    <View
+                      style={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        margin: HeightRatio(10),
+                        marginTop: 20,
+                        padding: 20,
+                        // marginLeft: 5,
+                        // marginRight: 5,
+                        borderRadius: 10,
+                        borderBottomLeftRadius: 50,
+                        borderWidth: 2,
+                        borderColor: '#ff0076',
+
+                      }}
+                    >
+
+                      <Text
+                        style={{ color: 'white', fontSize: HeightRatio(40), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}
                         allowFontScaling={false}
-                        ellipsizeMode='tail'
-                        numberOfLines={1}>
-                        {userByID?.user.username.toUpperCase()}
+                      >
+                        How to Play
                       </Text>
+                      <View
+                        style={{
+                          alignItems: 'center',
+                          alignSelf: 'center',
+                          justifyContent: 'center',
+                          flexDirection: 'row',
+                          flexWrap: 'wrap',
+                          marginTop: HeightRatio(8),
+                          width: windowWidth * 0.9
+
+                        }}
+                      >
+                        <DemoGrid />
+                      </View>
+                      {/* #1 */}
+                      <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                        <View
+                          style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                            borderRadius: 20,
+                            width: windowWidth * 0.12,
+                            height: windowWidth * 0.09,
+                            marginRight: 10,
+                            marginTop: 10,
+                            borderLeftColor: 'rgba(255, 255, 255, 0.5)',
+                            borderBottomColor: 'rgba(255, 255, 255, 0.5)',
+                            borderTopLeftRadius: 10,
+                            borderBottomLeftRadius: 30,
+                          }}
+                        >
+                          <Text
+                            style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
+                            allowFontScaling={false}
+                          >
+                            1
+                          </Text>
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                          <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                            Two words will appear.
+                          </Text>
+                        </View>
+                      </View>
+                      {/* #2 */}
+                      <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                        <View
+                          style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                            borderRadius: 20,
+                            width: windowWidth * 0.12,
+                            height: windowWidth * 0.09,
+                            marginRight: 10,
+                            marginTop: 10,
+                            borderLeftColor: 'rgba(255, 255, 255, 0.5)',
+                            borderBottomColor: 'rgba(255, 255, 255, 0.5)',
+                            borderTopLeftRadius: 10,
+                            borderBottomLeftRadius: 30,
+                          }}
+                        >
+                          <Text
+                            style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
+                            allowFontScaling={false}
+                          >
+                            2
+                          </Text>
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                          <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                            One letter will be revealed.
+                          </Text>
+                          <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                            That letter will always be the overlapping letter.
+                          </Text>
+                        </View>
+                      </View>
+                      {/* #3 */}
+                      <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                        <View
+                          style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                            borderRadius: 20,
+                            width: windowWidth * 0.12,
+                            height: windowWidth * 0.09,
+                            marginRight: 10,
+                            marginTop: 10,
+                            borderLeftColor: 'rgba(255, 255, 255, 0.5)',
+                            borderBottomColor: 'rgba(255, 255, 255, 0.5)',
+                            borderTopLeftRadius: 10,
+                            borderBottomLeftRadius: 30,
+                          }}
+                        >
+                          <Text
+                            style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
+                            allowFontScaling={false}
+                          >
+                            3
+                          </Text>
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                          <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                            Guess that letter.
+                          </Text>
+                          <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                            If you are lucky, the overlapping letter may appear in other places!
+                          </Text>
+                        </View>
+                      </View>
+                      {/* #4 */}
+                      <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                        <View
+                          style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                            borderRadius: 20,
+                            width: windowWidth * 0.12,
+                            height: windowWidth * 0.09,
+                            marginRight: 10,
+                            marginTop: 10,
+                            borderLeftColor: 'rgba(255, 255, 255, 0.5)',
+                            borderBottomColor: 'rgba(255, 255, 255, 0.5)',
+                            borderTopLeftRadius: 10,
+                            borderBottomLeftRadius: 30,
+                          }}
+                        >
+                          <Text
+                            style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
+                            allowFontScaling={false}
+                          >
+                            4
+                          </Text>
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                          <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                            You have 12 guesses.
+                          </Text>
+                        </View>
+                      </View>
+                      {/* #5 */}
+                      <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                        <View
+                          style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                            borderRadius: 20,
+                            width: windowWidth * 0.12,
+                            height: windowWidth * 0.09,
+                            marginRight: 10,
+                            marginTop: 10,
+                            borderLeftColor: 'rgba(255, 255, 255, 0.5)',
+                            borderBottomColor: 'rgba(255, 255, 255, 0.5)',
+                            borderTopLeftRadius: 10,
+                            borderBottomLeftRadius: 30,
+                          }}
+                        >
+                          <Text
+                            style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
+                            allowFontScaling={false}
+                          >
+                            5
+                          </Text>
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                          <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                            Score points are based on time and guesses.
+                          </Text>
+                          <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                            +100 points if you guess both words within 12 guesses and under 20 seconds.
+                          </Text>
+                          <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                            +80 points if you guess both words within 12 guesses and under 40 seconds.
+                          </Text>
+                          <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                            +40 points if you guess both words within 12 guesses and under 60 seconds.
+                          </Text>
+                          <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                            +20 points if you guess both words within 12 guesses and under 80 seconds.
+                          </Text>
+                          <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                            +10 points if you guess both words within 12 guesses and under 100 seconds.
+                          </Text>
+                          <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                            +5 points if you guess both words within 12 guesses.
+                          </Text>
+                        </View>
+                      </View>
                     </View>
-                  </>
-                  :
-                  <>
-                    <View style={{}}>
-                      <Image
-                        source={require('../../assets/feature_graphic.png')}
-                        style={{ height: HeightRatio(75), width: HeightRatio(150) }}
-                      />
-                    </View>
+                    <View style={{ marginBottom: 400 }}></View>
                   </>
 
                 }
-              </View>
+              </>
 
-              <View
-                style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  margin: HeightRatio(10),
-                  marginTop: 20,
-                  padding: 20,
-                  // marginLeft: 5,
-                  // marginRight: 5,
-                  borderRadius: 10,
-                  borderBottomLeftRadius: 50,
-                  borderWidth: 2,
-                  borderColor: '#ff0076',
-
-                }}
-              >
-
-                <Text
-                  style={{ color: 'white', fontSize: HeightRatio(40), fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}
-                  allowFontScaling={false}
-                >
-                  How to Play
-                </Text>
-                <View
-                  style={{
-                    alignItems: 'center',
-                    alignSelf: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    marginTop: HeightRatio(8),
-                    width: windowWidth * 0.9
-
-                  }}
-                >
-                  <DemoGrid />
-                </View>
-                {/* #1 */}
-                <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
-                  <View
-                    style={{
-                      backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                      borderRadius: 20,
-                      width: windowWidth * 0.12,
-                      height: windowWidth * 0.09,
-                      marginRight: 10,
-                      marginTop: 10,
-                      borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                      borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                      borderTopLeftRadius: 10,
-                      borderBottomLeftRadius: 30,
-                    }}
-                  >
-                    <Text
-                      style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
-                      allowFontScaling={false}
-                    >
-                      1
-                    </Text>
-                  </View>
-                  <View style={{ flexDirection: 'column' }}>
-                    <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
-                      Two words will appear.
-                    </Text>
-                  </View>
-                </View>
-                {/* #2 */}
-                <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
-                  <View
-                    style={{
-                      backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                      borderRadius: 20,
-                      width: windowWidth * 0.12,
-                      height: windowWidth * 0.09,
-                      marginRight: 10,
-                      marginTop: 10,
-                      borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                      borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                      borderTopLeftRadius: 10,
-                      borderBottomLeftRadius: 30,
-                    }}
-                  >
-                    <Text
-                      style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
-                      allowFontScaling={false}
-                    >
-                      2
-                    </Text>
-                  </View>
-                  <View style={{ flexDirection: 'column' }}>
-                    <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
-                      One letter will be revealed.
-                    </Text>
-                    <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                      That letter will always be the overlapping letter.
-                    </Text>
-                  </View>
-                </View>
-                {/* #3 */}
-                <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
-                  <View
-                    style={{
-                      backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                      borderRadius: 20,
-                      width: windowWidth * 0.12,
-                      height: windowWidth * 0.09,
-                      marginRight: 10,
-                      marginTop: 10,
-                      borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                      borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                      borderTopLeftRadius: 10,
-                      borderBottomLeftRadius: 30,
-                    }}
-                  >
-                    <Text
-                      style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
-                      allowFontScaling={false}
-                    >
-                      3
-                    </Text>
-                  </View>
-                  <View style={{ flexDirection: 'column' }}>
-                    <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
-                      Guess that letter.
-                    </Text>
-                    <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                      If you are lucky, the overlapping letter may appear in other places!
-                    </Text>
-                  </View>
-                </View>
-                {/* #4 */}
-                <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
-                  <View
-                    style={{
-                      backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                      borderRadius: 20,
-                      width: windowWidth * 0.12,
-                      height: windowWidth * 0.09,
-                      marginRight: 10,
-                      marginTop: 10,
-                      borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                      borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                      borderTopLeftRadius: 10,
-                      borderBottomLeftRadius: 30,
-                    }}
-                  >
-                    <Text
-                      style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
-                      allowFontScaling={false}
-                    >
-                      4
-                    </Text>
-                  </View>
-                  <View style={{ flexDirection: 'column' }}>
-                    <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
-                      You have 12 guesses.
-                    </Text>
-                  </View>
-                </View>
-                {/* #5 */}
-                <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
-                  <View
-                    style={{
-                      backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                      borderRadius: 20,
-                      width: windowWidth * 0.12,
-                      height: windowWidth * 0.09,
-                      marginRight: 10,
-                      marginTop: 10,
-                      borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                      borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                      borderTopLeftRadius: 10,
-                      borderBottomLeftRadius: 30,
-                    }}
-                  >
-                    <Text
-                      style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
-                      allowFontScaling={false}
-                    >
-                      5
-                    </Text>
-                  </View>
-                  <View style={{ flexDirection: 'column' }}>
-                    <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
-                      Score points are based on time and guesses.
-                    </Text>
-                    <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                      +100 points if you guess both words within 12 guesses and under 20 seconds.
-                    </Text>
-                    <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                      +80 points if you guess both words within 12 guesses and under 40 seconds.
-                    </Text>
-                    <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                      +40 points if you guess both words within 12 guesses and under 60 seconds.
-                    </Text>
-                    <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                      +20 points if you guess both words within 12 guesses and under 80 seconds.
-                    </Text>
-                    <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                      +10 points if you guess both words within 12 guesses and under 100 seconds.
-                    </Text>
-                    <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                      +5 points if you guess both words within 12 guesses.
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              <View style={{ marginBottom: 400 }}></View>
             </ScrollView>
           </SafeAreaView>
-        </View>
-
+          :
+          <>
+            {!displaySignUpModal &&
+              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
+                  <ActivityIndicator size="large" color="#00d8ff" />
+                </View>
+              </View>
+            }
+          </>
+        }
       </View>
-
       <Modal
-        animationType="slide"
+        animationType="none"
         transparent={true}
         visible={displaySignUpModal}
         onRequestClose={() => {
           setDisplaySignUpModal(!displaySignUpModal);
+          setMainState({
+            displaySignUpModal: false
+          })
         }}
       >
-        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
-          <View style={{ backgroundColor: '#161b21', borderTopRightRadius: HeightRatio(10) }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ borderTopRightRadius: HeightRatio(10) }}>
             {/* <LinearGradient
               colors={['#261823', '#792555']}
               style={{ flex: 1, borderWidth: 4 }}
             > */}
             <View
               style={{
-                backgroundColor: 'rgba(255, 0, 0, 1)',
+                borderWidth: 2,
+                borderColor: '#ff0076',
                 alignSelf: 'center',
-                borderRadius: 8,
+                borderRadius: 100,
                 position: 'absolute',
                 zIndex: 10,
-                top: 0,
-                right: 0
+                top: HeightRatio(-100),
+                left: 20
+
               }}
             >
               <TouchableOpacity
-                onPress={() => { setDisplaySignUpModal(!displaySignUpModal); }}
+                onPress={() => {
+                  setDisplaySignUpModal(!displaySignUpModal);
+                  setMainState({
+                    displaySignUpModal: false
+                  })
+                }}
                 style={{
-                  borderRadius: 10,
-                  height: 50,
-                  width: 50
+                  borderRadius: 100,
+                  height: 100,
+                  width: 100,
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
               >
                 <FontAwesomeIcon
                   icon={faSolid, faX}
                   style={{
                     color: 'white',
-                    justifyContent: 'center',
-                    alignSelf: 'center',
-                    marginTop: 17
+                    // justifyContent: 'center',
+                    // alignSelf: 'center',
                   }}
                 />
               </TouchableOpacity>
@@ -537,7 +576,7 @@ export const HomeScreen = ({ navigation }) => {
                   fontSize: HeightRatio(30),
                   fontWeight: 'bold',
                   alignSelf: 'center',
-                  marginTop: HeightRatio(20)
+                  marginTop: HeightRatio(20),
                 }}
                 allowFontScaling={false}>
                 SIGN UP!
@@ -549,7 +588,7 @@ export const HomeScreen = ({ navigation }) => {
                   fontSize: HeightRatio(20),
                   fontWeight: 'bold',
                   width: windowWidth * 0.9,
-                  alignSelf: 'center'
+                  alignSelf: 'center',
                 }}
                 allowFontScaling={false}>
                 Enhance your gaming experience and put your skills on display by
@@ -579,7 +618,7 @@ export const HomeScreen = ({ navigation }) => {
                       height: HeightRatio(60),
                       borderRadius: HeightRatio(80),
                       borderWidth: 2,
-                      borderColor: '#ff0076',
+                      borderColor: '#09e049',
                       opacity: 0.9
                     }}
                   />
@@ -588,11 +627,11 @@ export const HomeScreen = ({ navigation }) => {
                       color: 'white',
                       fontSize: HeightRatio(20),
                       fontWeight: 'bold',
-                      alignSelf: 'center'
+                      alignSelf: 'center',
                     }}
                     allowFontScaling={false}
                   >
-                    SIGN UP OR LOGIN
+                    Sign up or login
                   </Text>
                 </View>
               </TouchableOpacity>
