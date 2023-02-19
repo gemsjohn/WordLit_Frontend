@@ -106,13 +106,13 @@ export const KeyScreen = ({ navigation }) => {
                         <Image
                             source={require('../../assets/block_logo.png')}
                             style={{
-                                height: HeightRatio(300),
-                                width: HeightRatio(300),
+                                height: HeightRatio(250),
+                                width: HeightRatio(250),
                                 borderRadius: 200,
                                 marginTop: HeightRatio(40),
                                 alignSelf: 'center'
                             }} />
-                        <View style={{ marginTop: HeightRatio(20), alignSelf: 'center' }}>
+                        <View style={{ marginTop: HeightRatio(10), alignSelf: 'center' }}>
                             <View style={{ flexDirection: 'row' }}>
                                 {count > 0 ?
                                     <View style={{
@@ -193,7 +193,7 @@ export const KeyScreen = ({ navigation }) => {
 
 
                         </View>
-                        <View style={{ marginTop: HeightRatio(20) }}>
+                        <View style={{ marginTop: HeightRatio(10) }}>
                             <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                                 <TouchableOpacity style={{ backgroundColor: 'rgba(0, 0, 0, 0.25)', height: HeightRatio(60), width: HeightRatio(60), borderRadius: HeightRatio(200), margin: HeightRatio(10) }} onPress={() => handleKeyPress('1')}>
                                     <Text

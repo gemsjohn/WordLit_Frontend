@@ -148,10 +148,8 @@ export const Navbar = (props) => {
                 if (authState.current == true && userID.current != null) {
                     setDisplaySignUpModal(false)
                 } else if (!mainState.current.displaySignUpModal) {
-                    console.log("#1")
                     setDisplaySignUpModal(false)
                 } else if (mainState.current.displaySignUpModal) {
-                    console.log("#2")
                     setDisplaySignUpModal(true)
                 }
             }, 10)
@@ -165,11 +163,8 @@ export const Navbar = (props) => {
 
     useEffect(() => {
         if (displaySignUpModalPreviousRef.current != displaySignUpModal) {
-            console.log("#4")
-            console.log("NO CHANGE")
+            return;
         } else {
-            console.log("#5")
-            console.log("THERE HAS BEEN A CHANGE")
             clearInterval(checkSignUpModalIntervalID.current)
         }
     }, [displaySignUpModal])

@@ -163,13 +163,26 @@ useEffect(() => {
           }}
         >
 
-          <View style={{marginTop: HeightRatio(50)}}>
+          <View style={{marginTop: HeightRatio(50), alignItems: 'center'}}>
             <Text style={{
               color: 'white', 
-              fontSize: HeightRatio(50), 
-              textAlign: 'center'}}
+              fontSize: HeightRatio(50),
+              textAlign: 'center',
+              width: HeightRatio(300) 
+            }}
             >
               Leaderboard
+            </Text>
+          </View>
+          <View style={{marginTop: HeightRatio(5), alignItems: 'center'}}>
+            <Text style={{
+              color: 'white', 
+              fontSize: HeightRatio(25),
+              textAlign: 'center',
+              width: HeightRatio(300) 
+            }}
+            >
+              Last 30 days
             </Text>
           </View>
           <SafeAreaView 

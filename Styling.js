@@ -108,8 +108,8 @@ export const Styling = StyleSheet.create({
       alignSelf: 'center'
     },
     gridBlock: {
-      height: windowWidth * 0.16,
-      width: windowWidth * 0.16,
+      height: WidthRatio(60),
+      width: WidthRatio(60),
       margin: 1,
       flexDirection: 'row',
       justifyContent: 'center',
