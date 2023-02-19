@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useContext, useCallback } from 'react';
 import { Alert, StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, StatusBar, SafeAreaView, Dimensions, Button, Linking, ImageBackground, FlatList, PixelRatio, Modal, ActivityIndicator } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faSolid, faUser, faPlus, faUpLong, faMagnifyingGlass, faCheck, faLocationPin, faEnvelope, faLock, faGear, faX } from '@fortawesome/free-solid-svg-icons';
+import { faSolid, faFlagCheckered, faUser, faPlus, faUpLong, faMagnifyingGlass, faCheck, faLocationPin, faEnvelope, faLock, faGear, faX } from '@fortawesome/free-solid-svg-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Navbar } from '../../components/Navbar';
@@ -262,31 +262,35 @@ export const HomeScreen = ({ navigation }) => {
                       </View>
                     </View>
 
-                    <View
-                      style={{
-                        
-                      }}
+                    <TouchableOpacity
+                      onPress={() => { navigation.dispatch(resetActionGame); }}
+                      style={{}}
                     >
-                      {/* - - - - - - - - - - - - - -  */}
-                      {/* BUTTON: New Game */}
-                      {/* - - - - - - - - - - - - - -  */}
-                      <TouchableOpacity
-                        onPress={() => { navigation.dispatch(resetActionGame); }}
-                        style={{}}
-                      >
-                        <Image
-                          source={require('../../assets/new_game.png')}
-                          style={{
-                            height: 150,
-                            width: 150,
-                            alignSelf: 'center',
-                            justifyContent: 'center',
-                            marginTop: 10,
-                          }}
-                        />
-                      </TouchableOpacity>
-                    </View>
+                      <View
+                        style={{
+                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                          padding: HeightRatio(20),
+                          borderRadius: HeightRatio(20),
+                          borderWidth: 2,
+                          borderColor: '#09e049',
+                          margin: HeightRatio(10),
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
 
+                      >
+
+                        <View style={{ flexDirection: 'row' }}>
+
+                          <Text style={{
+                            color: 'white',
+                            fontSize: HeightRatio(30)
+                          }}>
+                            NEW GAME
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
 
                     <View
                       style={{
@@ -325,19 +329,16 @@ export const HomeScreen = ({ navigation }) => {
                         <DemoGrid />
                       </View>
                       {/* #1 */}
-                      <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                      <View style={{ flexDirection: 'row', margin: HeightRatio(10) }}>
                         <View
                           style={{
                             backgroundColor: 'rgba(0, 0, 0, 0.3)',
                             borderRadius: 20,
-                            width: windowWidth * 0.12,
-                            height: windowWidth * 0.09,
-                            marginRight: 10,
-                            marginTop: 10,
-                            borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                            borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                            borderTopLeftRadius: 10,
-                            borderBottomLeftRadius: 30,
+                            width: HeightRatio(50),
+                            height: HeightRatio(50),
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginRight: HeightRatio(10)
                           }}
                         >
                           <Text
@@ -354,19 +355,16 @@ export const HomeScreen = ({ navigation }) => {
                         </View>
                       </View>
                       {/* #2 */}
-                      <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                      <View style={{ flexDirection: 'row', margin: HeightRatio(10) }}>
                         <View
                           style={{
                             backgroundColor: 'rgba(0, 0, 0, 0.3)',
                             borderRadius: 20,
-                            width: windowWidth * 0.12,
-                            height: windowWidth * 0.09,
-                            marginRight: 10,
-                            marginTop: 10,
-                            borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                            borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                            borderTopLeftRadius: 10,
-                            borderBottomLeftRadius: 30,
+                            width: HeightRatio(50),
+                            height: HeightRatio(50),
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginRight: HeightRatio(10)
                           }}
                         >
                           <Text
@@ -386,19 +384,16 @@ export const HomeScreen = ({ navigation }) => {
                         </View>
                       </View>
                       {/* #3 */}
-                      <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                      <View style={{ flexDirection: 'row', margin: HeightRatio(10) }}>
                         <View
                           style={{
                             backgroundColor: 'rgba(0, 0, 0, 0.3)',
                             borderRadius: 20,
-                            width: windowWidth * 0.12,
-                            height: windowWidth * 0.09,
-                            marginRight: 10,
-                            marginTop: 10,
-                            borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                            borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                            borderTopLeftRadius: 10,
-                            borderBottomLeftRadius: 30,
+                            width: HeightRatio(50),
+                            height: HeightRatio(50),
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginRight: HeightRatio(10)
                           }}
                         >
                           <Text
@@ -418,19 +413,16 @@ export const HomeScreen = ({ navigation }) => {
                         </View>
                       </View>
                       {/* #4 */}
-                      <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                      <View style={{ flexDirection: 'row', margin: HeightRatio(10) }}>
                         <View
                           style={{
                             backgroundColor: 'rgba(0, 0, 0, 0.3)',
                             borderRadius: 20,
-                            width: windowWidth * 0.12,
-                            height: windowWidth * 0.09,
-                            marginRight: 10,
-                            marginTop: 10,
-                            borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                            borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                            borderTopLeftRadius: 10,
-                            borderBottomLeftRadius: 30,
+                            width: HeightRatio(50),
+                            height: HeightRatio(50),
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginRight: HeightRatio(10)
                           }}
                         >
                           <Text
@@ -447,19 +439,16 @@ export const HomeScreen = ({ navigation }) => {
                         </View>
                       </View>
                       {/* #5 */}
-                      <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                      <View style={{ flexDirection: 'row', margin: HeightRatio(10) }}>
                         <View
                           style={{
                             backgroundColor: 'rgba(0, 0, 0, 0.3)',
                             borderRadius: 20,
-                            width: windowWidth * 0.12,
-                            height: windowWidth * 0.09,
-                            marginRight: 10,
-                            marginTop: 10,
-                            borderLeftColor: 'rgba(255, 255, 255, 0.5)',
-                            borderBottomColor: 'rgba(255, 255, 255, 0.5)',
-                            borderTopLeftRadius: 10,
-                            borderBottomLeftRadius: 30,
+                            width: HeightRatio(50),
+                            height: HeightRatio(50),
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginRight: HeightRatio(10)
                           }}
                         >
                           <Text
@@ -471,25 +460,55 @@ export const HomeScreen = ({ navigation }) => {
                         </View>
                         <View style={{ flexDirection: 'column' }}>
                           <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
-                            Score points are based on time and guesses.
+                            Use question marks for a hint!
+                          </Text>
+                          <Image
+                            style={{ height: 40, width: 40, margin: 10 }}
+                            source={require('../../assets/Qmark_0.png')}
+                          />
+                        </View>
+                      </View>
+                      {/* #6 */}
+                      <View style={{ flexDirection: 'row', margin: HeightRatio(10) }}>
+                        <View
+                          style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                            borderRadius: 20,
+                            width: HeightRatio(50),
+                            height: HeightRatio(50),
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginRight: HeightRatio(10)
+                          }}
+                        >
+                          <Text
+                            style={{ color: 'white', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center' }}
+                            allowFontScaling={false}
+                          >
+                            6
+                          </Text>
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                          <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                            Final score is based on time and guesses.
                           </Text>
                           <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                            +100 points if you guess both words within 12 guesses and under 20 seconds.
+                            <Text style={{ color: '#09e049' }}>+100</Text> points if you guess both words in under 20 seconds.
                           </Text>
                           <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                            +80 points if you guess both words within 12 guesses and under 40 seconds.
+                            <Text style={{ color: '#09e049' }}>+80</Text> points if you guess both words in under 40 seconds.
                           </Text>
                           <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                            +40 points if you guess both words within 12 guesses and under 60 seconds.
+                            <Text style={{ color: '#09e049' }}>+40</Text> points if you guess both words in under 60 seconds.
                           </Text>
                           <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                            +20 points if you guess both words within 12 guesses and under 80 seconds.
+                            <Text style={{ color: '#09e049' }}>+20</Text> points if you guess both words in under 80 seconds.
                           </Text>
                           <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                            +10 points if you guess both words within 12 guesses and under 100 seconds.
+                            <Text style={{ color: '#09e049' }}>+10</Text> points if you guess both words in under 100 seconds.
                           </Text>
                           <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                            +5 points if you guess both words within 12 guesses.
+                            <Text style={{ color: '#09e049' }}>+5</Text> points if you guess both words within 12 guesses.
                           </Text>
                         </View>
                       </View>
@@ -520,9 +539,9 @@ export const HomeScreen = ({ navigation }) => {
         visible={displaySignUpModal}
         onRequestClose={() => {
           setDisplaySignUpModal(!displaySignUpModal);
-          setMainState({
-            displaySignUpModal: false
-          })
+          // setMainState({
+          //   displaySignUpModal: false
+          // })
         }}
       >
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

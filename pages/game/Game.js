@@ -125,7 +125,7 @@ export const GameScreen = ({ navigation }) => {
     const [leftRightHintReduction, setLeftRightHintReduction] = useState(0);
     const [topBottomHintReduction, setTopBottomHintReduction] = useState(0);
 
-    
+
 
     // Timer: Start and Stop
     const start = () => { setStartTime(Date.now()); };
@@ -138,7 +138,7 @@ export const GameScreen = ({ navigation }) => {
     });
 
     useLayoutEffect(() => {
-        Generate(); 
+        Generate();
     }, [])
 
 
@@ -838,11 +838,10 @@ export const GameScreen = ({ navigation }) => {
 
 
 
-
     const handleKeyPress = (key) => {
+        console.log("handleKeyPress")
         setSelectedKey(key);
-        setCurrentGuess([...currentGuess, key]);
-        NewKeyboard(inputInit, currentGuess.concat([key]));
+        NewKeyboard(inputInit);
     };
 
     const ReplaceKeyboard = () => {
@@ -889,7 +888,7 @@ export const GameScreen = ({ navigation }) => {
 
         setInputInit(scrambledCombined.filter((letter, index) => scrambledCombined.indexOf(letter) === index))
 
-        NewKeyboard(scrambledCombined.filter((letter, index) => scrambledCombined.indexOf(letter) === index), storedGuesses);
+        NewKeyboard(scrambledCombined.filter((letter, index) => scrambledCombined.indexOf(letter) === index));
     }
 
 
@@ -898,11 +897,10 @@ export const GameScreen = ({ navigation }) => {
 
 
 
-    const NewKeyboard = (input, guesses) => {
+    const NewKeyboard = (input) => {
         let keys = input.map(letter => {
             return {
                 letter: letter.toUpperCase(),
-                // guessed: guesses.includes(letter.toUpperCase()),
                 color: storedGuesses.includes(letter.toUpperCase()) ? 'black' : '#19d0bf',
             };
         });
@@ -911,8 +909,46 @@ export const GameScreen = ({ navigation }) => {
 
         setTimeout(() => {
             setRevealOptions(true);
-        }, 1000);
+        }, 10);
     };
+
+    const renderKeyButton = (key, index) => (
+        <View
+            key={index}
+            style={{
+
+            }}>
+            <TouchableOpacity
+                onPress={() => {
+                    setPromptGuessInput(key.letter);
+                    handleKeyPress(key.letter);
+                }}
+                style={{
+                    borderRadius: 6,
+                    borderWidth: 2,
+                    borderColor: 'black',
+                    height: 60,
+                    width: 70,
+                    margin: 4,
+                    opacity: 0.9,
+                    backgroundColor: selectedKey === key.letter ? '#a2ffff' : key.color,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+                accessible={true}
+                accessibilityLabel={`Keyboard letter ${key.letter}.`}>
+                <Text
+                    style={{
+                        color: 'black',
+                        fontSize: 35,
+                        fontWeight: 'bold',
+                    }}
+                    allowFontScaling={false}>
+                    {key.letter}
+                </Text>
+            </TouchableOpacity>
+        </View>
+    );
 
     useEffect(() => {
         if (bothWordsSelected) {
@@ -997,6 +1033,24 @@ export const GameScreen = ({ navigation }) => {
                             <>
                                 {revealOptions ?
                                     <>
+                                    <View
+                                            style={{
+                                                position: 'absolute',
+                                                bottom: -45,
+                                                left: 5,
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <Image
+                                                source={require('../../assets/clock_icon.png')}
+                                                style={{height: HeightRatio(35), width: HeightRatio(35), marginRight: HeightRatio(5)}}
+                                            />
+                                            <Text style={{color: 'white', fontSize: HeightRatio(20), width: HeightRatio(200)}}>
+                                                Timer
+                                            </Text>
+                                        </View>
                                         <View
                                             style={{
                                                 alignSelf: 'center',
@@ -1118,54 +1172,15 @@ export const GameScreen = ({ navigation }) => {
                                             </View>
                                         </View>
 
-                                        <View style={{
-                                            flexDirection: 'row',
-                                            flexWrap: 'wrap',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            marginTop: 10
-                                        }}>
-                                            {letterOptionDisplay.map((key, index) => (
-                                                <View
-                                                    key={index}
-                                                    style={{
-                                                        borderRadius: 6,
-                                                        borderWidth: 2,
-                                                        borderColor: 'black',
-                                                        height: 60,
-                                                        width: 70,
-                                                        margin: 4,
-                                                        opacity: 0.9,
-                                                        backgroundColor: selectedKey === key.letter ? '#a2ffff' : key.color,
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center'
-                                                    }}
-                                                >
-
-                                                    <TouchableOpacity
-                                                        onPress={() => {
-                                                            setPromptGuessInput(key.letter);
-                                                            handleKeyPress(key.letter);
-                                                        }}
-                                                        style={{}}
-                                                        accessible={true}
-                                                        accessibilityLabel={`Keyboard letter ${key.letter}.`}
-                                                    >
-                                                        <Text
-                                                            style={{
-                                                                color: 'black',
-                                                                fontSize: 35,
-                                                                fontWeight: 'bold',
-                                                                // alignSelf: 'center',
-                                                                // marginTop: 7,
-                                                            }}
-                                                            allowFontScaling={false}
-                                                        >
-                                                            {key.letter}
-                                                        </Text>
-                                                    </TouchableOpacity>
-                                                </View>
-                                            ))}
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                flexWrap: 'wrap',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                marginTop: 10,
+                                            }}>
+                                            {letterOptionDisplay.map((key, index) => renderKeyButton(key, index))}
                                         </View>
                                     </>
 
@@ -1180,7 +1195,7 @@ export const GameScreen = ({ navigation }) => {
                                 }
                             </>
                             :
-                            
+
                             null
                         }
 
@@ -1243,15 +1258,61 @@ export const GameScreen = ({ navigation }) => {
                                                 // style={Styling.modalWordButton}
                                                 disabled={!displayTopBottomHint ? false : true}
                                             >
-                                                <Image
-                                                    style={{ height: 150, width: 350, alignSelf: 'center' }}
-                                                    source={require('../../assets/hint_top_to_bottom.png')}
-                                                />
+                                                <View style={{
+                                                    // backgroundColor: '#09e049',
+                                                    display: 'flex',
+                                                    justifyContent: 'flex-start',
+                                                    padding: HeightRatio(20),
+                                                    borderRadius: HeightRatio(40),
+                                                    // alignSelf: 'center',
+                                                    marginTop: HeightRatio(20),
+                                                    // margin: HeightRatio(10),
+                                                    width: WidthRatio(300)
+                                                }}>
+                                                    <LinearGradient
+                                                        colors={['#0b132b', '#181d21']}
+                                                        style={{
+                                                            ...Styling.background,
+                                                            height: HeightRatio(95),
+                                                            borderRadius: HeightRatio(80),
+                                                            borderWidth: 2,
+                                                            borderColor: '#09e049',
+                                                            opacity: 0.9
+                                                        }}
+                                                    />
+                                                    <View style={{
+                                                        flexDirection: 'column'
+                                                    }}>
+                                                    <Text
+                                                        style={{
+                                                            color: 'white',
+                                                            fontSize: HeightRatio(25),
+                                                            fontWeight: 'bold',
+                                                            alignSelf: 'center',
+                                                        }}
+                                                        allowFontScaling={false}
+                                                    >
+                                                        Show Hint
+                                                    </Text>
+                                                    <Text
+                                                        style={{
+                                                            color: 'white',
+                                                            fontSize: HeightRatio(20),
+                                                            // fontWeight: 'bold',
+                                                            // alignSelf: 'center',
+                                                            textAlign: 'center'
+                                                        }}
+                                                        allowFontScaling={false}
+                                                    >
+                                                        Top to Bottom
+                                                    </Text>
+                                                    </View>
+                                                </View>
                                             </TouchableOpacity>
 
 
 
-                                            <View style={{ alignSelf: 'center' }}>
+                                            <View style={{ alignSelf: 'center', margin: HeightRatio(20) }}>
                                                 {definition3 != '' || definition4 != '' || definition5 != '' ?
                                                     <View style={{ marginTop: 10 }}>
                                                         <Text style={Styling.modalContentHeader}>
@@ -1370,12 +1431,58 @@ export const GameScreen = ({ navigation }) => {
                                                 // style={Styling.modalWordButton}
                                                 disabled={!displayLeftRightHint ? false : true}
                                             >
-                                                <Image
-                                                    style={{ height: 150, width: 350, alignSelf: 'center' }}
-                                                    source={require('../../assets/hint_left_to_right.png')}
-                                                />
+                                                <View style={{
+                                                    // backgroundColor: '#09e049',
+                                                    display: 'flex',
+                                                    justifyContent: 'flex-start',
+                                                    padding: HeightRatio(20),
+                                                    borderRadius: HeightRatio(40),
+                                                    // alignSelf: 'center',
+                                                    marginTop: HeightRatio(20),
+                                                    // margin: HeightRatio(10),
+                                                    width: WidthRatio(300)
+                                                }}>
+                                                    <LinearGradient
+                                                        colors={['#0b132b', '#181d21']}
+                                                        style={{
+                                                            ...Styling.background,
+                                                            height: HeightRatio(95),
+                                                            borderRadius: HeightRatio(80),
+                                                            borderWidth: 2,
+                                                            borderColor: '#09e049',
+                                                            opacity: 0.9
+                                                        }}
+                                                    />
+                                                    <View style={{
+                                                        flexDirection: 'column'
+                                                    }}>
+                                                    <Text
+                                                        style={{
+                                                            color: 'white',
+                                                            fontSize: HeightRatio(25),
+                                                            fontWeight: 'bold',
+                                                            alignSelf: 'center',
+                                                        }}
+                                                        allowFontScaling={false}
+                                                    >
+                                                        Show Hint
+                                                    </Text>
+                                                    <Text
+                                                        style={{
+                                                            color: 'white',
+                                                            fontSize: HeightRatio(20),
+                                                            // fontWeight: 'bold',
+                                                            // alignSelf: 'center',
+                                                            textAlign: 'center'
+                                                        }}
+                                                        allowFontScaling={false}
+                                                    >
+                                                        Left to Right
+                                                    </Text>
+                                                    </View>
+                                                </View>
                                             </TouchableOpacity>
-                                            <View style={{ alignSelf: 'center' }}>
+                                            <View style={{ alignSelf: 'center', margin: HeightRatio(20) }}>
                                                 {definition0 != '' || definition1 != '' || definition2 != '' ?
                                                     <View style={{ marginTop: 10 }}>
                                                         <Text style={Styling.modalContentHeader}>

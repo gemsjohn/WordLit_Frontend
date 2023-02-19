@@ -145,11 +145,13 @@ export const Navbar = (props) => {
         if (props.from == 'home') {
             checkSignUpModalIntervalID.current = setInterval(() => {
                 displaySignUpModalPreviousRef.current = displaySignUpModal;
-                if (authState.current == true && userID != null && !mainState.current.displaySignUpModal) {
+                if (authState.current == true && userID.current != null) {
                     setDisplaySignUpModal(false)
-        
-        
-                } else {
+                } else if (!mainState.current.displaySignUpModal) {
+                    console.log("#1")
+                    setDisplaySignUpModal(false)
+                } else if (mainState.current.displaySignUpModal) {
+                    console.log("#2")
                     setDisplaySignUpModal(true)
                 }
             }, 10)
@@ -163,8 +165,10 @@ export const Navbar = (props) => {
 
     useEffect(() => {
         if (displaySignUpModalPreviousRef.current != displaySignUpModal) {
-            console.log("NO CHNAGE")
+            console.log("#4")
+            console.log("NO CHANGE")
         } else {
+            console.log("#5")
             console.log("THERE HAS BEEN A CHANGE")
             clearInterval(checkSignUpModalIntervalID.current)
         }
