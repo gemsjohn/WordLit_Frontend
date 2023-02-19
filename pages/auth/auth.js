@@ -189,13 +189,32 @@ export const Auth = ({ navigation }) => {
       setPromptUsernameInput("")
       setPromptPasswordInput("")
 
+      // Alert.alert(
+      //   "Sign Up Failed",
+      //   `${e}`,
+      //   [
+      //     { text: "OK", onPress: () => console.log("OK Pressed") }
+      //   ]
+      // );
+
+      const errorRegex = /duplicate key.*index: (\w+)_\d+/i;
+      const emailErrorRegex = /email/i;
+      const errorMessage = `${e}`;
+
+      let fieldName = "field";
+
+      if (errorMessage.match(errorRegex)) {
+        fieldName = errorMessage.match(errorRegex)[1];
+      } else if (errorMessage.match(emailErrorRegex)) {
+        fieldName = "email";
+      }
+
       Alert.alert(
         "Sign Up Failed",
-        `${e}`,
-        [
-          { text: "OK", onPress: () => console.log("OK Pressed") }
-        ]
+        `The ${fieldName} is incorrect or already exists.`,
+        [{ text: "OK", onPress: () => console.log("OK Pressed") }]
       );
+
 
       setMainState({
         bearerToken: null,
@@ -625,14 +644,18 @@ export const Auth = ({ navigation }) => {
                           value={promptInput_1}
                           onChangeText={setPromptInput_1}
                           secureTextEntry={true}
-                          style={Styling.textInputStyle}
+                          style={{
+                            ...Styling.textInputStyle,
+                            borderColor: displayLoginFailureAlert ? 'red' : 'white',
+                            borderWidth: displayLoginFailureAlert ? 4 : 2
+                          }}
                           disableFullscreenUI={true}
                           allowFontScaling={false}
                         />
                         {displayLoginFailureAlert &&
-                          <View style={{ alignSelf: 'center' }}>
+                          <View style={{ alignSelf: 'center', }}>
                             <Text
-                              style={{ fontSize: HeightRatio(60), fontWeight: 'bold', color: 'red' }}
+                              style={{ fontSize: HeightRatio(15), fontWeight: 'bold', color: 'red' }}
                               allowFontScaling={false}
                             >
                               Incorrect Credentials
