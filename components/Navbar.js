@@ -282,7 +282,7 @@ export const Navbar = (props) => {
                             flexDirection: 'column'
                         }}
                         accessible={true}
-                        accessibilityLabel="Game"
+                        accessibilityLabel="Play"
                     >
                         <FontAwesomeIcon
                             icon={faSolid, faFlagCheckered}
@@ -293,7 +293,7 @@ export const Navbar = (props) => {
                             style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
                             allowFontScaling={false}
                         >
-                            Game
+                            Play
                         </Text>
                     </View>
                 </TouchableOpacity>
@@ -312,7 +312,7 @@ export const Navbar = (props) => {
                             flexDirection: 'column'
                         }}
                         accessible={true}
-                        accessibilityLabel="Game"
+                        accessibilityLabel="Mood Color"
                     >
                         <Image
                             source={require('../assets/color_wheel.png')}

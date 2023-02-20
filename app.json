@@ -2,7 +2,7 @@
   "expo": {
     "name": "WordLit",
     "slug": "WordLit",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "orientation": "portrait",
     "icon": "./assets/block_logo.png",
     "userInterfaceStyle": "light",
@@ -22,7 +22,7 @@
     },
     "android": {
       "package": "com.WordLit",
-      "versionCode": 15,
+      "versionCode": 16,
       "permissions": ["com.google.android.gms.permission.AD_ID"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/block_logo.png",
