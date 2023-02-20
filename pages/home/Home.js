@@ -366,7 +366,7 @@ export const HomeScreen = ({ navigation }) => {
                             </Text>
                           </View>
                           <View style={{ flexDirection: 'column' }}>
-                            <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                            <Text allowFontScaling={false} style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
                               Two words will appear.
                             </Text>
                           </View>
@@ -392,10 +392,10 @@ export const HomeScreen = ({ navigation }) => {
                             </Text>
                           </View>
                           <View style={{ flexDirection: 'column' }}>
-                            <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                            <Text allowFontScaling={false} style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
                               One letter will be revealed.
                             </Text>
-                            <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                            <Text allowFontScaling={false} style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
                               That letter will always be the overlapping letter.
                             </Text>
                           </View>
@@ -421,10 +421,10 @@ export const HomeScreen = ({ navigation }) => {
                             </Text>
                           </View>
                           <View style={{ flexDirection: 'column' }}>
-                            <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                            <Text allowFontScaling={false} style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
                               Guess that letter.
                             </Text>
-                            <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                            <Text allowFontScaling={false} style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
                               If you are lucky, the overlapping letter may appear in other places!
                             </Text>
                           </View>
@@ -450,7 +450,7 @@ export const HomeScreen = ({ navigation }) => {
                             </Text>
                           </View>
                           <View style={{ flexDirection: 'column' }}>
-                            <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                            <Text allowFontScaling={false} style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
                               You have 12 guesses.
                             </Text>
                           </View>
@@ -476,11 +476,11 @@ export const HomeScreen = ({ navigation }) => {
                             </Text>
                           </View>
                           <View style={{ flexDirection: 'column' }}>
-                            <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                            <Text allowFontScaling={false} style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
                               Use question marks for a hint!
                             </Text>
                             <Image
-                              style={{ height: 40, width: 40, margin: 10 }}
+                              style={{ height: HeightRatio(40), width: HeightRatio(40), margin: 10 }}
                               source={require('../../assets/Qmark_0.png')}
                             />
                           </View>
@@ -506,26 +506,26 @@ export const HomeScreen = ({ navigation }) => {
                             </Text>
                           </View>
                           <View style={{ flexDirection: 'column' }}>
-                            <Text style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
+                            <Text allowFontScaling={false} style={{ color: '#ffba08', fontSize: HeightRatio(25), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.4 }}>
                               Final score is based on time and guesses.
                             </Text>
-                            <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                              <Text style={{ color: '#09e049' }}>+100</Text> points if you guess both words in under 20 seconds.
+                            <Text allowFontScaling={false} style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                              <Text allowFontScaling={false} style={{ color: '#09e049' }}>+100</Text> points if you guess both words in under 20 seconds.
                             </Text>
-                            <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                              <Text style={{ color: '#09e049' }}>+80</Text> points if you guess both words in under 40 seconds.
+                            <Text allowFontScaling={false} style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                              <Text allowFontScaling={false} style={{ color: '#09e049' }}>+80</Text> points if you guess both words in under 40 seconds.
                             </Text>
-                            <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                              <Text style={{ color: '#09e049' }}>+40</Text> points if you guess both words in under 60 seconds.
+                            <Text allowFontScaling={false} style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                              <Text allowFontScaling={false} style={{ color: '#09e049' }}>+40</Text> points if you guess both words in under 60 seconds.
                             </Text>
-                            <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                              <Text style={{ color: '#09e049' }}>+20</Text> points if you guess both words in under 80 seconds.
+                            <Text allowFontScaling={false} style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                              <Text allowFontScaling={false} style={{ color: '#09e049' }}>+20</Text> points if you guess both words in under 80 seconds.
                             </Text>
-                            <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                              <Text style={{ color: '#09e049' }}>+10</Text> points if you guess both words in under 100 seconds.
+                            <Text allowFontScaling={false} style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                              <Text allowFontScaling={false} style={{ color: '#09e049' }}>+10</Text> points if you guess both words in under 100 seconds.
                             </Text>
-                            <Text style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
-                              <Text style={{ color: '#09e049' }}>+5</Text> points if you guess both words within 12 guesses.
+                            <Text allowFontScaling={false} style={{ color: 'white', fontSize: HeightRatio(20), fontWeight: 'bold', alignSelf: 'center', marginTop: 10, width: windowWidth / 1.5 }}>
+                              <Text allowFontScaling={false} style={{ color: '#09e049' }}>+5</Text> points if you guess both words within 12 guesses.
                             </Text>
                           </View>
                         </View>
@@ -572,7 +572,7 @@ export const HomeScreen = ({ navigation }) => {
 
                           <Text style={{
                             color: 'white', fontSize: HeightRatio(40), fontWeight: 'bold',
-                          }}>
+                          }} allowFontScaling={false}>
                             Play Game
                           </Text>
                         </View>
@@ -637,8 +637,8 @@ export const HomeScreen = ({ navigation }) => {
                 }}
                 style={{
                   borderRadius: 100,
-                  height: 100,
-                  width: 100,
+                  height: HeightRatio(100),
+                  width: HeightRatio(100),
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}

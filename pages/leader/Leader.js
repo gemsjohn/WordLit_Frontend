@@ -170,6 +170,7 @@ useEffect(() => {
               textAlign: 'center',
               width: HeightRatio(300) 
             }}
+            allowFontScaling={false}
             >
               Leaderboard
             </Text>
@@ -181,6 +182,7 @@ useEffect(() => {
               textAlign: 'center',
               width: HeightRatio(300) 
             }}
+            allowFontScaling={false}
             >
               Last 30 days
             </Text>

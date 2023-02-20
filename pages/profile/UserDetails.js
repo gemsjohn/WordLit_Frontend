@@ -215,7 +215,7 @@ export const UserDetails = (props) => {
                                     color: 'white',
                                     fontSize: HeightRatio(20),
                                     fontWeight: 'bold',
-                                    margin: HeightRatio(5)
+                                    margin: HeightRatio(10)
                                 }} 
                                 allowFontScaling={false}
                             >{EditableFields[i].title}</Text>

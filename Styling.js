@@ -62,7 +62,7 @@ export const Styling = StyleSheet.create({
       width: HeightRatio(40),
       height: HeightRatio(40),
       borderRadius: 20,
-      margin: 10,
+      margin: HeightRatio(10),
     },
     difficultyButton: {
       display: 'flex',
@@ -108,8 +108,8 @@ export const Styling = StyleSheet.create({
       alignSelf: 'center'
     },
     gridBlock: {
-      height: WidthRatio(60),
-      width: WidthRatio(60),
+      height: WidthRatio(55),
+      width: WidthRatio(55),
       margin: 1,
       flexDirection: 'row',
       justifyContent: 'center',
@@ -210,7 +210,7 @@ export const Styling = StyleSheet.create({
         color: 'white',
         display: 'flex',
         justifyContent: 'flex-start',
-        padding: 20,
+        padding: HeightRatio(20),
         border: 'solid',
         borderWidth: 2,
         borderColor: 'white',
@@ -251,11 +251,7 @@ export const Styling = StyleSheet.create({
         alignSelf: 'center',
         marginRight: 10
     },
-    modalScoringVarText: {
-        color: 'white',
-        fontSize: 30,
-        fontWeight: 'bold',
-    },
+
     profileDivisionLine: {
         borderColor: 'white',
         borderBottomWidth: 1,
@@ -313,18 +309,18 @@ export const Styling = StyleSheet.create({
     },
     modalContentHeader: {
         color: '#4cc9f0',
-        fontSize: 30,
+        fontSize: HeightRatio(25),
         fontWeight: 'bold',
     },
     modalContent: {
         color: 'white',
-        fontSize: 25,
+        fontSize: HeightRatio(18),
         fontWeight: 'bold',
         alignSelf: 'center'
     },
     modalScoringVarText: {
         color: 'white',
-        fontSize: 40,
+        fontSize: HeightRatio(25),
         fontWeight: 'bold',
     },
     row: {

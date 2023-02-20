@@ -36,7 +36,7 @@ const colors = [
     { value: 'blue', gradient: ['#00171f', '#0466c8'], image: require('../assets/dalle_3.png'), id: 3 },
     { value: 'purple', gradient: ['#240046', '#c77dff'], image: require('../assets/dalle_5.png'), id: 4 },
     { value: '#0b132b', gradient: ['#0b132b', '#3a506b'], image: require('../assets/dalle_7.png'), id: 5 },
-  ];
+];
 
 
 export const Navbar = (props) => {
@@ -119,10 +119,10 @@ export const Navbar = (props) => {
         // console.log(color)
         // setSelectedColor(color);
         try {
-          const jsonValue = JSON.stringify(color)
-          await AsyncStorage.setItem('selectedColor', jsonValue);
+            const jsonValue = JSON.stringify(color)
+            await AsyncStorage.setItem('selectedColor', jsonValue);
         } catch (e) {
-          console.error(e)
+            console.error(e)
         }
     };
 
@@ -174,244 +174,244 @@ export const Navbar = (props) => {
 
     return (
         <>
-        {displayColorOptions &&
-        <>
-        <View
-                style={{
-                    position: 'absolute',
-                    zIndex: 10,
-                    // left: 0,
-                    // right: 0,
-                    // bottom: HeightRatio(100),
-                    justifyContent: 'center',
-                    alignSelf: 'center',
-                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                    flexDirection: 'row',
-                    padding: HeightRatio(10),
-                    height: windowHeight,
-                    width: windowWidth,
-                    borderRadius: HeightRatio(30)
-                }}
-            ></View>
+            {displayColorOptions &&
+                <>
+                    <View
+                        style={{
+                            position: 'absolute',
+                            zIndex: 10,
+                            // left: 0,
+                            // right: 0,
+                            // bottom: HeightRatio(100),
+                            justifyContent: 'center',
+                            alignSelf: 'center',
+                            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                            flexDirection: 'row',
+                            padding: HeightRatio(10),
+                            height: windowHeight,
+                            width: windowWidth,
+                            borderRadius: HeightRatio(30)
+                        }}
+                    ></View>
+                    <View
+                        style={{
+                            position: 'absolute',
+                            zIndex: 20,
+                            // left: 0,
+                            // right: 0,
+                            bottom: HeightRatio(100),
+                            justifyContent: 'center',
+                            alignSelf: 'center',
+                            backgroundColor: '#161b21',
+                            flexDirection: 'row',
+                            padding: HeightRatio(10),
+                            height: HeightRatio(90),
+                            width: HeightRatio(350),
+                            borderRadius: HeightRatio(30)
+                        }}
+                    >
+                        <View style={Styling.circlecontainer}>
+                            {colors.map((color) => (
+                                <TouchableOpacity
+                                    key={color.id}
+                                    style={[Styling.circle, { backgroundColor: color.value }]}
+                                    onPress={() => { selectColor(color); setDisplayColorOptions(current => !current) }}
+                                    accessible={true}
+                                    accessibilityLabel={`${color} background.`}
+                                />
+                            ))}
+                        </View>
+                    </View>
+                </>
+            }
             <View
                 style={{
                     position: 'absolute',
-                    zIndex: 20,
-                    // left: 0,
-                    // right: 0,
-                    bottom: HeightRatio(100),
+                    zIndex: 10,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
                     justifyContent: 'center',
-                    alignSelf: 'center',
+                    alignItems: 'center',
                     backgroundColor: '#161b21',
                     flexDirection: 'row',
                     padding: HeightRatio(10),
-                    height: HeightRatio(90),
-                    width: HeightRatio(350),
-                    borderRadius: HeightRatio(30)
+                    opacity: displaySignUpModal ? 0.1 : 1.0
                 }}
-            >
-                <View style={Styling.circlecontainer}>
-                  {colors.map((color) => (
-                    <TouchableOpacity
-                      key={color.id}
-                      style={[Styling.circle, { backgroundColor: color.value }]}
-                      onPress={() => {selectColor(color); setDisplayColorOptions(current => !current)}}
-                      accessible={true}
-                      accessibilityLabel={`${color} background.`}
-                    />
-                  ))}
-                </View>
-            </View>
-            </>
-        }
-        <View
-            style={{
-                position: 'absolute',
-                zIndex: 10,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#161b21',
-                flexDirection: 'row',
-                padding: HeightRatio(10),
-                opacity: displaySignUpModal ? 0.1 : 1.0
-            }}
-            
-        >
-            {/* [[[HOME]]] */}
-            <TouchableOpacity
-                onPress={() => { props.nav.dispatch(resetActionHome); }}
-            >
-                <View
-                    style={{
-                        backgroundColor: `${homeBg}`,
-                        padding: 8,
-                        borderRadius: HeightRatio(10),
-                        width: windowWidth / 5,
-                        flexDirection: 'column'
-                    }}
-                    accessible={true}
-                    accessibilityLabel="Home"
-                >
-                    <FontAwesomeIcon
-                        icon={faSolid, faHouse}
-                        style={{ color: '#7678ed', alignSelf: 'center' }}
-                        size={25}
-                    />
-                    <Text
-                        style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
-                        allowFontScaling={false}
-                    >
-                        Home
-                    </Text>
-                </View>
-            </TouchableOpacity>
 
-            {/* [[[GAME]]] */}
-            <TouchableOpacity
-                onPress={() => { props.nav.dispatch(resetActionGame); }}
             >
-                <View
-                    style={{
-                        backgroundColor: `${gameBg}`,
-                        padding: 8,
-                        borderRadius: HeightRatio(10),
-                        width: windowWidth / 5,
-                        flexDirection: 'column'
-                    }}
-                    accessible={true}
-                    accessibilityLabel="Game"
-                >
-                    <FontAwesomeIcon
-                        icon={faSolid, faFlagCheckered}
-                        style={{ color: '#aaf683', alignSelf: 'center' }}
-                        size={25}
-                    />
-                    <Text
-                        style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
-                        allowFontScaling={false}
-                    >
-                        Game
-                    </Text>
-                </View>
-            </TouchableOpacity>
-
-            {/* [[[COLOR]]] */}
-            <TouchableOpacity
-                onPress={() => {  setDisplayColorOptions(current => !current) }}
-            >
-                <View
-                    style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                        padding: 8,
-                        borderRadius: HeightRatio(50),
-                        width: windowWidth / 8,
-                        margin: HeightRatio(10),
-                        flexDirection: 'column'
-                    }}
-                    accessible={true}
-                    accessibilityLabel="Game"
-                >
-                    <Image
-                        source={require('../assets/color_wheel.png')}
-                        style={{ width: HeightRatio(40), height: HeightRatio(40), alignSelf: 'center' }}
-                    />
-                </View>
-            </TouchableOpacity>
-
-
-            {/* [[[LEADER BOARD]]] */}
-            <TouchableOpacity
-                onPress={() => { props.nav.dispatch(resetActionLeader); }}
-            >
-                <View
-                    style={{
-                        backgroundColor: `${leaderBg}`,
-                        padding: 8,
-                        borderRadius: HeightRatio(10),
-                        width: windowWidth / 5,
-                        flexDirection: 'column',
-                        alignSelf: 'center'
-                    }}
-                    accessible={true}
-                    accessibilityLabel="Leader board"
-                >
-                    <FontAwesomeIcon
-                        icon={faSolid, faTrophy}
-                        style={{ color: '#efea5a', alignSelf: 'center' }}
-                        size={25}
-                    />
-                    <Text
-                        style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
-                        allowFontScaling={false}
-                    >
-                        Leader
-                    </Text>
-                </View>
-            </TouchableOpacity>
-
-            {/* [[[PROFILE]]] */}
-            {isTokenValid ?
+                {/* [[[HOME]]] */}
                 <TouchableOpacity
-                    onPress={() => {
-                        props.nav.dispatch(resetActionProfile);
-                    }}
+                    onPress={() => { props.nav.dispatch(resetActionHome); }}
                 >
                     <View
                         style={{
-                            backgroundColor: `${profileBg}`,
+                            backgroundColor: `${homeBg}`,
                             padding: 8,
                             borderRadius: HeightRatio(10),
                             width: windowWidth / 5,
                             flexDirection: 'column'
                         }}
                         accessible={true}
-                        accessibilityLabel="User profile"
+                        accessibilityLabel="Home"
                     >
                         <FontAwesomeIcon
-                            icon={faSolid, faUser}
-                            style={{ color: '#00b2ca', alignSelf: 'center' }}
+                            icon={faSolid, faHouse}
+                            style={{ color: '#7678ed', alignSelf: 'center' }}
                             size={25}
                         />
                         <Text
                             style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
                             allowFontScaling={false}
                         >
-                            Profile
+                            Home
                         </Text>
                     </View>
                 </TouchableOpacity>
-                :
+
+                {/* [[[GAME]]] */}
                 <TouchableOpacity
-                    onPress={() => { props.nav.dispatch(resetActionAuth); }}
+                    onPress={() => { props.nav.dispatch(resetActionGame); }}
                 >
                     <View
                         style={{
-                            backgroundColor: `${profileBg}`,
+                            backgroundColor: `${gameBg}`,
                             padding: 8,
                             borderRadius: HeightRatio(10),
                             width: windowWidth / 5,
                             flexDirection: 'column'
                         }}
+                        accessible={true}
+                        accessibilityLabel="Game"
                     >
                         <FontAwesomeIcon
-                            icon={faSolid, faUser}
-                            style={{ color: '#00b2ca', alignSelf: 'center' }}
+                            icon={faSolid, faFlagCheckered}
+                            style={{ color: '#aaf683', alignSelf: 'center' }}
                             size={25}
                         />
                         <Text
                             style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
                             allowFontScaling={false}
                         >
-                            Profile
+                            Game
                         </Text>
                     </View>
                 </TouchableOpacity>
 
-            }
-        </View>
+                {/* [[[COLOR]]] */}
+                <TouchableOpacity
+                    onPress={() => { setDisplayColorOptions(current => !current) }}
+                >
+                    <View
+                        style={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                            padding: 8,
+                            borderRadius: HeightRatio(50),
+                            width: windowWidth / 7,
+                            margin: HeightRatio(10),
+                            flexDirection: 'column'
+                        }}
+                        accessible={true}
+                        accessibilityLabel="Game"
+                    >
+                        <Image
+                            source={require('../assets/color_wheel.png')}
+                            style={{ width: HeightRatio(40), height: HeightRatio(40), alignSelf: 'center' }}
+                        />
+                    </View>
+                </TouchableOpacity>
+
+
+                {/* [[[LEADER BOARD]]] */}
+                <TouchableOpacity
+                    onPress={() => { props.nav.dispatch(resetActionLeader); }}
+                >
+                    <View
+                        style={{
+                            backgroundColor: `${leaderBg}`,
+                            padding: 8,
+                            borderRadius: HeightRatio(10),
+                            width: windowWidth / 5,
+                            flexDirection: 'column',
+                            alignSelf: 'center'
+                        }}
+                        accessible={true}
+                        accessibilityLabel="Leader board"
+                    >
+                        <FontAwesomeIcon
+                            icon={faSolid, faTrophy}
+                            style={{ color: '#efea5a', alignSelf: 'center' }}
+                            size={25}
+                        />
+                        <Text
+                            style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
+                            allowFontScaling={false}
+                        >
+                            Leader
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+
+                {/* [[[PROFILE]]] */}
+                {isTokenValid ?
+                    <TouchableOpacity
+                        onPress={() => {
+                            props.nav.dispatch(resetActionProfile);
+                        }}
+                    >
+                        <View
+                            style={{
+                                backgroundColor: `${profileBg}`,
+                                padding: 8,
+                                borderRadius: HeightRatio(10),
+                                width: windowWidth / 5,
+                                flexDirection: 'column'
+                            }}
+                            accessible={true}
+                            accessibilityLabel="User profile"
+                        >
+                            <FontAwesomeIcon
+                                icon={faSolid, faUser}
+                                style={{ color: '#00b2ca', alignSelf: 'center' }}
+                                size={25}
+                            />
+                            <Text
+                                style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
+                                allowFontScaling={false}
+                            >
+                                Profile
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity
+                        onPress={() => { props.nav.dispatch(resetActionAuth); }}
+                    >
+                        <View
+                            style={{
+                                backgroundColor: `${profileBg}`,
+                                padding: 8,
+                                borderRadius: HeightRatio(10),
+                                width: windowWidth / 5,
+                                flexDirection: 'column'
+                            }}
+                        >
+                            <FontAwesomeIcon
+                                icon={faSolid, faUser}
+                                style={{ color: '#00b2ca', alignSelf: 'center' }}
+                                size={25}
+                            />
+                            <Text
+                                style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
+                                allowFontScaling={false}
+                            >
+                                Profile
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+
+                }
+            </View>
         </>
     )
 }

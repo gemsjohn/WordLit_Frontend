@@ -477,7 +477,7 @@ export const SecureStorage = () => {
         </View>
         :
         <View style={{ marginTop: windowHeight / 3, alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ fontSize: HeightRatio(50), color: 'white' }}>
+          <Text style={{ fontSize: HeightRatio(50), color: 'white' }} allowFontScaling={false}>
             &nbsp; Keycode Saved &nbsp;
           </Text>
         </View>
