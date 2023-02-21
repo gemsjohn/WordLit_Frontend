@@ -197,71 +197,70 @@ export const GameScreen = ({ navigation }) => {
     const [count, setCount] = useState(0);
     const [letter, setLetter] = useState('');
 
-    const TelephonePad = () => {
-        const buttons = [
-            ['1', '2', '3'],
-            ['4', '5', '6'],
-            ['7', '8', '9'],
-            // ['*', '0', '#']
-        ];
-        const letters = {
-            '2': ['A', 'B', 'C'],
-            '3': ['D', 'E', 'F'],
-            '4': ['G', 'H', 'I'],
-            '5': ['J', 'K', 'L'],
-            '6': ['M', 'N', 'O'],
-            '7': ['P', 'Q', 'R', 'S'],
-            '8': ['T', 'U', 'V'],
-            '9': ['W', 'X', 'Y', 'Z']
-        };
+    // const TelephonePad = () => {
+    //     const buttons = [
+    //         ['1', '2', '3'],
+    //         ['4', '5', '6'],
+    //         ['7', '8', '9'],
+    //         // ['*', '0', '#']
+    //     ];
+    //     const letters = {
+    //         '2': ['A', 'B', 'C'],
+    //         '3': ['D', 'E', 'F'],
+    //         '4': ['G', 'H', 'I'],
+    //         '5': ['J', 'K', 'L'],
+    //         '6': ['M', 'N', 'O'],
+    //         '7': ['P', 'Q', 'R', 'S'],
+    //         '8': ['T', 'U', 'V'],
+    //         '9': ['W', 'X', 'Y', 'Z']
+    //     };
 
-        const handlePress = (button) => {
-            if (button == '1' || button == '*' || button == '0' || button === '#') {
-                console.log("#1")
-            } else {
-                if (selected !== button) {
-                    setSelected(button);
-                    let test = letters[button]
-                    setLetter(test[(0) % letters[button].length])
-                    setCount(1)
-                } else {
-                    let test = letters[button]
-                    setLetter(test[(count) % letters[button].length])
-                    setCount(count + 1)
-                }
-            }
-        }
+    //     const handlePress = (button) => {
+    //         if (button == '1' || button == '*' || button == '0' || button === '#') {
+    //             console.log("#1")
+    //         } else {
+    //             if (selected !== button) {
+    //                 setSelected(button);
+    //                 let test = letters[button]
+    //                 setLetter(test[(0) % letters[button].length])
+    //                 setCount(1)
+    //             } else {
+    //                 let test = letters[button]
+    //                 setLetter(test[(count) % letters[button].length])
+    //                 setCount(count + 1)
+    //             }
+    //         }
+    //     }
 
-        return (
-            <View style={{ flexDirection: 'column', alignSelf: 'center', marginTop: 200, marginBottom: 80 }}>
-                {buttons.map((row, index) => (
-                    <View key={index} style={Styling.row}>
-                        {row.map((button) => (
-                            <TouchableOpacity
-                                key={button}
-                                style={selected === button ? Styling.telePadButtonSelected : Styling.telePadButton}
-                                onPress={() => handlePress(button)}
-                            >
-                                <View style={Styling.row}>
-                                    <Text style={{ ...Styling.telePadButtonText, margin: 4 }}>
-                                        {/* {selected === button ? letters[button][count]: button} */}
-                                        {button}
-                                    </Text>
-                                    <Text style={{ ...Styling.telePadButtonText, margin: 4 }}>
-                                        {letters[button]}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                ))}
-            </View>
-        );
-    }
+    //     return (
+    //         <View style={{ flexDirection: 'column', alignSelf: 'center', marginTop: 200, marginBottom: 80 }}>
+    //             {buttons.map((row, index) => (
+    //                 <View key={index} style={Styling.row}>
+    //                     {row.map((button) => (
+    //                         <TouchableOpacity
+    //                             key={button}
+    //                             style={selected === button ? Styling.telePadButtonSelected : Styling.telePadButton}
+    //                             onPress={() => handlePress(button)}
+    //                         >
+    //                             <View style={Styling.row}>
+    //                                 <Text style={{ ...Styling.telePadButtonText, margin: 4 }}>
+    //                                     {button}
+    //                                 </Text>
+    //                                 <Text style={{ ...Styling.telePadButtonText, margin: 4 }}>
+    //                                     {letters[button]}
+    //                                 </Text>
+    //                             </View>
+    //                         </TouchableOpacity>
+    //                     ))}
+    //                 </View>
+    //             ))}
+    //         </View>
+    //     );
+    // }
 
-    useEffect(() => {
-        setPromptGuessInput(letter)
-    }, [count && letter])
+    // useEffect(() => {
+    //     setPromptGuessInput(letter)
+    // }, [count && letter])
 
 
     const ResetAllVariables = () => {
@@ -505,36 +504,44 @@ export const GameScreen = ({ navigation }) => {
     }
     DisplayWords();
 
-    // const oldStoredGuesses = useRef([...storedGuesses]);
+    const prevStoredGuesses = useRef([...storedGuesses]);
+    const newGuess = useRef('');
+
 
     const CheckArray = (guess) => {
+        console.log(" - - - - ")
+        console.log(guess)
+        console.log(" - - - - ")
+        prevStoredGuesses.current = storedGuesses;
         if (!guesses.includes(guess)) {
-            setGuesses(guesses => [...guesses, guess])
-            for (let i = 0; i < tempGridArray_0.length; i++) {
-                if (promptGuessInput == tempGridArray_0[i]) {
-                    setIVar(iVar => [...iVar, i]);
-                }
+          setGuesses(guesses => [...guesses, guess])
+          for (let i = 0; i < tempGridArray_0.length; i++) {
+            if (promptGuessInput == tempGridArray_0[i]) {
+              setIVar(iVar => [...iVar, i]);
             }
+          }
         }
 
-        // const contentsChanged = storedGuesses.every((guess, i) => guess === oldStoredGuesses[i]);
-
-        // if (contentsChanged) {
-        //     console.log("The contents of storedGuesses have not changed.");
-        // } else {
-        //     console.log("The contents of storedGuesses have changed.");
-        // }
-
-
-    }
+        newGuess.current = guess;
+      }
+      
 
 
 
     const PreviousGuess = () => {
-        // oldStoredGuesses.current = [...storedGuesses];
+        
         for (let i = 0; i < guesses.length; i++) {
             storedGuesses.splice(i, 1, guesses[i])
         }
+
+        // if (storedGuesses.includes(newGuess.current)) {
+        //     newGuess.current = null;
+
+        //     setSelectedKey(newGuess.current);
+        //     if (inputInit != []) {
+        //         NewKeyboard(inputInit)
+        //     }
+        // }
 
         for (let i = 0; i < 12; i++) {
             guessBoxes[i] =
@@ -606,6 +613,16 @@ export const GameScreen = ({ navigation }) => {
 
 
     }
+
+    useEffect(() => {
+        if (storedGuesses.includes(newGuess.current)) {
+            newGuess.current = null;
+            setSelectedKey(newGuess.current);
+            if (inputInit !== []) {
+                NewKeyboard(inputInit);
+            }
+        }
+    }, [newGuess.current, storedGuesses, inputInit]);
 
     const cleanArrays = (arr1, arr2) => {
         const removeEmptyStrings = (arr) => {
@@ -873,11 +890,7 @@ export const GameScreen = ({ navigation }) => {
 
 
 
-    const handleKeyPress = (key) => {
-        console.log("handleKeyPress")
-        setSelectedKey(key);
-        NewKeyboard(inputInit);
-    };
+    
 
     const ReplaceKeyboard = () => {
         setRevealOptions(false);
@@ -926,11 +939,12 @@ export const GameScreen = ({ navigation }) => {
         NewKeyboard(scrambledCombined.filter((letter, index) => scrambledCombined.indexOf(letter) === index));
     }
 
-
-
-
-
-
+    const handleKeyPress = (key) => {
+        console.log("handleKeyPress")
+        console.log(key)
+        setSelectedKey(key);
+        NewKeyboard(inputInit);
+    };
 
     const NewKeyboard = (input) => {
         let keys = input.map(letter => {
@@ -1167,7 +1181,7 @@ export const GameScreen = ({ navigation }) => {
 
                                                         <TouchableOpacity
                                                             disabled={promptGuessInput == '' ? true : false}
-                                                            onPress={() => { CheckArray(promptGuessInput); setPromptGuessInput([]); setCount(0) }}
+                                                            onPress={() => { CheckArray(promptGuessInput); setPromptGuessInput([]); setCount(0); }}
                                                         >
                                                             <Image
                                                                 style={{ height: HeightRatio(25), width: HeightRatio(80), position: 'absolute', zIndex: 10, top: -12, left: -8 }}
