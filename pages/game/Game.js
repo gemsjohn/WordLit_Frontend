@@ -1107,7 +1107,7 @@ export const GameScreen = ({ navigation }) => {
                                                         alignItems: 'center',
                                                         padding: 5,
                                                         top: HeightRatio(-10),
-                                                        left: ((WidthRatio(58)) * (u1 + 1)) + (u1 * 2) - HeightRatio(30)
+                                                        left: ((WidthRatio(50)) * (u1 + 1)) + (u1 * 2) + ( u1 * HeightRatio(8))
                                                     }}
                                                     accessible={true}
                                                     accessibilityLabel="Top down hint."
@@ -1130,8 +1130,9 @@ export const GameScreen = ({ navigation }) => {
                                                         justifyContent: 'center',
                                                         alignItems: 'center',
                                                         padding: 5,
-                                                        top: ((WidthRatio(58)) * ((u0) / 5)) + ((u0 / 5) * 2) + HeightRatio(30),
-                                                        left: WidthRatio(0)
+                                                        // top: ((WidthRatio(65)) * (u0 / 5)) + ((u0 / 5) * 2),
+                                                        top: WidthRatio(50) * (u0 / 5) + HeightRatio(8) * (u0 / 5) + HeightRatio(40),
+                                                        left: WidthRatio(5)
                                                     }}
                                                     accessible={true}
                                                     accessibilityLabel="Left right hint."
