@@ -210,13 +210,14 @@ export const Styling = StyleSheet.create({
         color: 'white',
         display: 'flex',
         justifyContent: 'flex-start',
-        padding: HeightRatio(20),
+        padding: HeightRatio(14),
+        paddingLeft: HeightRatio(20),
         border: 'solid',
         borderWidth: 2,
         borderColor: 'white',
         borderRadius: 40,
         alignSelf: 'center',
-        margin: 10,
+        margin: HeightRatio(8),
         width: windowWidth - 80
       },
       profileContainer: {

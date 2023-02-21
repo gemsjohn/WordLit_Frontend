@@ -344,6 +344,7 @@ export const Auth = ({ navigation }) => {
                             <FontAwesomeIcon
                               icon={faSolid, faCheck}
                               style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
+                              size={16}
                             />
                             <Text
                               style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
@@ -361,6 +362,7 @@ export const Auth = ({ navigation }) => {
                             <FontAwesomeIcon
                               icon={faSolid, faEnvelope}
                               style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
+                              size={16}
                             />
                             <Text
                               style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
@@ -379,6 +381,7 @@ export const Auth = ({ navigation }) => {
                             <FontAwesomeIcon
                               icon={faSolid, faCheck}
                               style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
+                              size={16}
                             />
                             <Text
                               style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
@@ -396,6 +399,7 @@ export const Auth = ({ navigation }) => {
                             <FontAwesomeIcon
                               icon={faSolid, faUser}
                               style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
+                              size={16}
                             />
                             <Text
                               style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
@@ -414,6 +418,7 @@ export const Auth = ({ navigation }) => {
                             <FontAwesomeIcon
                               icon={faSolid, faCheck}
                               style={{ color: '#70e000', margin: HeightRatio(14), alignSelf: 'center' }}
+                              size={16}
                             />
                             <Text
                               style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}
@@ -431,6 +436,7 @@ export const Auth = ({ navigation }) => {
                             <FontAwesomeIcon
                               icon={faSolid, faLock}
                               style={{ color: 'white', margin: HeightRatio(14), alignSelf: 'center' }}
+                              size={16}
                             />
                             <Text
                               style={{ color: 'white', fontSize: HeightRatio(18), textAlign: 'center' }}

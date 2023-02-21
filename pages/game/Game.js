@@ -94,6 +94,8 @@ export const GameScreen = ({ navigation }) => {
     const [guesses, setGuesses] = useState([]);
     const [displayGrid, setDisplayGrid] = useState(false)
     const [randomItems, setRandomItems] = useState([]);
+    const [flashScore, setFlashScore] = useState(false);
+    const [seePreviousScore, setSeePreviousScore] = useState(true)
     const [modalVisible, setModalVisible] = useState(false);
     const [expandScoreDetails, setExpandScoreDetails] = useState(false)
 
@@ -579,7 +581,7 @@ export const GameScreen = ({ navigation }) => {
                                 style={{
                                     color: 'black',
                                     fontWeight: 'bold',
-                                    fontSize: 25,
+                                    fontSize: HeightRatio(22),
                                 }}
                                 allowFontScaling={false}
                             >
@@ -704,71 +706,103 @@ export const GameScreen = ({ navigation }) => {
     const ScoreCalculator = () => {
         const filteredArray = tempGridArray_0.filter(element => element !== "");
         let localTimeTaken;
+        let localExtraPoints = 0;
+        let localLeftRightHintReduction = 0;
+        let localTopBottomHintReduction = 0;
         let localScore;
         let totalGuesses = storedGuesses.length;
         let correctAnswers = 0;
         let incorrectAnswers = 0;
         for (let i = 0; i < totalGuesses; i++) {
-            if (tempGridArray_0.includes(`${storedGuesses[i]}`)) {
-                correctAnswers = correctAnswers + 1
+          if (tempGridArray_0.includes(`${storedGuesses[i]}`)) {
+            correctAnswers = correctAnswers + 1;
+          } else {
+            if (localTimeTaken < 20) {
+              incorrectAnswers = incorrectAnswers*2;
+            } else if (localTimeTaken >= 20 && localTimeTaken < 40) {
+              incorrectAnswers = incorrectAnswers*1.5;
+            } else if (localTimeTaken >= 40 && localTimeTaken < 60) {
+              incorrectAnswers = incorrectAnswers*1.25;
             } else {
-                incorrectAnswers = incorrectAnswers + 1
+              incorrectAnswers = incorrectAnswers + 1;
             }
+          }
         }
         setStoreCorrectAnswers(correctAnswers);
         setStoreIncorrectAnswers(incorrectAnswers);
-
+      
         localTimeTaken = Math.trunc((endTime - startTime) / 1000);
         setTimeTaken(localTimeTaken);
         // Calculate the score as a percentage of correct answers
-        let scorePercentage = Math.trunc((correctAnswers / (correctAnswers + (incorrectAnswers * 2))) * 100);
-
+        let scorePercentage = Math.trunc(
+          (correctAnswers / (correctAnswers + incorrectAnswers)) * 100
+        );
+      
         // If the time taken is less than the average time per guess, add a bonus to the score
         if (localTimeTaken < 20 && awardExtraPoints) {
-            localScore = scorePercentage + 100;
-            setExtraPoints(100);
-
+          localScore = scorePercentage + 100;
+          setExtraPoints(100);
+          localExtraPoints = 100;
         } else if (localTimeTaken >= 20 && localTimeTaken < 40 && awardExtraPoints) {
-            localScore = scorePercentage + 80;
-            setExtraPoints(80);
-
+          localScore = scorePercentage + 80;
+          setExtraPoints(80);
+          localExtraPoints = 80;
         } else if (localTimeTaken >= 40 && localTimeTaken < 60 && awardExtraPoints) {
-            localScore = scorePercentage + 40;
-            setExtraPoints(40);
-
+          localScore = scorePercentage + 40;
+          setExtraPoints(40);
+          localExtraPoints = 40;
         } else if (localTimeTaken >= 60 && localTimeTaken < 80 && awardExtraPoints) {
-            localScore = scorePercentage + 20;
-            setExtraPoints(20);
-
+          localScore = scorePercentage + 20;
+          setExtraPoints(20);
+          localExtraPoints = 20;
         } else if (localTimeTaken >= 80 && localTimeTaken < 100 && awardExtraPoints) {
-            localScore = scorePercentage + 10;
-            setExtraPoints(10);
-
+          localScore = scorePercentage + 10;
+          setExtraPoints(10);
+          localExtraPoints = 10;
         } else if (localTimeTaken >= 100 && awardExtraPoints) {
-            localScore = scorePercentage + 5;
-            setExtraPoints(5);
-
+          localScore = scorePercentage + 5;
+          setExtraPoints(5);
+          localExtraPoints = 5;
         } else {
-            localScore = scorePercentage;
-            console.log("NO EXTRA")
+          localScore = scorePercentage;
+          console.log("NO EXTRA");
         }
-
+      
         if (displayLeftRightHint) {
-            localScore = localScore - 10;
-            setLeftRightHintReduction(-10)
+          localScore = localScore - 10;
+          setLeftRightHintReduction(-10);
+          localLeftRightHintReduction = -10;
         }
         if (displayTopBottomHint) {
-            localScore = localScore - 10;
-            setTopBottomHintReduction(-10)
+          localScore = localScore - 10;
+          setTopBottomHintReduction(-10);
+          localTopBottomHintReduction = -10;
         }
-
+      
         console.log("TIME TAKEN: " + localTimeTaken)
+      
 
         setScore(localScore);
 
         handleAddGame(word1, word2, localTimeTaken, localScore);
+        setFlashScore(true)
+        setMainState({
+            prevGame_word1: word1,
+            prevGame_word2: word2,
+            prevGame_timeTaken: localTimeTaken,
+            prevGame_extraPoints: localExtraPoints,
+            prevGame_leftRightHintReduction: localLeftRightHintReduction,
+            prevGame_topBottomHintReduction: localTopBottomHintReduction,
+            prevGame_storeCorrectAnswers: correctAnswers,
+            prevGame_storeIncorrectAnswers: incorrectAnswers,
+            prevGame_score: localScore
+        })
+        setTimeout(() => {
+            setFlashScore(false)
+            navigation.dispatch(resetActionGame);
+        }, 2000)
+        
 
-        setModalVisible(true)
     };
 
 
@@ -941,7 +975,7 @@ export const GameScreen = ({ navigation }) => {
                 <Text
                     style={{
                         color: 'black',
-                        fontSize: HeightRatio(30),
+                        fontSize: HeightRatio(27),
                         fontWeight: 'bold',
                     }}
                     allowFontScaling={false}>
@@ -1029,7 +1063,7 @@ export const GameScreen = ({ navigation }) => {
                             <>
                                 {revealOptions ?
                                     <>
-                                        {!hintTopBottomModal && !hintLeftRightModal && !modalVisible &&
+                                        {!hintTopBottomModal && !hintLeftRightModal && !modalVisible && !flashScore &&
                                             <>
                                                 <View
                                                     style={{
@@ -1189,7 +1223,7 @@ export const GameScreen = ({ navigation }) => {
 
                                     :
                                     <>
-                                        {!modalVisible &&
+                                        {!modalVisible && !flashScore &&
                                             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                                                 <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
                                                     <ActivityIndicator size="large" color="#00d8ff" />
@@ -1580,6 +1614,182 @@ export const GameScreen = ({ navigation }) => {
                         </Modal>
                     }
 
+                    {flashScore &&
+                        <View
+                            style={{
+                                // position: 'absolute',
+                                // zIndex: 20,
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                alignSelf: 'center'
+                            }}
+                        >
+                            <View
+                                style={{
+                                    borderRadius: HeightRatio(30),
+                                    padding: HeightRatio(15),
+                                    width: WidthRatio(300),
+                                    flexDirection: 'column',
+                                    margin: HeightRatio(5),
+                                    alignSelf: 'center'
+                                }}
+
+                            >
+                                <LinearGradient
+                                    colors={['#0b132b', '#181d21']}
+                                    style={{
+                                        ...Styling.background,
+                                        height: HeightRatio(75),
+                                        borderRadius: HeightRatio(8),
+                                        borderWidth: 2,
+                                        borderColor: '#09e049',
+                                        opacity: 0.9
+                                    }}
+                                />
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <FontAwesomeIcon
+                                        icon={faSolid, faClock}
+                                        style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
+                                        size={20}
+                                    />
+                                    <Text
+                                        style={{
+                                            color: 'white',
+                                            fontSize: HeightRatio(27),
+                                            fontWeight: 'bold',
+                                            margin: HeightRatio(5)
+                                        }}
+                                        allowFontScaling={false}
+                                    >Time</Text>
+
+                                    <Text
+                                        style={{
+                                            color: '#19d0bf',
+                                            // alignSelf: 'center', 
+                                            fontSize: HeightRatio(25),
+                                            fontWeight: 'bold',
+                                            margin: HeightRatio(5),
+                                            marginLeft: HeightRatio(20),
+                                            width: WidthRatio(180)
+                                        }}
+                                        numberOfLines={1}
+                                        ellipsizeMode='tail'
+                                        allowFontScaling={false}
+                                    >
+                                        {timeTaken} seconds
+                                    </Text>
+
+                                </View>
+                            </View>
+                            <View
+                                style={{
+                                    borderRadius: HeightRatio(30),
+                                    padding: HeightRatio(15),
+                                    width: WidthRatio(300),
+                                    flexDirection: 'column',
+                                    margin: HeightRatio(5),
+                                    alignSelf: 'center'
+                                }}
+
+                            >
+                                <LinearGradient
+                                    colors={['#0b132b', '#181d21']}
+                                    style={{
+                                        ...Styling.background,
+                                        height: HeightRatio(75),
+                                        borderRadius: HeightRatio(8),
+                                        borderWidth: 2,
+                                        borderColor: '#09e049',
+                                        opacity: 0.9
+                                    }}
+                                />
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <FontAwesomeIcon
+                                        icon={faSolid, faFlagCheckered}
+                                        style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
+                                        size={20}
+                                    />
+                                    <Text
+                                        style={{
+                                            color: 'white',
+                                            fontSize: HeightRatio(27),
+                                            fontWeight: 'bold',
+                                            margin: HeightRatio(5)
+                                        }}
+                                        allowFontScaling={false}
+                                    >Score</Text>
+
+                                    <Text
+                                        style={{
+                                            color: '#19d0bf',
+                                            // alignSelf: 'center', 
+                                            fontSize: HeightRatio(25),
+                                            fontWeight: 'bold',
+                                            margin: HeightRatio(5),
+                                            marginLeft: HeightRatio(20),
+                                            width: WidthRatio(180)
+                                        }}
+                                        numberOfLines={1}
+                                        ellipsizeMode='tail'
+                                        allowFontScaling={false}
+                                    >
+                                        {score}
+                                    </Text>
+
+                                </View>
+                            </View>
+                        </View>
+                    }
+
+                    {seePreviousScore && mainState.current.prevGame_word1 != null && mainState.current.prevGame_word2  != null && !flashScore &&
+                        <>
+
+                            {!expandScoreDetails &&
+                                <TouchableOpacity
+                                    onPress={() => { setExpandScoreDetails(true); setModalVisible(true); searchWord1(mainState.current.prevGame_word1); searchWord2(mainState.current.prevGame_word2);  }}
+                                    style={{}}
+                                >
+                                    <View style={{
+                                        position: 'absolute',
+                                        top: HeightRatio(10),
+                                        right: HeightRatio(10),
+                                        padding: HeightRatio(10),
+                                        borderRadius: HeightRatio(10),
+                                        alignSelf: 'center',
+                                        marginTop: HeightRatio(0),
+                                        width: HeightRatio(240),
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <LinearGradient
+                                            colors={['#0b132b', '#181d21']}
+                                            style={{
+                                                ...Styling.background,
+                                                height: HeightRatio(45),
+                                                borderRadius: HeightRatio(10),
+                                                borderWidth: 2,
+                                                borderColor: '#ff0076',
+                                                opacity: 0.9
+                                            }}
+                                        />
+                                        <Text
+                                            style={{
+                                                color: 'white',
+                                                fontSize: HeightRatio(20),
+                                                fontWeight: 'bold',
+                                                textAlign: 'center'
+                                            }}
+                                            allowFontScaling={false}
+                                        >
+                                            SEE PREVIOUS SCORE
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            }
+                        </>
+                    }
+
                     {modalVisible &&
                         <Modal
                             animationType="none"
@@ -1598,7 +1808,7 @@ export const GameScreen = ({ navigation }) => {
                                     <View style={{ ...Styling.gameCenteredView, marginTop: expandScoreDetails ? null : HeightRatio(200) }}>
                                         {expandScoreDetails &&
                                             <TouchableOpacity
-                                                onPress={() => { searchWord1(word1); searchWord2(word2); setDisplayDetails(!displayDetails); }}
+                                                onPress={() => { setDisplayDetails(!displayDetails); }}
 
                                                 style={{
                                                     borderRadius: HeightRatio(30),
@@ -1614,7 +1824,7 @@ export const GameScreen = ({ navigation }) => {
                                                     colors={['#0b132b', '#181d21']}
                                                     style={{
                                                         ...Styling.background,
-                                                        height: HeightRatio(95),
+                                                        height: HeightRatio(90),
                                                         borderRadius: HeightRatio(8),
                                                         borderWidth: 2,
                                                         borderColor: '#ff0076',
@@ -1631,7 +1841,7 @@ export const GameScreen = ({ navigation }) => {
                                                             margin: HeightRatio(5)
                                                         }}
                                                         allowFontScaling={false}
-                                                    >Definitions</Text>
+                                                    >See Definitions</Text>
 
                                                     <Text
                                                         style={{
@@ -1647,7 +1857,7 @@ export const GameScreen = ({ navigation }) => {
                                                         ellipsizeMode='tail'
                                                         allowFontScaling={false}
                                                     >
-                                                        {word1}, {word2}
+                                                        {mainState.current.prevGame_word1}, {mainState.current.prevGame_word2}
                                                     </Text>
 
                                                     <View
@@ -1658,27 +1868,23 @@ export const GameScreen = ({ navigation }) => {
                                                         <View style={{ alignSelf: 'center', width: WidthRatio(280), marginTop: displayDetails ? HeightRatio(25) : HeightRatio(0) }}>
                                                             {displayDetails &&
                                                                 <View>
-                                                                    {definition0 != '' || definition1 != '' || definition2 != '' ?
-                                                                        <>
-                                                                            <View style={{
-                                                                                flexDirection: 'column'
-                                                                            }}>
-                                                                                <Text
-                                                                                    style={{
-                                                                                        color: 'white',
-                                                                                        fontSize: HeightRatio(25),
-                                                                                        fontWeight: 'bold',
-                                                                                    }}
-                                                                                    allowFontScaling={false}
-                                                                                >
-                                                                                    {word1}
-                                                                                </Text>
-                                                                            </View>
 
-                                                                        </>
-                                                                        :
-                                                                        null
-                                                                    }
+                                                                    <View style={{
+                                                                        flexDirection: 'column'
+                                                                    }}>
+                                                                        <Text
+                                                                            style={{
+                                                                                color: '#19d0bf',
+                                                                                fontSize: HeightRatio(25),
+                                                                                fontWeight: 'bold',
+                                                                            }}
+                                                                            allowFontScaling={false}
+                                                                        >
+                                                                            {mainState.current.prevGame_word1}
+                                                                        </Text>
+                                                                    </View>
+
+
                                                                     {definition0 != '' ?
                                                                         <View
                                                                             style={{ flexDirection: 'row', marginBottom: 10 }}
@@ -1725,14 +1931,14 @@ export const GameScreen = ({ navigation }) => {
                                                                     }}>
                                                                         <Text
                                                                             style={{
-                                                                                color: 'white',
+                                                                                color: '#19d0bf',
                                                                                 fontSize: HeightRatio(25),
                                                                                 fontWeight: 'bold',
                                                                                 // alignSelf: 'center',
                                                                             }}
                                                                             allowFontScaling={false}
                                                                         >
-                                                                            {word2}
+                                                                            {mainState.current.prevGame_word2}
                                                                         </Text>
                                                                     </View>
 
@@ -1787,7 +1993,7 @@ export const GameScreen = ({ navigation }) => {
                                                 padding: HeightRatio(15),
                                                 width: WidthRatio(300),
                                                 flexDirection: 'column',
-                                                margin: HeightRatio(5),
+                                                margin: HeightRatio(10),
                                                 alignSelf: 'center'
                                             }}
 
@@ -1796,7 +2002,7 @@ export const GameScreen = ({ navigation }) => {
                                                 colors={['#0b132b', '#181d21']}
                                                 style={{
                                                     ...Styling.background,
-                                                    height: HeightRatio(75),
+                                                    height: HeightRatio(65),
                                                     borderRadius: HeightRatio(8),
                                                     borderWidth: 2,
                                                     borderColor: '#ff0076',
@@ -1807,12 +2013,13 @@ export const GameScreen = ({ navigation }) => {
                                                 <FontAwesomeIcon
                                                     icon={faSolid, faClock}
                                                     style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
-                                                    size={20}
+                                                    size={16}
+                                                    
                                                 />
                                                 <Text
                                                     style={{
                                                         color: 'white',
-                                                        fontSize: HeightRatio(30),
+                                                        fontSize: HeightRatio(27),
                                                         fontWeight: 'bold',
                                                         margin: HeightRatio(5)
                                                     }}
@@ -1833,7 +2040,7 @@ export const GameScreen = ({ navigation }) => {
                                                     ellipsizeMode='tail'
                                                     allowFontScaling={false}
                                                 >
-                                                    {timeTaken} seconds
+                                                    {mainState.current.prevGame_timeTaken} seconds
                                                 </Text>
 
                                             </View>
@@ -1854,7 +2061,7 @@ export const GameScreen = ({ navigation }) => {
                                                 colors={['#0b132b', '#181d21']}
                                                 style={{
                                                     ...Styling.background,
-                                                    height: expandScoreDetails ? HeightRatio(400) : HeightRatio(75),
+                                                    height: expandScoreDetails ? HeightRatio(380) : HeightRatio(75),
                                                     borderRadius: HeightRatio(8),
                                                     borderWidth: 2,
                                                     borderColor: '#ff0076',
@@ -1865,12 +2072,12 @@ export const GameScreen = ({ navigation }) => {
                                                 <FontAwesomeIcon
                                                     icon={faSolid, faFlagCheckered}
                                                     style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
-                                                    size={20}
+                                                    size={16}
                                                 />
                                                 <Text
                                                     style={{
                                                         color: 'white',
-                                                        fontSize: HeightRatio(30),
+                                                        fontSize: HeightRatio(27),
                                                         fontWeight: 'bold',
                                                         margin: HeightRatio(5)
                                                     }}
@@ -1891,7 +2098,7 @@ export const GameScreen = ({ navigation }) => {
                                                     ellipsizeMode='tail'
                                                     allowFontScaling={false}
                                                 >
-                                                    {score}
+                                                    {mainState.current.prevGame_score}
                                                 </Text>
 
                                             </View>
@@ -1909,20 +2116,20 @@ export const GameScreen = ({ navigation }) => {
                                                         <FontAwesomeIcon
                                                             icon={faSolid, faGift}
                                                             style={{ ...Styling.modalFontAwesomeIcons, color: '#f9c74f' }}
-                                                            size={30}
+                                                            size={16}
                                                         />
                                                         <Text
                                                             style={{
                                                                 color: '#f9c74f',
-                                                                fontSize: HeightRatio(30),
+                                                                fontSize: HeightRatio(27),
                                                                 fontWeight: 'bold',
                                                             }}
                                                             allowFontScaling={false}
                                                         >
-                                                            {extraPoints} points
+                                                            {mainState.current.prevGame_extraPoints} points
                                                         </Text>
                                                     </View>
-                                                    {extraPoints != 0 &&
+                                                    {mainState.current.prevGame_extraPoints != 0 &&
                                                         <Text
                                                             style={{
                                                                 color: '#f9c74f',
@@ -1946,17 +2153,17 @@ export const GameScreen = ({ navigation }) => {
                                                         <FontAwesomeIcon
                                                             icon={faSolid, faSquareMinus}
                                                             style={{ ...Styling.modalFontAwesomeIcons, color: '#f9c74f' }}
-                                                            size={30}
+                                                            size={16}
                                                         />
                                                         <Text
                                                             style={{
                                                                 color: '#f9c74f',
-                                                                fontSize: HeightRatio(30),
+                                                                fontSize: HeightRatio(27),
                                                                 fontWeight: 'bold',
                                                             }}
                                                             allowFontScaling={false}
                                                         >
-                                                            {leftRightHintReduction} points
+                                                            {mainState.current.prevGame_leftRightHintReduction} points
                                                         </Text>
                                                     </View>
                                                     <Text
@@ -1981,17 +2188,17 @@ export const GameScreen = ({ navigation }) => {
                                                         <FontAwesomeIcon
                                                             icon={faSolid, faSquareMinus}
                                                             style={{ ...Styling.modalFontAwesomeIcons, color: '#f9c74f' }}
-                                                            size={30}
+                                                            size={16}
                                                         />
                                                         <Text
                                                             style={{
                                                                 color: '#f9c74f',
-                                                                fontSize: HeightRatio(30),
+                                                                fontSize: HeightRatio(27),
                                                                 fontWeight: 'bold',
                                                             }}
                                                             allowFontScaling={false}
                                                         >
-                                                            {topBottomHintReduction} points
+                                                            {mainState.current.prevGame_topBottomHintReduction} points
                                                         </Text>
                                                     </View>
                                                     <Text
@@ -2019,13 +2226,13 @@ export const GameScreen = ({ navigation }) => {
                                                         <FontAwesomeIcon
                                                             icon={faSolid, faCheck}
                                                             style={{ ...Styling.modalFontAwesomeIcons, color: '#90be6d' }}
-                                                            size={30}
+                                                            size={16}
                                                         />
                                                         <Text
                                                             style={Styling.modalScoringVarText}
                                                             allowFontScaling={false}
                                                         >
-                                                            Correct: {storeCorrectAnswers}
+                                                            Correct: {mainState.current.prevGame_storeCorrectAnswers}
                                                         </Text>
                                                     </View>
 
@@ -2041,17 +2248,17 @@ export const GameScreen = ({ navigation }) => {
                                                         <FontAwesomeIcon
                                                             icon={faSolid, faX}
                                                             style={{ ...Styling.modalFontAwesomeIcons, color: '#f94144' }}
-                                                            size={30}
+                                                            size={16}
                                                         />
                                                         <Text
                                                             style={Styling.modalScoringVarText}
                                                             allowFontScaling={false}
                                                         >
-                                                            Incorrect: {storeIncorrectAnswers}
+                                                            Incorrect: {mainState.current.prevGame_storeIncorrectAnswers}
                                                         </Text>
                                                     </View>
 
-                                                    <View style={{ ...Styling.modalDivisionLine, width: WidthRatio(200) }}></View>
+                                                    {/* <View style={{ ...Styling.modalDivisionLine, width: WidthRatio(200) }}></View> */}
 
                                                 </View>
                                             }
@@ -2059,50 +2266,10 @@ export const GameScreen = ({ navigation }) => {
 
 
                                         {/* #ff0076 */}
-                                        {!expandScoreDetails &&
-                                            <TouchableOpacity
-                                                onPress={() => setExpandScoreDetails(true)}
-                                                style={{}}
-                                            >
-                                                <View style={{
-                                                    // backgroundColor: '#09e049',
-                                                    display: 'flex',
-                                                    justifyContent: 'flex-start',
-                                                    padding: HeightRatio(20),
-                                                    borderRadius: HeightRatio(40),
-                                                    alignSelf: 'center',
-                                                    marginTop: HeightRatio(20),
-                                                    // margin: HeightRatio(10),
-                                                    width: WidthRatio(300)
-                                                }}>
-                                                    <LinearGradient
-                                                        colors={['#0b132b', '#181d21']}
-                                                        style={{
-                                                            ...Styling.background,
-                                                            height: HeightRatio(60),
-                                                            borderRadius: HeightRatio(80),
-                                                            borderWidth: 2,
-                                                            borderColor: '#ff0076',
-                                                            opacity: 0.9
-                                                        }}
-                                                    />
-                                                    <Text
-                                                        style={{
-                                                            color: 'white',
-                                                            fontSize: HeightRatio(20),
-                                                            fontWeight: 'bold',
-                                                            alignSelf: 'center'
-                                                        }}
-                                                        allowFontScaling={false}
-                                                    >
-                                                        MORE DETAILS
-                                                    </Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                        }
+
 
                                         <TouchableOpacity
-                                            onPress={() => setModalVisible(!modalVisible)}
+                                            onPress={() => { setModalVisible(!modalVisible); setSeePreviousScore(false); }}
                                             style={{}}
                                         >
                                             <View style={{
@@ -2112,7 +2279,7 @@ export const GameScreen = ({ navigation }) => {
                                                 padding: HeightRatio(20),
                                                 borderRadius: HeightRatio(40),
                                                 alignSelf: 'center',
-                                                marginTop: HeightRatio(20),
+                                                marginTop: HeightRatio(35),
                                                 // margin: HeightRatio(10),
                                                 width: WidthRatio(300)
                                             }}>

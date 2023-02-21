@@ -258,7 +258,7 @@ export const Navbar = (props) => {
                         <FontAwesomeIcon
                             icon={faSolid, faHouse}
                             style={{ color: '#7678ed', alignSelf: 'center' }}
-                            size={25}
+                            size={16}
                         />
                         <Text
                             style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
@@ -287,7 +287,7 @@ export const Navbar = (props) => {
                         <FontAwesomeIcon
                             icon={faSolid, faFlagCheckered}
                             style={{ color: '#aaf683', alignSelf: 'center' }}
-                            size={25}
+                            size={16}
                         />
                         <Text
                             style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
@@ -341,7 +341,7 @@ export const Navbar = (props) => {
                         <FontAwesomeIcon
                             icon={faSolid, faTrophy}
                             style={{ color: '#efea5a', alignSelf: 'center' }}
-                            size={25}
+                            size={16}
                         />
                         <Text
                             style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
@@ -373,7 +373,7 @@ export const Navbar = (props) => {
                             <FontAwesomeIcon
                                 icon={faSolid, faUser}
                                 style={{ color: '#00b2ca', alignSelf: 'center' }}
-                                size={25}
+                                size={16}
                             />
                             <Text
                                 style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
@@ -399,7 +399,7 @@ export const Navbar = (props) => {
                             <FontAwesomeIcon
                                 icon={faSolid, faUser}
                                 style={{ color: '#00b2ca', alignSelf: 'center' }}
-                                size={25}
+                                size={16}
                             />
                             <Text
                                 style={{ color: 'white', marginTop: 6, textAlign: 'center', fontSize: HeightRatio(18) }}
