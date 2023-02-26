@@ -1142,6 +1142,7 @@ export const GameScreen = ({ navigation }) => {
                                     <>
                                         {!hintTopBottomModal && !hintLeftRightModal && !modalVisible && !flashScore &&
                                             <>
+                                            {startTime != null &&
                                                 <View
                                                     style={{
                                                         position: 'absolute',
@@ -1164,6 +1165,7 @@ export const GameScreen = ({ navigation }) => {
                                                         {Math.floor((Date.now() - startTime) / 1000)}s
                                                     </Text>
                                                 </View>
+                                            }
 
 
                                                 <Animated.View

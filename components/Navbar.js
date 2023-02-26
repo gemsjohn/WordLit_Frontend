@@ -114,6 +114,22 @@ export const Navbar = (props) => {
         routes: [{ name: 'Leader', params: {} }]
     });
 
+    const getSelectedColor = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('selectedColor')
+            if (jsonValue != null) {
+                let color = JSON.parse(jsonValue)
+                // console.log("= = = = =  Form NAV = = = = = ")
+                // console.log(color)
+                // console.log("= = = = = = = = = =")
+            } else {
+                selectColor((colors[5]))
+            }
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
 
     const selectColor = async (color) => {
         // console.log(color)
@@ -131,6 +147,7 @@ export const Navbar = (props) => {
     const checkSignUpModalIntervalID = useRef(null);
 
     useEffect(() => {
+        getSelectedColor()
         if (props.from == 'home') { setHomeBg('rgba(255, 255, 255, 0.1)') } else { setHomeBg('transparent') }
         if (props.from == 'game') { setGameBg('rgba(255, 255, 255, 0.1)') } else { setGameBg('transparent') }
         if (props.from == 'leader') { setLeaderBg('rgba(255, 255, 255, 0.1)') } else { setLeaderBg('transparent') }
