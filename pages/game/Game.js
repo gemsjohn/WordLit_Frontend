@@ -27,7 +27,8 @@ import {
     ScrollView,
     Button,
     Image,
-    PixelRatio
+    PixelRatio,
+    Animated
 } from 'react-native';
 import {
     faSolid,
@@ -129,6 +130,26 @@ export const GameScreen = ({ navigation }) => {
     const [topBottomHintReduction, setTopBottomHintReduction] = useState(0);
 
 
+    // [LETTER ANIMATION] - - - - - 
+    const isGameInProgress = useRef(false);
+    const hasUpdatedLetterBlock = useRef(false);
+    const [letter, setLetter] = useState('');
+    const letterPosition = useRef(new Animated.ValueXY({ x: 0, y: HeightRatio(600) })).current
+    const animation = useRef(null)
+    const animationRotation_0 = useRef(new Animated.Value(0)).current;
+    const timeCount = useRef(-1)
+    // const count = new Animated.Value(mainState.current.currentLetter_countValue);
+    // const countRef = useRef(mainState.current.currentLetter_countValue);
+    // const wordPlusSeven = useRef(mainState.current.currentWordPlusSeven);
+    let timeoutLetter_ID;
+
+
+    const rotationInterpolation_0 = animationRotation_0.interpolate({
+        inputRange: [0, 10000],
+        outputRange: ['0deg', '360deg']
+    });
+
+
 
     // Timer: Start and Stop
     const start = () => { setStartTime(Date.now()); };
@@ -165,6 +186,13 @@ export const GameScreen = ({ navigation }) => {
             getValueFor('cosmicKey')
         }, 500)
 
+        return () => {
+            if (animation.current != null) {
+                animation.current.stop()
+                isGameInProgress.current = false;
+            }
+        }
+
     }, [])
 
     const handleAddGame = async (w1, w2, t, s) => {
@@ -194,8 +222,8 @@ export const GameScreen = ({ navigation }) => {
     }
 
     const [selected, setSelected] = useState(null);
-    const [count, setCount] = useState(0);
-    const [letter, setLetter] = useState('');
+    // const [count, setCount] = useState(0);
+    // const [letter, setLetter] = useState('');
 
     // const TelephonePad = () => {
     //     const buttons = [
@@ -514,22 +542,22 @@ export const GameScreen = ({ navigation }) => {
         console.log(" - - - - ")
         prevStoredGuesses.current = storedGuesses;
         if (!guesses.includes(guess)) {
-          setGuesses(guesses => [...guesses, guess])
-          for (let i = 0; i < tempGridArray_0.length; i++) {
-            if (promptGuessInput == tempGridArray_0[i]) {
-              setIVar(iVar => [...iVar, i]);
+            setGuesses(guesses => [...guesses, guess])
+            for (let i = 0; i < tempGridArray_0.length; i++) {
+                if (promptGuessInput == tempGridArray_0[i]) {
+                    setIVar(iVar => [...iVar, i]);
+                }
             }
-          }
         }
 
         newGuess.current = guess;
-      }
-      
+    }
+
 
 
 
     const PreviousGuess = () => {
-        
+
         for (let i = 0; i < guesses.length; i++) {
             storedGuesses.splice(i, 1, guesses[i])
         }
@@ -884,13 +912,15 @@ export const GameScreen = ({ navigation }) => {
     useEffect(() => {
         if (revealOptions) {
             start();
+            isGameInProgress.current = true;
+            letterAnimation();
         }
     }, [revealOptions])
 
 
 
 
-    
+
 
     const ReplaceKeyboard = () => {
         setRevealOptions(false);
@@ -1034,6 +1064,39 @@ export const GameScreen = ({ navigation }) => {
         getSelectedColor();
     }, [selectedColor])
 
+
+
+    const letterAnimation = () => {
+
+        if (isGameInProgress.current) {
+            timeCount.current += 1;
+            hasUpdatedLetterBlock.current = false;
+            letterPosition.setValue({ x: HeightRatio(5), y: HeightRatio(600) })
+            animationRotation_0.setValue(0);
+            animation.current = Animated.parallel([
+                Animated.timing(animationRotation_0, {
+                    toValue: 10000,
+                    duration: 9000,
+                    useNativeDriver: true
+                })
+            ]);
+
+            animation.current.start(() => {
+                animation.current.stop((value) => {
+                    letterPosition.setValue(value)
+                })
+
+                timeoutLetter_ID = setTimeout(() => {
+                    letterAnimation();
+                }, 10)
+            });
+        } else {
+            clearTimeout(timeoutLetter_ID);
+            return;
+        }
+
+    };
+
     return (
         <>
             <View style={{
@@ -1082,21 +1145,60 @@ export const GameScreen = ({ navigation }) => {
                                                 <View
                                                     style={{
                                                         position: 'absolute',
-                                                        bottom: -25,
-                                                        left: 5,
+                                                        bottom: -40,
+                                                        left: HeightRatio(50),
                                                         flexDirection: 'row',
                                                         alignItems: 'center',
                                                         justifyContent: 'center'
                                                     }}
                                                 >
-                                                    <Image
+                                                    {/* <Image
                                                         source={require('../../assets/clock_icon.png')}
                                                         style={{ height: HeightRatio(35), width: HeightRatio(35), marginRight: HeightRatio(5) }}
-                                                    />
-                                                    <Text style={{ color: 'white', fontSize: HeightRatio(20), width: HeightRatio(200) }}>
-                                                        Timer
+                                                    /> */}
+                                                    <Text 
+                                                        style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', width: HeightRatio(200) }}
+                                                        allowFontScaling={false}
+                                                    >
+                                                        {/* {timeCount.current}s */}
+                                                        {Math.floor((Date.now() - startTime) / 1000)}s
                                                     </Text>
                                                 </View>
+
+
+                                                <Animated.View
+                                                    style={[
+                                                        {
+                                                            width: HeightRatio(50),
+                                                            height: HeightRatio(50),
+                                                            borderRadius: 10,
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            position: 'absolute',
+                                                            zIndex: 5,
+                                                        },
+                                                        {
+                                                            transform: [
+                                                                { translateX: letterPosition.x },
+                                                                { translateY: letterPosition.y },
+                                                                { rotate: rotationInterpolation_0 }
+                                                            ],
+
+                                                        },
+                                                    ]}
+                                                >
+                                                    <Image
+                                                        source={require('../../assets/clock_icon.png')}
+                                                        style={{ height: WidthRatio(35), width: WidthRatio(35) }} />
+                                                    {/* <Text style={{ color: 'white', fontSize: HeightRatio(20), margin: HeightRatio(20) }}>
+                                                        -
+                                                    </Text>
+                                                    <Text style={{ color: 'white', fontSize: HeightRatio(20), margin: HeightRatio(20) }}>
+                                                        -
+                                                    </Text> */}
+
+                                                </Animated.View>
+
                                                 <View
                                                     style={{
                                                         alignSelf: 'center',
@@ -1121,7 +1223,7 @@ export const GameScreen = ({ navigation }) => {
                                                         alignItems: 'center',
                                                         padding: 5,
                                                         top: HeightRatio(-10),
-                                                        left: ((WidthRatio(50)) * (u1 + 1)) + (u1 * 2) + ( u1 * HeightRatio(8))
+                                                        left: ((WidthRatio(50)) * (u1 + 1)) + (u1 * 2) + (u1 * HeightRatio(8))
                                                     }}
                                                     accessible={true}
                                                     accessibilityLabel="Top down hint."
@@ -1181,7 +1283,7 @@ export const GameScreen = ({ navigation }) => {
 
                                                         <TouchableOpacity
                                                             disabled={promptGuessInput == '' ? true : false}
-                                                            onPress={() => { CheckArray(promptGuessInput); setPromptGuessInput([]); setCount(0); }}
+                                                            onPress={() => { CheckArray(promptGuessInput); setPromptGuessInput([]); }}
                                                         >
                                                             <Image
                                                                 style={{ height: HeightRatio(25), width: HeightRatio(80), position: 'absolute', zIndex: 10, top: -12, left: -8 }}
@@ -1258,7 +1360,7 @@ export const GameScreen = ({ navigation }) => {
 
                     </View>
 
-                    
+
 
 
                     {hintTopBottomModal &&
@@ -1270,10 +1372,10 @@ export const GameScreen = ({ navigation }) => {
                                 setHintTopBottomModal(!hintTopBottomModal);
                             }}
                         >
-                            <View style={{ 
-                                flex: 1, 
-                                justifyContent: 'center', 
-                                alignItems: 'center', 
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'center',
                             }}>
                                 <View style={{ height: HeightRatio(690), marginBottom: HeightRatio(100) }}>
 
@@ -1335,7 +1437,7 @@ export const GameScreen = ({ navigation }) => {
                                         <SafeAreaView style={{}}>
                                             <ScrollView style={{ ...Styling.gameScrollView, height: HeightRatio(500) }}>
                                                 <View style={{ alignSelf: 'center', margin: 25, width: WidthRatio(280) }}>
-                                                {definition3 != '' || definition4 != '' || definition5 != '' ?
+                                                    {definition3 != '' || definition4 != '' || definition5 != '' ?
                                                         <View style={{ marginTop: 10 }}>
                                                             <Text style={Styling.modalContentHeader}>
                                                                 Definitions

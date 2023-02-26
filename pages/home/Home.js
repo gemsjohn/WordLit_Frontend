@@ -224,16 +224,16 @@ export const HomeScreen = ({ navigation }) => {
                         // borderRadius: HeightRatio(20),
                         // borderBottomRightRadius: 600,
                         // marginTop: windowHeight / 24,
-                        backgroundColor: '#070707'
+                        backgroundColor: 'rgba(7, 7, 7, 0.75)'
                       }}
 
                     >
 
                       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         {authState.current == true && userID.current != null ?
-                          <View style={{ backgroundColor: '#a2ffff', padding: HeightRatio(10), borderRadius: HeightRatio(10)}}>
+                          <View style={{ backgroundColor: '#ff0076', padding: HeightRatio(10), borderRadius: HeightRatio(10)}}>
                             <Text style={{
-                              color: 'black',
+                              color: 'white',
                               fontSize: HeightRatio(30),
                               fontWeight: 'bold',
                               textAlign: 'center'
@@ -246,7 +246,7 @@ export const HomeScreen = ({ navigation }) => {
                           </View>
                           :
                           <Text style={{
-                            color: 'black',
+                            color: 'white',
                             fontSize: HeightRatio(30),
                             fontWeight: 'bold',
                             textAlign: 'center'
@@ -258,33 +258,18 @@ export const HomeScreen = ({ navigation }) => {
                           </Text>
                         }
                       </View>
-
-                      {/* <View
-                        style={{
-                          borderColor: 'white',
-                          borderBottomWidth: 1,
-                          width: windowWidth - 80,
-                          alignSelf: 'center',
-                          marginTop: 10,
-                          marginBottom: 10
-                        }}
-                      /> */}
                     </View>
-
-
-
 
                     {!expand &&
                       <TouchableOpacity
                         onPress={() => setExpand(true)}
                       >
                         <View style={{
-                          backgroundColor: '#161b21',
+                          backgroundColor: 'rgba(22, 27, 33, 0.50)',
                           display: 'flex',
                           justifyContent: 'flex-start',
                           padding: HeightRatio(20),
                           alignSelf: 'center',
-                          // marginTop: HeightRatio(20),
                           width: '100%'
                         }}>
                           <Text
@@ -534,10 +519,10 @@ export const HomeScreen = ({ navigation }) => {
                       }}
                     >
                       <Image
-                        source={require('../../assets/play_button.png')}
+                        source={require('../../assets/play_button_0.png')}
                         style={{
                           height: HeightRatio(500),
-                          width: '150%',
+                          width: '70%',
                           alignSelf: 'center'
                           // borderRadius: HeightRatio(20)
                           // position: 'absolute',
