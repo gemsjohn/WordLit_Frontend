@@ -9,6 +9,8 @@ import moment from 'moment';
 import { useQuery } from '@apollo/client';
 import { GET_USER_BY_ID, GET_ME } from '../utils/queries';
 import { Styling } from '../Styling';
+import Constants from 'expo-constants';
+
 
 
 const {
@@ -41,6 +43,7 @@ const colors = [
 
 export const Navbar = (props) => {
     const { mainState, setMainState } = useContext(MainStateContext);
+    const version = Constants.manifest.version
 
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
@@ -191,7 +194,7 @@ export const Navbar = (props) => {
 
     return (
         <>
-            {displayColorOptions &&
+            {displayColorOptions ?
                 <>
                     <View
                         style={{
@@ -239,6 +242,33 @@ export const Navbar = (props) => {
                             ))}
                         </View>
                     </View>
+                </>
+                :
+                <>
+                    {props.from == 'home' &&
+                        <View
+                            style={{
+                                position: 'absolute',
+                                zIndex: 20,
+                                // left: 0,
+                                // right: 0,
+                                bottom: HeightRatio(100),
+                                right: HeightRatio(10),
+                                justifyContent: 'center',
+                                alignSelf: 'flex-end',
+                                backgroundColor: '#161b21',
+                                flexDirection: 'row',
+                                padding: HeightRatio(10),
+                                height: HeightRatio(40),
+                                width: HeightRatio(80),
+                                borderRadius: HeightRatio(30)
+                            }}
+                        >
+                            <Text style={{ color: 'white', fontSize: HeightRatio(18), alignSelf: 'center' }}>
+                                v{version}
+                            </Text>
+                        </View>
+                    }
                 </>
             }
             <View

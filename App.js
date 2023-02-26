@@ -36,7 +36,6 @@ export default function App() {
 
   useEffect(() => {
     getValueFor('cosmicKey')
-    
   }, [])
 
   const GRAPHQL_API_URL = 'https://wordlit-backend.herokuapp.com/graphql';
@@ -57,6 +56,8 @@ export default function App() {
     cache: new InMemoryCache(),
     link: asyncAuthLink.concat(httpLink),
   });
+
+  
 
 
 
