@@ -219,40 +219,34 @@ export const HomeScreen = ({ navigation }) => {
                   <>
                     <View
                       style={{
-                        // backgroundColor: 'rgba(0, 0, 0, 0.5)',
                         padding: HeightRatio(20),
-                        borderRadius: HeightRatio(20),
-                        // borderWidth: 2,
-                        // borderColor: '#ff0076',
-                        // borderBottomWidth: 2,
-                        // borderRightWidth: 2,
-                        borderBottomRightRadius: 600,
-                        // margin: HeightRatio(10),
-                        marginTop: windowHeight / 24
+                        paddingTop: HeightRatio(40),
+                        // borderRadius: HeightRatio(20),
+                        // borderBottomRightRadius: 600,
+                        // marginTop: windowHeight / 24,
+                        backgroundColor: '#070707'
                       }}
 
                     >
 
                       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        {/* <Image
-                          source={require('../../assets/block_logo.png')}
-                          style={{ height: HeightRatio(50), width: HeightRatio(50), alignSelf: 'center' }}
-                        /> */}
                         {authState.current == true && userID.current != null ?
-                          <Text style={{
-                            color: 'white',
-                            fontSize: HeightRatio(30),
-                            fontWeight: 'bold',
-                            textAlign: 'center'
-                          }}
-                            allowFontScaling={false}
-                            ellipsizeMode='tail'
-                            numberOfLines={1}>
-                            {userByID?.user.username.toUpperCase()}
-                          </Text>
+                          <View style={{ backgroundColor: '#a2ffff', padding: HeightRatio(10), borderRadius: HeightRatio(10)}}>
+                            <Text style={{
+                              color: 'black',
+                              fontSize: HeightRatio(30),
+                              fontWeight: 'bold',
+                              textAlign: 'center'
+                            }}
+                              allowFontScaling={false}
+                              ellipsizeMode='tail'
+                              numberOfLines={1}>
+                              {userByID?.user.username.toUpperCase()}
+                            </Text>
+                          </View>
                           :
                           <Text style={{
-                            color: 'white',
+                            color: 'black',
                             fontSize: HeightRatio(30),
                             fontWeight: 'bold',
                             textAlign: 'center'
@@ -264,7 +258,20 @@ export const HomeScreen = ({ navigation }) => {
                           </Text>
                         }
                       </View>
+
+                      {/* <View
+                        style={{
+                          borderColor: 'white',
+                          borderBottomWidth: 1,
+                          width: windowWidth - 80,
+                          alignSelf: 'center',
+                          marginTop: 10,
+                          marginBottom: 10
+                        }}
+                      /> */}
                     </View>
+
+
 
 
                     {!expand &&
@@ -272,32 +279,18 @@ export const HomeScreen = ({ navigation }) => {
                         onPress={() => setExpand(true)}
                       >
                         <View style={{
-                          // backgroundColor: '#09e049',
+                          backgroundColor: '#161b21',
                           display: 'flex',
                           justifyContent: 'flex-start',
                           padding: HeightRatio(20),
-                          borderRadius: HeightRatio(40),
                           alignSelf: 'center',
-                          marginTop: HeightRatio(20),
-                          margin: HeightRatio(10),
-                          marginBottom: HeightRatio(40),
-                          width: WidthRatio(300)
+                          // marginTop: HeightRatio(20),
+                          width: '100%'
                         }}>
-                          <LinearGradient
-                            colors={['#0b132b', '#181d21']}
-                            style={{
-                              ...Styling.background,
-                              height: HeightRatio(90),
-                              borderRadius: HeightRatio(80),
-                              borderWidth: 2,
-                              borderColor: '#09e049',
-                              opacity: 0.9
-                            }}
-                          />
                           <Text
                             style={{
                               color: 'white',
-                              fontSize: HeightRatio(40),
+                              fontSize: HeightRatio(50),
                               fontWeight: 'bold',
                               alignSelf: 'center',
                             }}
@@ -313,11 +306,8 @@ export const HomeScreen = ({ navigation }) => {
                       <View
                         style={{
                           backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                          margin: HeightRatio(10),
                           marginTop: 20,
                           padding: 20,
-                          // marginLeft: 5,
-                          // marginRight: 5,
                           borderRadius: 10,
                           borderWidth: 2,
                           borderColor: '#ff0076',
@@ -533,26 +523,29 @@ export const HomeScreen = ({ navigation }) => {
                     }
                     <TouchableOpacity
                       onPress={() => { navigation.dispatch(resetActionGame); }}
-                      style={{ height: HeightRatio(160), 
-                        width: HeightRatio(310),
-                        borderRadius: HeightRatio(20),
-                        alignSelf: 'center', 
-                        borderWidth: 4,  
-                        borderColor: '#09e049',
+                      style={{
+                        height: HeightRatio(500),
+                        width: '100%',
+                        // borderRadius: HeightRatio(20),
+                        alignSelf: 'center',
+                        // backgroundColor: 'rgba(0, 0, 0, 0.25)' 
+                        // borderWidth: 4,  
+                        // borderColor: '#09e049',
                       }}
                     >
                       <Image
-                          source={require('../../assets/play_button.png')}
-                          style={{
-                            height: HeightRatio(150), 
-                            width: HeightRatio(300),
-                            borderRadius: HeightRatio(20)
-                            // position: 'absolute',
-                            // zIndex: -10
-                          }}
-                        />
+                        source={require('../../assets/play_button.png')}
+                        style={{
+                          height: HeightRatio(500),
+                          width: '150%',
+                          alignSelf: 'center'
+                          // borderRadius: HeightRatio(20)
+                          // position: 'absolute',
+                          // zIndex: -10
+                        }}
+                      />
                     </TouchableOpacity>
-                    <View style={{ marginBottom: 400 }}></View>
+                    {/* <View style={{ marginBottom: 400 }}></View> */}
                   </>
 
                 }

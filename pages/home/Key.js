@@ -117,7 +117,7 @@ export const KeyScreen = ({ navigation }) => {
                             <View style={{ flexDirection: 'row' }}>
                                 {count > 0 ?
                                     <View style={{
-                                        backgroundColor: 'rgba(255, 255, 255, 1.0)',
+                                        backgroundColor: '#d9005b',
                                         height: HeightRatio(25),
                                         width: HeightRatio(25),
                                         margin: HeightRatio(5),
@@ -135,7 +135,7 @@ export const KeyScreen = ({ navigation }) => {
                                 }
                                 {count > 1 ?
                                     <View style={{
-                                        backgroundColor: 'rgba(255, 255, 255, 1.0)',
+                                        backgroundColor: '#15f009',
                                         height: HeightRatio(25),
                                         width: HeightRatio(25),
                                         margin: HeightRatio(5),
@@ -156,7 +156,7 @@ export const KeyScreen = ({ navigation }) => {
                             <View style={{ flexDirection: 'row' }}>
                                 {count > 3 ?
                                     <View style={{
-                                        backgroundColor: 'rgba(255, 255, 255, 1.0)',
+                                        backgroundColor: '#15f009',
                                         height: HeightRatio(25),
                                         width: HeightRatio(25),
                                         margin: HeightRatio(5),
@@ -174,7 +174,7 @@ export const KeyScreen = ({ navigation }) => {
                                 }
                                 {count > 2 ?
                                     <View style={{
-                                        backgroundColor: 'rgba(255, 255, 255, 1.0)',
+                                        backgroundColor: '#860093',
                                         height: HeightRatio(25),
                                         width: HeightRatio(25),
                                         margin: HeightRatio(5),
