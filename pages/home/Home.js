@@ -533,50 +533,24 @@ export const HomeScreen = ({ navigation }) => {
                     }
                     <TouchableOpacity
                       onPress={() => { navigation.dispatch(resetActionGame); }}
-                      style={{ height: HeightRatio(300), width: WidthRatio(300), alignSelf: 'center' }}
+                      style={{ height: HeightRatio(160), 
+                        width: HeightRatio(310),
+                        borderRadius: HeightRatio(20),
+                        alignSelf: 'center', 
+                        borderWidth: 4,  
+                        borderColor: '#09e049',
+                      }}
                     >
-                      <View
-                        style={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                          height: HeightRatio(300),
-                          padding: 20,
-                          borderRadius: HeightRatio(20),
-                          borderWidth: 2,
-                          borderColor: '#09e049',
-                          margin: HeightRatio(10),
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}
-
-                      >
-                        <Image
-                          source={require('../../assets/block_logo.png')}
+                      <Image
+                          source={require('../../assets/play_button.png')}
                           style={{
-                            height: HeightRatio(175), 
-                            width: HeightRatio(175),
+                            height: HeightRatio(150), 
+                            width: HeightRatio(300),
+                            borderRadius: HeightRatio(20)
                             // position: 'absolute',
                             // zIndex: -10
                           }}
                         />
-
-                        {/* <FontAwesomeIcon
-                          icon={faSolid, faPlay}
-                          style={{
-                            color: 'white',
-                            // justifyContent: 'center',
-                            // alignSelf: 'center',
-                          }}
-                          size={70}
-                        /> */}
-                        <View style={{ flexDirection: 'row', margin: 20 }}>
-
-                          <Text style={{
-                            color: 'white', fontSize: HeightRatio(40), fontWeight: 'bold',
-                          }} allowFontScaling={false}>
-                            Play Game
-                          </Text>
-                        </View>
-                      </View>
                     </TouchableOpacity>
                     <View style={{ marginBottom: 400 }}></View>
                   </>

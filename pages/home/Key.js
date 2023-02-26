@@ -91,7 +91,8 @@ export const KeyScreen = ({ navigation }) => {
     return (
         <>
             <LinearGradient
-                colors={['#261823', '#792555']}
+                // colors={['#261823', '#792555']} //#101010
+                colors={['#261823', '#101010']}
                 style={{ flex: 1 }}
             >
                 {pageLoadComplete ?
@@ -106,13 +107,13 @@ export const KeyScreen = ({ navigation }) => {
                         <Image
                             source={require('../../assets/block_logo.png')}
                             style={{
-                                height: HeightRatio(250),
-                                width: HeightRatio(250),
-                                borderRadius: 200,
+                                height: HeightRatio(170),
+                                width: HeightRatio(170),
+                                borderRadius: 40,
                                 marginTop: HeightRatio(40),
                                 alignSelf: 'center'
                             }} />
-                        <View style={{ marginTop: HeightRatio(10), alignSelf: 'center' }}>
+                        <View style={{ marginTop: HeightRatio(20), alignSelf: 'center' }}>
                             <View style={{ flexDirection: 'row' }}>
                                 {count > 0 ?
                                     <View style={{
