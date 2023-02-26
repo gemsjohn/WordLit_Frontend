@@ -1,5 +1,5 @@
 import React, { useEffect, useInsertionEffect, useState, useRef, useContext } from 'react';
-import { View, Text, Button, Dimensions, Image, TouchableOpacity, PixelRatio } from 'react-native';
+import { View, Text, Button, Dimensions, Image, TouchableOpacity, PixelRatio, TouchableHighlight, Linking } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSolid, faUser, faPlus, faUpLong, faMagnifyingGlass, faComment, faPen, faW, faF, faFlagCheckered, faGear, faTrophy, faHouse } from '@fortawesome/free-solid-svg-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -91,6 +91,10 @@ export const Navbar = (props) => {
             console.error(error);
         }
     }
+
+    const { data: userByID, refetch } = useQuery(GET_USER_BY_ID, {
+        variables: { id: mainState.current.userID }
+    });
 
     const resetActionHome = CommonActions.reset({
         index: 1,
@@ -264,9 +268,28 @@ export const Navbar = (props) => {
                                 borderRadius: HeightRatio(30)
                             }}
                         >
-                            <Text style={{ color: 'white', fontSize: HeightRatio(18), alignSelf: 'center' }}>
-                                v{version}
-                            </Text>
+                            {userByID?.user.currentVersion != version ?
+                                <TouchableHighlight
+                                    onPress={() => {
+                                        Linking.openURL('https://play.google.com/store/apps/details?id=com.cosmicscramble&hl=en_US&gl=US');
+                                    }}
+                                    underlayColor="#ffffff"
+                                >
+                                    <Text 
+                                        style={{ color: '#13dc08', fontSize: HeightRatio(16), textAlign: 'center', width: HeightRatio(60) }}
+                                        allowFontScaling={false}
+                                    >
+                                        UPDATE
+                                    </Text>
+                                </TouchableHighlight>
+                                :
+                                <Text 
+                                    style={{ color: 'white', fontSize: HeightRatio(18), alignSelf: 'center' }}
+                                    allowFontScaling={false}
+                                >
+                                    v{version}
+                                </Text>
+                            }
                         </View>
                     }
                 </>
