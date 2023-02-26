@@ -1142,30 +1142,30 @@ export const GameScreen = ({ navigation }) => {
                                     <>
                                         {!hintTopBottomModal && !hintLeftRightModal && !modalVisible && !flashScore &&
                                             <>
-                                            {startTime != null &&
-                                                <View
-                                                    style={{
-                                                        position: 'absolute',
-                                                        bottom: -40,
-                                                        left: HeightRatio(50),
-                                                        flexDirection: 'row',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center'
-                                                    }}
-                                                >
-                                                    {/* <Image
+                                                {startTime != null &&
+                                                    <View
+                                                        style={{
+                                                            position: 'absolute',
+                                                            bottom: -40,
+                                                            left: HeightRatio(50),
+                                                            flexDirection: 'row',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center'
+                                                        }}
+                                                    >
+                                                        {/* <Image
                                                         source={require('../../assets/clock_icon.png')}
                                                         style={{ height: HeightRatio(35), width: HeightRatio(35), marginRight: HeightRatio(5) }}
                                                     /> */}
-                                                    <Text 
-                                                        style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', width: HeightRatio(200) }}
-                                                        allowFontScaling={false}
-                                                    >
-                                                        {/* {timeCount.current}s */}
-                                                        {Math.floor((Date.now() - startTime) / 1000)}s
-                                                    </Text>
-                                                </View>
-                                            }
+                                                        <Text
+                                                            style={{ color: 'white', fontSize: HeightRatio(30), fontWeight: 'bold', width: HeightRatio(200) }}
+                                                            allowFontScaling={false}
+                                                        >
+                                                            {/* {timeCount.current}s */}
+                                                            {Math.floor((Date.now() - startTime) / 1000)}s
+                                                        </Text>
+                                                    </View>
+                                                }
 
 
                                                 <Animated.View
@@ -1190,7 +1190,7 @@ export const GameScreen = ({ navigation }) => {
                                                     ]}
                                                 >
                                                     <Image
-                                                        source={require('../../assets/clock_icon.png')}
+                                                        source={require('../../assets/clock_icon_0.png')}
                                                         style={{ height: WidthRatio(35), width: WidthRatio(35) }} />
                                                     {/* <Text style={{ color: 'white', fontSize: HeightRatio(20), margin: HeightRatio(20) }}>
                                                         -
@@ -1776,11 +1776,7 @@ export const GameScreen = ({ navigation }) => {
                                     }}
                                 />
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <FontAwesomeIcon
-                                        icon={faSolid, faClock}
-                                        style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
-                                        size={20}
-                                    />
+
                                     <Text
                                         style={{
                                             color: 'white',
@@ -1789,638 +1785,162 @@ export const GameScreen = ({ navigation }) => {
                                             margin: HeightRatio(5)
                                         }}
                                         allowFontScaling={false}
-                                    >Time</Text>
+                                    >{word1}, {word2}</Text>
 
-                                    <Text
-                                        style={{
-                                            color: '#19d0bf',
-                                            // alignSelf: 'center', 
-                                            fontSize: HeightRatio(25),
-                                            fontWeight: 'bold',
-                                            margin: HeightRatio(5),
-                                            marginLeft: HeightRatio(20),
-                                            width: WidthRatio(180)
-                                        }}
-                                        numberOfLines={1}
-                                        ellipsizeMode='tail'
-                                        allowFontScaling={false}
-                                    >
-                                        {timeTaken} seconds
-                                    </Text>
 
                                 </View>
-                            </View>
-                            <View
-                                style={{
-                                    borderRadius: HeightRatio(30),
-                                    padding: HeightRatio(15),
-                                    width: WidthRatio(300),
-                                    flexDirection: 'column',
-                                    margin: HeightRatio(5),
-                                    alignSelf: 'center'
-                                }}
-
-                            >
-                                <LinearGradient
-                                    colors={['#0b132b', '#181d21']}
+                                </View>
+                                <View
                                     style={{
-                                        ...Styling.background,
-                                        height: HeightRatio(75),
-                                        borderRadius: HeightRatio(8),
-                                        borderWidth: 2,
-                                        borderColor: '#09e049',
-                                        opacity: 0.9
+                                        borderRadius: HeightRatio(30),
+                                        padding: HeightRatio(15),
+                                        width: WidthRatio(300),
+                                        flexDirection: 'column',
+                                        margin: HeightRatio(5),
+                                        alignSelf: 'center'
                                     }}
-                                />
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <FontAwesomeIcon
-                                        icon={faSolid, faFlagCheckered}
-                                        style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
-                                        size={20}
-                                    />
-                                    <Text
-                                        style={{
-                                            color: 'white',
-                                            fontSize: HeightRatio(27),
-                                            fontWeight: 'bold',
-                                            margin: HeightRatio(5)
-                                        }}
-                                        allowFontScaling={false}
-                                    >Score</Text>
 
-                                    <Text
-                                        style={{
-                                            color: '#19d0bf',
-                                            // alignSelf: 'center', 
-                                            fontSize: HeightRatio(25),
-                                            fontWeight: 'bold',
-                                            margin: HeightRatio(5),
-                                            marginLeft: HeightRatio(20),
-                                            width: WidthRatio(180)
-                                        }}
-                                        numberOfLines={1}
-                                        ellipsizeMode='tail'
-                                        allowFontScaling={false}
-                                    >
-                                        {score}
-                                    </Text>
-
-                                </View>
-                            </View>
-                        </View>
-                    }
-
-                    {seePreviousScore &&
-                        mainState.current.prevGame_word1 != null &&
-                        mainState.current.prevGame_word2 != null &&
-                        !flashScore &&
-                        !hintTopBottomModal &&
-                        !hintLeftRightModal &&
-                        !modalVisible &&
-                        <>
-
-                            {!expandScoreDetails &&
-                                <TouchableOpacity
-                                    onPress={() => { setExpandScoreDetails(true); setModalVisible(true); searchWord1(mainState.current.prevGame_word1); searchWord2(mainState.current.prevGame_word2); }}
-                                    style={{}}
                                 >
-                                    <View style={{
-                                        position: 'absolute',
-                                        top: HeightRatio(10),
-                                        right: HeightRatio(10),
-                                        padding: HeightRatio(10),
-                                        borderRadius: HeightRatio(10),
-                                        alignSelf: 'center',
-                                        marginTop: HeightRatio(0),
-                                        width: HeightRatio(240),
-                                        justifyContent: 'center',
-                                        alignItems: 'center'
-                                    }}>
-                                        <LinearGradient
-                                            colors={['#0b132b', '#181d21']}
-                                            style={{
-                                                ...Styling.background,
-                                                height: HeightRatio(45),
-                                                borderRadius: HeightRatio(10),
-                                                borderWidth: 2,
-                                                borderColor: '#ff0076',
-                                                opacity: 0.9
-                                            }}
+                                    <LinearGradient
+                                        colors={['#0b132b', '#181d21']}
+                                        style={{
+                                            ...Styling.background,
+                                            height: HeightRatio(75),
+                                            borderRadius: HeightRatio(8),
+                                            borderWidth: 2,
+                                            borderColor: '#09e049',
+                                            opacity: 0.9
+                                        }}
+                                    />
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <FontAwesomeIcon
+                                            icon={faSolid, faClock}
+                                            style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
+                                            size={20}
                                         />
                                         <Text
                                             style={{
                                                 color: 'white',
-                                                fontSize: HeightRatio(20),
+                                                fontSize: HeightRatio(27),
                                                 fontWeight: 'bold',
-                                                textAlign: 'center'
+                                                margin: HeightRatio(5)
                                             }}
                                             allowFontScaling={false}
+                                        >Time</Text>
+
+                                        <Text
+                                            style={{
+                                                color: '#19d0bf',
+                                                // alignSelf: 'center', 
+                                                fontSize: HeightRatio(25),
+                                                fontWeight: 'bold',
+                                                margin: HeightRatio(5),
+                                                marginLeft: HeightRatio(20),
+                                                width: WidthRatio(180)
+                                            }}
+                                            numberOfLines={1}
+                                            ellipsizeMode='tail'
+                                            allowFontScaling={false}
                                         >
-                                            SEE PREVIOUS SCORE
+                                            {timeTaken} seconds
                                         </Text>
+
                                     </View>
-                                </TouchableOpacity>
-                            }
-                        </>
+                                </View>
+                                <View
+                                    style={{
+                                        borderRadius: HeightRatio(30),
+                                        padding: HeightRatio(15),
+                                        width: WidthRatio(300),
+                                        flexDirection: 'column',
+                                        margin: HeightRatio(5),
+                                        alignSelf: 'center'
+                                    }}
+
+                                >
+                                    <LinearGradient
+                                        colors={['#0b132b', '#181d21']}
+                                        style={{
+                                            ...Styling.background,
+                                            height: HeightRatio(75),
+                                            borderRadius: HeightRatio(8),
+                                            borderWidth: 2,
+                                            borderColor: '#09e049',
+                                            opacity: 0.9
+                                        }}
+                                    />
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <FontAwesomeIcon
+                                            icon={faSolid, faFlagCheckered}
+                                            style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
+                                            size={20}
+                                        />
+                                        <Text
+                                            style={{
+                                                color: 'white',
+                                                fontSize: HeightRatio(27),
+                                                fontWeight: 'bold',
+                                                margin: HeightRatio(5)
+                                            }}
+                                            allowFontScaling={false}
+                                        >Score</Text>
+
+                                        <Text
+                                            style={{
+                                                color: '#19d0bf',
+                                                // alignSelf: 'center', 
+                                                fontSize: HeightRatio(25),
+                                                fontWeight: 'bold',
+                                                margin: HeightRatio(5),
+                                                marginLeft: HeightRatio(20),
+                                                width: WidthRatio(180)
+                                            }}
+                                            numberOfLines={1}
+                                            ellipsizeMode='tail'
+                                            allowFontScaling={false}
+                                        >
+                                            {score}
+                                        </Text>
+
+                                    </View>
+                                </View>
+                            </View>
                     }
 
-                    {modalVisible &&
-                        <Modal
-                            animationType="none"
-                            transparent={true}
-                            visible={modalVisible}
-                            onRequestClose={() => {
-                                setModalVisible(!modalVisible);
-                            }}
-                        >
-                            <SafeAreaView style={Styling.profileContainer}>
-                                <ScrollView
-                                    style={{ ...Styling.profileScrollView, height: HeightRatio(650), }}
-                                >
-                                    {/* expandScoreDetails */}
+                            {seePreviousScore &&
+                                mainState.current.prevGame_word1 != null &&
+                                mainState.current.prevGame_word2 != null &&
+                                !flashScore &&
+                                !hintTopBottomModal &&
+                                !hintLeftRightModal &&
+                                !modalVisible &&
+                                <>
 
-                                    <View style={{ ...Styling.gameCenteredView, marginTop: expandScoreDetails ? null : HeightRatio(200) }}>
-                                        {expandScoreDetails &&
-                                            <TouchableOpacity
-                                                onPress={() => { setDisplayDetails(!displayDetails); }}
-
-                                                style={{
-                                                    borderRadius: HeightRatio(30),
-                                                    padding: HeightRatio(15),
-                                                    width: WidthRatio(300),
-                                                    flexDirection: 'column',
-                                                }}
-
-                                            >
-                                                <LinearGradient
-                                                    colors={['#0b132b', '#181d21']}
-                                                    style={{
-                                                        ...Styling.background,
-                                                        height: HeightRatio(90),
-                                                        borderRadius: HeightRatio(8),
-                                                        borderWidth: 2,
-                                                        borderColor: '#ff0076',
-                                                        opacity: 0.9
-                                                    }}
-                                                />
-                                                <View style={{ flexDirection: 'column' }}>
-
-                                                    <Text
-                                                        style={{
-                                                            color: 'white',
-                                                            fontSize: HeightRatio(25),
-                                                            fontWeight: 'bold',
-                                                            margin: HeightRatio(5)
-                                                        }}
-                                                        allowFontScaling={false}
-                                                    >See Definitions</Text>
-
-                                                    <Text
-                                                        style={{
-                                                            color: '#19d0bf',
-                                                            // alignSelf: 'center', 
-                                                            fontSize: HeightRatio(18),
-                                                            fontWeight: 'bold',
-                                                            margin: HeightRatio(5),
-                                                            marginLeft: HeightRatio(20),
-                                                            width: WidthRatio(180)
-                                                        }}
-                                                        numberOfLines={1}
-                                                        ellipsizeMode='tail'
-                                                        allowFontScaling={false}
-                                                    >
-                                                        {mainState.current.prevGame_word1}, {mainState.current.prevGame_word2}
-                                                    </Text>
-                                                    {displayDetails &&
-                                                        <View
-                                                            style={{ flexDirection: 'column' }}
-                                                        >
-
-
-                                                            <View style={{ alignSelf: 'center', width: WidthRatio(280), marginTop: displayDetails ? HeightRatio(25) : HeightRatio(0) }}>
-
-                                                                <View>
-
-                                                                    <View style={{
-                                                                        flexDirection: 'column'
-                                                                    }}>
-                                                                        <Text
-                                                                            style={{
-                                                                                color: '#19d0bf',
-                                                                                fontSize: HeightRatio(25),
-                                                                                fontWeight: 'bold',
-                                                                            }}
-                                                                            allowFontScaling={false}
-                                                                        >
-                                                                            {mainState.current.prevGame_word1}
-                                                                        </Text>
-                                                                    </View>
-
-
-                                                                    {definition0 != '' ?
-                                                                        <View
-                                                                            style={{ flexDirection: 'row', marginBottom: 10 }}
-                                                                        >
-
-                                                                            <Text style={Styling.modalContent}>
-                                                                                {definition0}
-                                                                            </Text>
-                                                                        </View>
-                                                                        :
-                                                                        null
-                                                                    }
-                                                                    {definition1 != '' ?
-                                                                        <View
-                                                                            style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
-                                                                        >
-                                                                            <Text style={Styling.modalContent}>
-                                                                                {definition1}
-                                                                            </Text>
-                                                                        </View>
-                                                                        :
-                                                                        null
-                                                                    }
-                                                                    {definition2 != '' ?
-                                                                        <View
-                                                                            style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
-                                                                        >
-                                                                            <Text style={Styling.modalContent}>
-                                                                                {definition2}
-                                                                            </Text>
-                                                                        </View>
-                                                                        :
-                                                                        null
-                                                                    }
-                                                                </View>
-                                                            </View>
-
-                                                            <View style={{ alignSelf: 'center', margin: 10, width: WidthRatio(280) }}>
-                                                                <>
-                                                                    <View style={{
-                                                                        flexDirection: 'column'
-                                                                    }}>
-                                                                        <Text
-                                                                            style={{
-                                                                                color: '#19d0bf',
-                                                                                fontSize: HeightRatio(25),
-                                                                                fontWeight: 'bold',
-                                                                                // alignSelf: 'center',
-                                                                            }}
-                                                                            allowFontScaling={false}
-                                                                        >
-                                                                            {mainState.current.prevGame_word2}
-                                                                        </Text>
-                                                                    </View>
-
-                                                                    {definition3 != '' ?
-                                                                        <View
-                                                                            style={{ flexDirection: 'row', marginBottom: 10 }}
-                                                                        >
-
-                                                                            <Text style={Styling.modalContent}>
-                                                                                {definition3}
-                                                                            </Text>
-                                                                        </View>
-                                                                        :
-                                                                        null
-                                                                    }
-                                                                    {definition4 != '' ?
-                                                                        <View
-                                                                            style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
-                                                                        >
-                                                                            <Text style={Styling.modalContent}>
-                                                                                {definition4}
-                                                                            </Text>
-                                                                        </View>
-                                                                        :
-                                                                        null
-                                                                    }
-                                                                    {definition5 != '' ?
-                                                                        <View
-                                                                            style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
-                                                                        >
-                                                                            <Text style={Styling.modalContent}>
-                                                                                {definition5}
-                                                                            </Text>
-                                                                        </View>
-                                                                        :
-                                                                        null
-                                                                    }
-                                                                </>
-                                                            </View>
-
-
-
-                                                        </View>
-                                                    }
-
-                                                </View>
-                                            </TouchableOpacity>
-                                        }
-                                        <View
-                                            style={{
-                                                borderRadius: HeightRatio(30),
-                                                padding: HeightRatio(15),
-                                                width: WidthRatio(300),
-                                                flexDirection: 'column',
-                                                // margin: HeightRatio(10),
-                                                alignSelf: 'center'
-                                            }}
-
-                                        >
-                                            <LinearGradient
-                                                colors={['#0b132b', '#181d21']}
-                                                style={{
-                                                    ...Styling.background,
-                                                    height: HeightRatio(65),
-                                                    borderRadius: HeightRatio(8),
-                                                    borderWidth: 2,
-                                                    borderColor: '#ff0076',
-                                                    opacity: 0.9
-                                                }}
-                                            />
-                                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                                <FontAwesomeIcon
-                                                    icon={faSolid, faClock}
-                                                    style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
-                                                    size={16}
-
-                                                />
-                                                <Text
-                                                    style={{
-                                                        color: 'white',
-                                                        fontSize: HeightRatio(27),
-                                                        fontWeight: 'bold',
-                                                        margin: HeightRatio(5)
-                                                    }}
-                                                    allowFontScaling={false}
-                                                >Time</Text>
-
-                                                <Text
-                                                    style={{
-                                                        color: '#19d0bf',
-                                                        // alignSelf: 'center', 
-                                                        fontSize: HeightRatio(25),
-                                                        fontWeight: 'bold',
-                                                        margin: HeightRatio(5),
-                                                        marginLeft: HeightRatio(20),
-                                                        width: WidthRatio(180)
-                                                    }}
-                                                    numberOfLines={1}
-                                                    ellipsizeMode='tail'
-                                                    allowFontScaling={false}
-                                                >
-                                                    {mainState.current.prevGame_timeTaken} seconds
-                                                </Text>
-
-                                            </View>
-                                        </View>
-
-                                        <View
-                                            style={{
-                                                borderRadius: HeightRatio(30),
-                                                padding: HeightRatio(15),
-                                                width: WidthRatio(300),
-                                                flexDirection: 'column',
-                                                margin: HeightRatio(5),
-                                                alignSelf: 'center'
-                                            }}
-
-                                        >
-                                            <LinearGradient
-                                                colors={['#0b132b', '#181d21']}
-                                                style={{
-                                                    ...Styling.background,
-                                                    height: expandScoreDetails ? HeightRatio(380) : HeightRatio(75),
-                                                    borderRadius: HeightRatio(8),
-                                                    borderWidth: 2,
-                                                    borderColor: '#ff0076',
-                                                    opacity: 0.9
-                                                }}
-                                            />
-                                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                                <FontAwesomeIcon
-                                                    icon={faSolid, faFlagCheckered}
-                                                    style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
-                                                    size={16}
-                                                />
-                                                <Text
-                                                    style={{
-                                                        color: 'white',
-                                                        fontSize: HeightRatio(27),
-                                                        fontWeight: 'bold',
-                                                        margin: HeightRatio(5)
-                                                    }}
-                                                    allowFontScaling={false}
-                                                >Score</Text>
-
-                                                <Text
-                                                    style={{
-                                                        color: '#19d0bf',
-                                                        // alignSelf: 'center', 
-                                                        fontSize: HeightRatio(25),
-                                                        fontWeight: 'bold',
-                                                        margin: HeightRatio(5),
-                                                        marginLeft: HeightRatio(20),
-                                                        width: WidthRatio(180)
-                                                    }}
-                                                    numberOfLines={1}
-                                                    ellipsizeMode='tail'
-                                                    allowFontScaling={false}
-                                                >
-                                                    {mainState.current.prevGame_score}
-                                                </Text>
-
-                                            </View>
-
-                                            {expandScoreDetails &&
-                                                <View style={{}}>
-                                                    <View
-                                                        style={{
-                                                            flexDirection: 'row',
-                                                            marginTop: HeightRatio(8),
-                                                            marginBottom: HeightRatio(8),
-                                                            marginLeft: HeightRatio(30)
-                                                        }}
-                                                    >
-                                                        <FontAwesomeIcon
-                                                            icon={faSolid, faGift}
-                                                            style={{ ...Styling.modalFontAwesomeIcons, color: '#f9c74f' }}
-                                                            size={16}
-                                                        />
-                                                        <Text
-                                                            style={{
-                                                                color: '#f9c74f',
-                                                                fontSize: HeightRatio(27),
-                                                                fontWeight: 'bold',
-                                                            }}
-                                                            allowFontScaling={false}
-                                                        >
-                                                            {mainState.current.prevGame_extraPoints} points
-                                                        </Text>
-                                                    </View>
-                                                    {mainState.current.prevGame_extraPoints != 0 &&
-                                                        <Text
-                                                            style={{
-                                                                color: '#f9c74f',
-                                                                fontSize: HeightRatio(20),
-                                                                fontWeight: 'bold',
-                                                                marginLeft: HeightRatio(35)
-                                                            }}
-                                                            allowFontScaling={false}
-                                                        >
-                                                            Bonus points!
-                                                        </Text>
-                                                    }
-                                                    <View
-                                                        style={{
-                                                            flexDirection: 'row',
-                                                            marginTop: HeightRatio(8),
-                                                            marginBottom: HeightRatio(8),
-                                                            marginLeft: HeightRatio(30)
-                                                        }}
-                                                    >
-                                                        <FontAwesomeIcon
-                                                            icon={faSolid, faSquareMinus}
-                                                            style={{ ...Styling.modalFontAwesomeIcons, color: '#f9c74f' }}
-                                                            size={16}
-                                                        />
-                                                        <Text
-                                                            style={{
-                                                                color: '#f9c74f',
-                                                                fontSize: HeightRatio(27),
-                                                                fontWeight: 'bold',
-                                                            }}
-                                                            allowFontScaling={false}
-                                                        >
-                                                            {mainState.current.prevGame_leftRightHintReduction} points
-                                                        </Text>
-                                                    </View>
-                                                    <Text
-                                                        style={{
-                                                            color: '#f9c74f',
-                                                            fontSize: HeightRatio(20),
-                                                            fontWeight: 'bold',
-                                                            marginLeft: HeightRatio(35)
-                                                        }}
-                                                        allowFontScaling={false}
-                                                    >
-                                                        Left to Right hint reduction.
-                                                    </Text>
-                                                    <View
-                                                        style={{
-                                                            flexDirection: 'row',
-                                                            marginTop: HeightRatio(8),
-                                                            marginBottom: HeightRatio(8),
-                                                            marginLeft: HeightRatio(30)
-                                                        }}
-                                                    >
-                                                        <FontAwesomeIcon
-                                                            icon={faSolid, faSquareMinus}
-                                                            style={{ ...Styling.modalFontAwesomeIcons, color: '#f9c74f' }}
-                                                            size={16}
-                                                        />
-                                                        <Text
-                                                            style={{
-                                                                color: '#f9c74f',
-                                                                fontSize: HeightRatio(27),
-                                                                fontWeight: 'bold',
-                                                            }}
-                                                            allowFontScaling={false}
-                                                        >
-                                                            {mainState.current.prevGame_topBottomHintReduction} points
-                                                        </Text>
-                                                    </View>
-                                                    <Text
-                                                        style={{
-                                                            color: '#f9c74f',
-                                                            fontSize: HeightRatio(20),
-                                                            fontWeight: 'bold',
-                                                            marginLeft: HeightRatio(35)
-                                                        }}
-                                                        allowFontScaling={false}
-                                                    >
-                                                        Top to Bottom hint reduction.
-                                                    </Text>
-
-                                                    <View style={{ ...Styling.modalDivisionLine, width: WidthRatio(200) }}></View>
-                                                    {/* CORRECT */}
-                                                    <View
-                                                        style={{
-                                                            flexDirection: 'row',
-                                                            marginTop: HeightRatio(8),
-                                                            marginBottom: HeightRatio(8),
-                                                            marginLeft: HeightRatio(30)
-                                                        }}
-                                                    >
-                                                        <FontAwesomeIcon
-                                                            icon={faSolid, faCheck}
-                                                            style={{ ...Styling.modalFontAwesomeIcons, color: '#90be6d' }}
-                                                            size={16}
-                                                        />
-                                                        <Text
-                                                            style={Styling.modalScoringVarText}
-                                                            allowFontScaling={false}
-                                                        >
-                                                            Correct: {mainState.current.prevGame_storeCorrectAnswers}
-                                                        </Text>
-                                                    </View>
-
-                                                    {/* INCORRECT */}
-                                                    <View
-                                                        style={{
-                                                            flexDirection: 'row',
-                                                            marginTop: HeightRatio(8),
-                                                            marginBottom: HeightRatio(8),
-                                                            marginLeft: HeightRatio(30)
-                                                        }}
-                                                    >
-                                                        <FontAwesomeIcon
-                                                            icon={faSolid, faX}
-                                                            style={{ ...Styling.modalFontAwesomeIcons, color: '#f94144' }}
-                                                            size={16}
-                                                        />
-                                                        <Text
-                                                            style={Styling.modalScoringVarText}
-                                                            allowFontScaling={false}
-                                                        >
-                                                            Incorrect: {mainState.current.prevGame_storeIncorrectAnswers}
-                                                        </Text>
-                                                    </View>
-
-                                                    {/* <View style={{ ...Styling.modalDivisionLine, width: WidthRatio(200) }}></View> */}
-
-                                                </View>
-                                            }
-                                        </View>
-
-
-                                        {/* #ff0076 */}
-
-
+                                    {!expandScoreDetails &&
                                         <TouchableOpacity
-                                            onPress={() => { setModalVisible(!modalVisible); setSeePreviousScore(false); }}
+                                            onPress={() => { setExpandScoreDetails(true); setModalVisible(true); searchWord1(mainState.current.prevGame_word1); searchWord2(mainState.current.prevGame_word2); }}
                                             style={{}}
                                         >
                                             <View style={{
-                                                // backgroundColor: '#09e049',
-                                                display: 'flex',
-                                                justifyContent: 'flex-start',
-                                                padding: HeightRatio(20),
-                                                borderRadius: HeightRatio(40),
+                                                position: 'absolute',
+                                                top: HeightRatio(10),
+                                                right: HeightRatio(10),
+                                                padding: HeightRatio(10),
+                                                borderRadius: HeightRatio(10),
                                                 alignSelf: 'center',
-                                                marginTop: HeightRatio(35),
-                                                // margin: HeightRatio(10),
-                                                width: WidthRatio(300)
+                                                marginTop: HeightRatio(0),
+                                                width: HeightRatio(240),
+                                                justifyContent: 'center',
+                                                alignItems: 'center'
                                             }}>
                                                 <LinearGradient
                                                     colors={['#0b132b', '#181d21']}
                                                     style={{
                                                         ...Styling.background,
-                                                        height: HeightRatio(60),
-                                                        borderRadius: HeightRatio(80),
+                                                        height: HeightRatio(45),
+                                                        borderRadius: HeightRatio(10),
                                                         borderWidth: 2,
-                                                        borderColor: '#09e049',
+                                                        borderColor: '#ff0076',
                                                         opacity: 0.9
                                                     }}
                                                 />
@@ -2429,36 +1949,553 @@ export const GameScreen = ({ navigation }) => {
                                                         color: 'white',
                                                         fontSize: HeightRatio(20),
                                                         fontWeight: 'bold',
-                                                        alignSelf: 'center'
+                                                        textAlign: 'center'
                                                     }}
                                                     allowFontScaling={false}
                                                 >
-                                                    CLOSE
+                                                    SEE PREVIOUS SCORE
                                                 </Text>
                                             </View>
                                         </TouchableOpacity>
-                                    </View>
-                                </ScrollView>
-                            </SafeAreaView>
-                        </Modal>
-                    }
-                </View>
+                                    }
+                                </>
+                            }
+
+                            {modalVisible &&
+                                <Modal
+                                    animationType="none"
+                                    transparent={true}
+                                    visible={modalVisible}
+                                    onRequestClose={() => {
+                                        setModalVisible(!modalVisible);
+                                    }}
+                                >
+                                    <SafeAreaView style={Styling.profileContainer}>
+                                        <ScrollView
+                                            style={{ ...Styling.profileScrollView, height: HeightRatio(650), }}
+                                        >
+                                            {/* expandScoreDetails */}
+
+                                            <View style={{ ...Styling.gameCenteredView, marginTop: expandScoreDetails ? null : HeightRatio(200) }}>
+                                                {expandScoreDetails &&
+                                                    <TouchableOpacity
+                                                        onPress={() => { setDisplayDetails(!displayDetails); }}
+
+                                                        style={{
+                                                            borderRadius: HeightRatio(30),
+                                                            padding: HeightRatio(15),
+                                                            width: WidthRatio(300),
+                                                            flexDirection: 'column',
+                                                        }}
+
+                                                    >
+                                                        <LinearGradient
+                                                            colors={['#0b132b', '#181d21']}
+                                                            style={{
+                                                                ...Styling.background,
+                                                                height: HeightRatio(90),
+                                                                borderRadius: HeightRatio(8),
+                                                                borderWidth: 2,
+                                                                borderColor: '#ff0076',
+                                                                opacity: 0.9
+                                                            }}
+                                                        />
+                                                        <View style={{ flexDirection: 'column' }}>
+
+                                                            <Text
+                                                                style={{
+                                                                    color: 'white',
+                                                                    fontSize: HeightRatio(25),
+                                                                    fontWeight: 'bold',
+                                                                    margin: HeightRatio(5)
+                                                                }}
+                                                                allowFontScaling={false}
+                                                            >See Definitions</Text>
+
+                                                            <Text
+                                                                style={{
+                                                                    color: '#19d0bf',
+                                                                    // alignSelf: 'center', 
+                                                                    fontSize: HeightRatio(18),
+                                                                    fontWeight: 'bold',
+                                                                    margin: HeightRatio(5),
+                                                                    marginLeft: HeightRatio(20),
+                                                                    width: WidthRatio(180)
+                                                                }}
+                                                                numberOfLines={1}
+                                                                ellipsizeMode='tail'
+                                                                allowFontScaling={false}
+                                                            >
+                                                                {mainState.current.prevGame_word1}, {mainState.current.prevGame_word2}
+                                                            </Text>
+                                                            {displayDetails &&
+                                                                <View
+                                                                    style={{ flexDirection: 'column' }}
+                                                                >
+
+
+                                                                    <View style={{ alignSelf: 'center', width: WidthRatio(280), marginTop: displayDetails ? HeightRatio(25) : HeightRatio(0) }}>
+
+                                                                        <View>
+
+                                                                            <View style={{
+                                                                                flexDirection: 'column'
+                                                                            }}>
+                                                                                <Text
+                                                                                    style={{
+                                                                                        color: '#19d0bf',
+                                                                                        fontSize: HeightRatio(25),
+                                                                                        fontWeight: 'bold',
+                                                                                    }}
+                                                                                    allowFontScaling={false}
+                                                                                >
+                                                                                    {mainState.current.prevGame_word1}
+                                                                                </Text>
+                                                                            </View>
+
+
+                                                                            {definition0 != '' ?
+                                                                                <View
+                                                                                    style={{ flexDirection: 'row', marginBottom: 10 }}
+                                                                                >
+
+                                                                                    <Text style={Styling.modalContent}>
+                                                                                        {definition0}
+                                                                                    </Text>
+                                                                                </View>
+                                                                                :
+                                                                                null
+                                                                            }
+                                                                            {definition1 != '' ?
+                                                                                <View
+                                                                                    style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
+                                                                                >
+                                                                                    <Text style={Styling.modalContent}>
+                                                                                        {definition1}
+                                                                                    </Text>
+                                                                                </View>
+                                                                                :
+                                                                                null
+                                                                            }
+                                                                            {definition2 != '' ?
+                                                                                <View
+                                                                                    style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
+                                                                                >
+                                                                                    <Text style={Styling.modalContent}>
+                                                                                        {definition2}
+                                                                                    </Text>
+                                                                                </View>
+                                                                                :
+                                                                                null
+                                                                            }
+                                                                        </View>
+                                                                    </View>
+
+                                                                    <View style={{ alignSelf: 'center', margin: 10, width: WidthRatio(280) }}>
+                                                                        <>
+                                                                            <View style={{
+                                                                                flexDirection: 'column'
+                                                                            }}>
+                                                                                <Text
+                                                                                    style={{
+                                                                                        color: '#19d0bf',
+                                                                                        fontSize: HeightRatio(25),
+                                                                                        fontWeight: 'bold',
+                                                                                        // alignSelf: 'center',
+                                                                                    }}
+                                                                                    allowFontScaling={false}
+                                                                                >
+                                                                                    {mainState.current.prevGame_word2}
+                                                                                </Text>
+                                                                            </View>
+
+                                                                            {definition3 != '' ?
+                                                                                <View
+                                                                                    style={{ flexDirection: 'row', marginBottom: 10 }}
+                                                                                >
+
+                                                                                    <Text style={Styling.modalContent}>
+                                                                                        {definition3}
+                                                                                    </Text>
+                                                                                </View>
+                                                                                :
+                                                                                null
+                                                                            }
+                                                                            {definition4 != '' ?
+                                                                                <View
+                                                                                    style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
+                                                                                >
+                                                                                    <Text style={Styling.modalContent}>
+                                                                                        {definition4}
+                                                                                    </Text>
+                                                                                </View>
+                                                                                :
+                                                                                null
+                                                                            }
+                                                                            {definition5 != '' ?
+                                                                                <View
+                                                                                    style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}
+                                                                                >
+                                                                                    <Text style={Styling.modalContent}>
+                                                                                        {definition5}
+                                                                                    </Text>
+                                                                                </View>
+                                                                                :
+                                                                                null
+                                                                            }
+                                                                        </>
+                                                                    </View>
+
+
+
+                                                                </View>
+                                                            }
+
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                }
+                                                <View
+                                                    style={{
+                                                        borderRadius: HeightRatio(30),
+                                                        padding: HeightRatio(15),
+                                                        width: WidthRatio(300),
+                                                        flexDirection: 'column',
+                                                        // margin: HeightRatio(10),
+                                                        alignSelf: 'center'
+                                                    }}
+
+                                                >
+                                                    <LinearGradient
+                                                        colors={['#0b132b', '#181d21']}
+                                                        style={{
+                                                            ...Styling.background,
+                                                            height: HeightRatio(65),
+                                                            borderRadius: HeightRatio(8),
+                                                            borderWidth: 2,
+                                                            borderColor: '#ff0076',
+                                                            opacity: 0.9
+                                                        }}
+                                                    />
+                                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                        <FontAwesomeIcon
+                                                            icon={faSolid, faClock}
+                                                            style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
+                                                            size={16}
+
+                                                        />
+                                                        <Text
+                                                            style={{
+                                                                color: 'white',
+                                                                fontSize: HeightRatio(27),
+                                                                fontWeight: 'bold',
+                                                                margin: HeightRatio(5)
+                                                            }}
+                                                            allowFontScaling={false}
+                                                        >Time</Text>
+
+                                                        <Text
+                                                            style={{
+                                                                color: '#19d0bf',
+                                                                // alignSelf: 'center', 
+                                                                fontSize: HeightRatio(25),
+                                                                fontWeight: 'bold',
+                                                                margin: HeightRatio(5),
+                                                                marginLeft: HeightRatio(20),
+                                                                width: WidthRatio(180)
+                                                            }}
+                                                            numberOfLines={1}
+                                                            ellipsizeMode='tail'
+                                                            allowFontScaling={false}
+                                                        >
+                                                            {mainState.current.prevGame_timeTaken} seconds
+                                                        </Text>
+
+                                                    </View>
+                                                </View>
+
+                                                <View
+                                                    style={{
+                                                        borderRadius: HeightRatio(30),
+                                                        padding: HeightRatio(15),
+                                                        width: WidthRatio(300),
+                                                        flexDirection: 'column',
+                                                        margin: HeightRatio(5),
+                                                        alignSelf: 'center'
+                                                    }}
+
+                                                >
+                                                    <LinearGradient
+                                                        colors={['#0b132b', '#181d21']}
+                                                        style={{
+                                                            ...Styling.background,
+                                                            height: expandScoreDetails ? HeightRatio(380) : HeightRatio(75),
+                                                            borderRadius: HeightRatio(8),
+                                                            borderWidth: 2,
+                                                            borderColor: '#ff0076',
+                                                            opacity: 0.9
+                                                        }}
+                                                    />
+                                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                        <FontAwesomeIcon
+                                                            icon={faSolid, faFlagCheckered}
+                                                            style={{ ...Styling.modalFontAwesomeIcons, color: 'white' }}
+                                                            size={16}
+                                                        />
+                                                        <Text
+                                                            style={{
+                                                                color: 'white',
+                                                                fontSize: HeightRatio(27),
+                                                                fontWeight: 'bold',
+                                                                margin: HeightRatio(5)
+                                                            }}
+                                                            allowFontScaling={false}
+                                                        >Score</Text>
+
+                                                        <Text
+                                                            style={{
+                                                                color: '#19d0bf',
+                                                                // alignSelf: 'center', 
+                                                                fontSize: HeightRatio(25),
+                                                                fontWeight: 'bold',
+                                                                margin: HeightRatio(5),
+                                                                marginLeft: HeightRatio(20),
+                                                                width: WidthRatio(180)
+                                                            }}
+                                                            numberOfLines={1}
+                                                            ellipsizeMode='tail'
+                                                            allowFontScaling={false}
+                                                        >
+                                                            {mainState.current.prevGame_score}
+                                                        </Text>
+
+                                                    </View>
+
+                                                    {expandScoreDetails &&
+                                                        <View style={{}}>
+                                                            <View
+                                                                style={{
+                                                                    flexDirection: 'row',
+                                                                    marginTop: HeightRatio(8),
+                                                                    marginBottom: HeightRatio(8),
+                                                                    marginLeft: HeightRatio(30)
+                                                                }}
+                                                            >
+                                                                <FontAwesomeIcon
+                                                                    icon={faSolid, faGift}
+                                                                    style={{ ...Styling.modalFontAwesomeIcons, color: '#f9c74f' }}
+                                                                    size={16}
+                                                                />
+                                                                <Text
+                                                                    style={{
+                                                                        color: '#f9c74f',
+                                                                        fontSize: HeightRatio(27),
+                                                                        fontWeight: 'bold',
+                                                                    }}
+                                                                    allowFontScaling={false}
+                                                                >
+                                                                    {mainState.current.prevGame_extraPoints} points
+                                                                </Text>
+                                                            </View>
+                                                            {mainState.current.prevGame_extraPoints != 0 &&
+                                                                <Text
+                                                                    style={{
+                                                                        color: '#f9c74f',
+                                                                        fontSize: HeightRatio(20),
+                                                                        fontWeight: 'bold',
+                                                                        marginLeft: HeightRatio(35)
+                                                                    }}
+                                                                    allowFontScaling={false}
+                                                                >
+                                                                    Bonus points!
+                                                                </Text>
+                                                            }
+                                                            <View
+                                                                style={{
+                                                                    flexDirection: 'row',
+                                                                    marginTop: HeightRatio(8),
+                                                                    marginBottom: HeightRatio(8),
+                                                                    marginLeft: HeightRatio(30)
+                                                                }}
+                                                            >
+                                                                <FontAwesomeIcon
+                                                                    icon={faSolid, faSquareMinus}
+                                                                    style={{ ...Styling.modalFontAwesomeIcons, color: '#f9c74f' }}
+                                                                    size={16}
+                                                                />
+                                                                <Text
+                                                                    style={{
+                                                                        color: '#f9c74f',
+                                                                        fontSize: HeightRatio(27),
+                                                                        fontWeight: 'bold',
+                                                                    }}
+                                                                    allowFontScaling={false}
+                                                                >
+                                                                    {mainState.current.prevGame_leftRightHintReduction} points
+                                                                </Text>
+                                                            </View>
+                                                            <Text
+                                                                style={{
+                                                                    color: '#f9c74f',
+                                                                    fontSize: HeightRatio(20),
+                                                                    fontWeight: 'bold',
+                                                                    marginLeft: HeightRatio(35)
+                                                                }}
+                                                                allowFontScaling={false}
+                                                            >
+                                                                Left to Right hint reduction.
+                                                            </Text>
+                                                            <View
+                                                                style={{
+                                                                    flexDirection: 'row',
+                                                                    marginTop: HeightRatio(8),
+                                                                    marginBottom: HeightRatio(8),
+                                                                    marginLeft: HeightRatio(30)
+                                                                }}
+                                                            >
+                                                                <FontAwesomeIcon
+                                                                    icon={faSolid, faSquareMinus}
+                                                                    style={{ ...Styling.modalFontAwesomeIcons, color: '#f9c74f' }}
+                                                                    size={16}
+                                                                />
+                                                                <Text
+                                                                    style={{
+                                                                        color: '#f9c74f',
+                                                                        fontSize: HeightRatio(27),
+                                                                        fontWeight: 'bold',
+                                                                    }}
+                                                                    allowFontScaling={false}
+                                                                >
+                                                                    {mainState.current.prevGame_topBottomHintReduction} points
+                                                                </Text>
+                                                            </View>
+                                                            <Text
+                                                                style={{
+                                                                    color: '#f9c74f',
+                                                                    fontSize: HeightRatio(20),
+                                                                    fontWeight: 'bold',
+                                                                    marginLeft: HeightRatio(35)
+                                                                }}
+                                                                allowFontScaling={false}
+                                                            >
+                                                                Top to Bottom hint reduction.
+                                                            </Text>
+
+                                                            <View style={{ ...Styling.modalDivisionLine, width: WidthRatio(200) }}></View>
+                                                            {/* CORRECT */}
+                                                            <View
+                                                                style={{
+                                                                    flexDirection: 'row',
+                                                                    marginTop: HeightRatio(8),
+                                                                    marginBottom: HeightRatio(8),
+                                                                    marginLeft: HeightRatio(30)
+                                                                }}
+                                                            >
+                                                                <FontAwesomeIcon
+                                                                    icon={faSolid, faCheck}
+                                                                    style={{ ...Styling.modalFontAwesomeIcons, color: '#90be6d' }}
+                                                                    size={16}
+                                                                />
+                                                                <Text
+                                                                    style={Styling.modalScoringVarText}
+                                                                    allowFontScaling={false}
+                                                                >
+                                                                    Correct: {mainState.current.prevGame_storeCorrectAnswers}
+                                                                </Text>
+                                                            </View>
+
+                                                            {/* INCORRECT */}
+                                                            <View
+                                                                style={{
+                                                                    flexDirection: 'row',
+                                                                    marginTop: HeightRatio(8),
+                                                                    marginBottom: HeightRatio(8),
+                                                                    marginLeft: HeightRatio(30)
+                                                                }}
+                                                            >
+                                                                <FontAwesomeIcon
+                                                                    icon={faSolid, faX}
+                                                                    style={{ ...Styling.modalFontAwesomeIcons, color: '#f94144' }}
+                                                                    size={16}
+                                                                />
+                                                                <Text
+                                                                    style={Styling.modalScoringVarText}
+                                                                    allowFontScaling={false}
+                                                                >
+                                                                    Incorrect: {mainState.current.prevGame_storeIncorrectAnswers}
+                                                                </Text>
+                                                            </View>
+
+                                                            {/* <View style={{ ...Styling.modalDivisionLine, width: WidthRatio(200) }}></View> */}
+
+                                                        </View>
+                                                    }
+                                                </View>
+
+
+                                                {/* #ff0076 */}
+
+
+                                                <TouchableOpacity
+                                                    onPress={() => { setModalVisible(!modalVisible); setSeePreviousScore(false); }}
+                                                    style={{}}
+                                                >
+                                                    <View style={{
+                                                        // backgroundColor: '#09e049',
+                                                        display: 'flex',
+                                                        justifyContent: 'flex-start',
+                                                        padding: HeightRatio(20),
+                                                        borderRadius: HeightRatio(40),
+                                                        alignSelf: 'center',
+                                                        marginTop: HeightRatio(35),
+                                                        // margin: HeightRatio(10),
+                                                        width: WidthRatio(300)
+                                                    }}>
+                                                        <LinearGradient
+                                                            colors={['#0b132b', '#181d21']}
+                                                            style={{
+                                                                ...Styling.background,
+                                                                height: HeightRatio(60),
+                                                                borderRadius: HeightRatio(80),
+                                                                borderWidth: 2,
+                                                                borderColor: '#09e049',
+                                                                opacity: 0.9
+                                                            }}
+                                                        />
+                                                        <Text
+                                                            style={{
+                                                                color: 'white',
+                                                                fontSize: HeightRatio(20),
+                                                                fontWeight: 'bold',
+                                                                alignSelf: 'center'
+                                                            }}
+                                                            allowFontScaling={false}
+                                                        >
+                                                            CLOSE
+                                                        </Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </ScrollView>
+                                    </SafeAreaView>
+                                </Modal>
+                            }
+                        </View>
 
             </View>
-            <Navbar
-                nav={navigation}
-                auth={authState}
-                position={'relative'}
-                from={'game'}
-            />
-            <StatusBar
-                barStyle="default"
-                hidden={false}
-                backgroundColor="transparent"
-                translucent={true}
-                networkActivityIndicatorVisible={true}
-            />
-        </>
-    )
+                <Navbar
+                    nav={navigation}
+                    auth={authState}
+                    position={'relative'}
+                    from={'game'}
+                />
+                <StatusBar
+                    barStyle="default"
+                    hidden={false}
+                    backgroundColor="transparent"
+                    translucent={true}
+                    networkActivityIndicatorVisible={true}
+                />
+            </>
+            )
 
 }
