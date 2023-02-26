@@ -154,6 +154,7 @@ export const Navbar = (props) => {
     const checkSignUpModalIntervalID = useRef(null);
 
     useEffect(() => {
+        refetch()
         getSelectedColor()
         if (props.from == 'home') { setHomeBg('rgba(255, 255, 255, 0.1)') } else { setHomeBg('transparent') }
         if (props.from == 'game') { setGameBg('rgba(255, 255, 255, 0.1)') } else { setGameBg('transparent') }
@@ -268,10 +269,10 @@ export const Navbar = (props) => {
                                 borderRadius: HeightRatio(30)
                             }}
                         >
-                            {userByID?.user.currentVersion != version ?
+                            {typeof userByID?.user.currentVersion === 'string' && typeof version === 'string' && userByID?.user.currentVersion != version ?
                                 <TouchableHighlight
                                     onPress={() => {
-                                        Linking.openURL('https://play.google.com/store/apps/details?id=com.cosmicscramble&hl=en_US&gl=US');
+                                        Linking.openURL('https://play.google.com/store/apps/details?id=com.WordLit&hl=en_US&gl=US');
                                     }}
                                     underlayColor="#ffffff"
                                 >
